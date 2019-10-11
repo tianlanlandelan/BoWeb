@@ -1,17 +1,22 @@
 <template>
   <el-row>
-    <el-form :model="logonUser" :rules="logonRules" 
-		ref="logonUser" label-position="left" 
+    <el-form label-position="left" 
 		label-width="0px" class="demo-ruleForm login-container"
 		>
 		  <h3 class="title">系统登录</h3>
-		    <!-- 用户名输入框 -->
-		    <el-form-item prop="username">
-		      <el-input type="text" v-model="logonUser.username" auto-complete="off" placeholder="用户名、手机号、邮箱"></el-input>
-		    </el-form-item>
-		    <!-- 密码输入框 -->
-		    <el-form-item prop="password">
-		      <el-input type="password" v-model="logonUser.password" auto-complete="off" placeholder="密码"></el-input>
+		    
+		    <el-form-item>
+				<!-- 用户名输入框 -->
+				<span class="tip">Uemail </span>
+				<span class="Danger" v-show="isShow.username"> (please enter your umail)</span>
+				<el-input type="text" v-model="user.username" auto-complete="off" 
+					placeholder="u1145615@YourUniversity.edu" @blur="checkUserName()"></el-input>
+		    
+				<!-- 密码输入框 -->
+				<span class="tip">Password</span>
+				<span class="Danger" v-show="isShow.password"> (please enter your password)</span>
+				<el-input type="password" v-model="user.password" auto-complete="off" 
+					placeholder="password" @blur="checkPassword()"></el-input>
 		    </el-form-item>
 		    <!-- 忘记密码和新用户注册按钮 -->
 		    <el-form-item>
@@ -36,20 +41,15 @@
     data() {
       return {
         //登录用户数据
-        logonUser: {
+        user: {
 		  type:0,
           username: '',
           password: ''
         },
-        //登录验证规则
-        logonRules: {
-          username: [
-            { required: true, message: '请输入账号', trigger: 'blur' },
-          ],
-          password: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
-          ]
-        },
+		isShow:{
+			username:false,
+			password:false
+		},
         //登录按钮是否显示加载动画
         logining: false
       };
@@ -58,12 +58,12 @@
       //登录操作
       handleLogon(ev) {
         //验证表单内容是否符合规则
-        this.$refs.logonUser.validate((valid) => {
-          if (valid) {
+        
+          if (this.checkPassword() && this.checkUserName()) {
             //显示加载动画
             this.logining = true;
             //调用登录接口，上传用户名和密码
-            req_logon(this.logonUser).then(response => {
+            req_logon(this.user).then(response => {
               console.log("登录完毕，Response:",response);
               this.logining = false;
               //解析接口应答的json串
@@ -81,17 +81,31 @@
                 this.$router.push({ path: '/Home' });
               }
             });
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
+          } 
       },
       showRegister(){
         console.log('showRegister');
         this.$router.push('/Register');
         console.log('RouterList',this.$router);
-      }
+      },
+	  checkUserName(){
+	  		   if(this.user.username == "" || !this.user.username.endsWith("edu") || this.user.username.indexOf("@") < 0 ){
+	  		   		this.isShow.username = true;
+	  				return false;
+	  		   }else{
+	  		   		this.isShow.username = false;
+	  				return true;
+	  		   }
+	  },
+	  checkPassword(){
+	  		   if(this.user.password == "" || this.user.password.length < 6){
+	  		   		this.isShow.password = true;
+	  				return false;
+	  		   }else{
+	  				this.isShow.password = false;
+	  				return true;
+	  		   }
+	  }
     },mounted(){
 		
 	}

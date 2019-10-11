@@ -246,9 +246,6 @@
 	.center{
 		text-align: center;
 	}
-	.tip{
-		color: #303133;
-	}
 	.popover{
 		background-color: #F2F6FC;
 		border-radius: 20px;
