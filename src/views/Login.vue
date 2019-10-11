@@ -37,6 +37,7 @@
       return {
         //登录用户数据
         logonUser: {
+		  type:0,
           username: '',
           password: ''
         },
@@ -62,7 +63,7 @@
             //显示加载动画
             this.logining = true;
             //调用登录接口，上传用户名和密码
-            req_logon(this.logonUser.username,this.logonUser.password).then(response => {
+            req_logon(this.logonUser).then(response => {
               console.log("登录完毕，Response:",response);
               this.logining = false;
               //解析接口应答的json串

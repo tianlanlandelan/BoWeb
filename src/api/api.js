@@ -38,12 +38,15 @@ export const req_updateUserInfo = (user) => {
 };
 /**
  * 登录接口
- * @param {用户名、手机号、邮箱} userName 
- * @param {密码} password 
  */
-export const req_logon = (userName,password) => { 
-    return axios.post(`${base}/logon`, {
-        userName:userName,
-        password:password
-    }).then(res => res.data); 
+export const req_logon = (user) => { 
+    return axios.post(api, {
+        type:1,
+        name:user.username,
+		password:user.password
+    },{
+		headers:{
+			'method':'login'
+		}
+	}).then(res => res.data); 
 };
