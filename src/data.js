@@ -184,7 +184,45 @@ const user={
 	code:'',
 	firstName:'',
 	lastName:'',
-	avatarId:0
+	avatarId:0,
+	//初始化时赋值为true，此时用户尚未输入内容，不提示错误
+	sidChecked:true,
+	emailChecked:true,
+	passChecked:true,
+	//没有输入用户名时，提交按钮是禁用状态
+	nameChecked:false,
+	checkSid(){
+	   if(this.sid == "" || !this.sid.startsWith("u")){
+	   		this.sidChecked = false;
+	   }else{
+	   		this.sidChecked = true;
+	   }
+	   return this.sidChecked;
+	},
+	checkEmail(){
+		if(this.email == "" || !this.email.endsWith("edu") || this.email.indexOf("@") < 0 ){
+		   this.emailChecked = false;
+		}else{
+			this.emailChecked =  true;
+		}
+		return this.emailChecked;
+	},
+	checkPassword(){
+		if(this.password == "" || this.password.length < 6){
+			this.passChecked = false;
+		}else{
+			this.passChecked = true;
+		}
+		return this.passChecked;
+	},
+	checkUserName(){
+		if(this.firstName == "" || this.lastName == ""){
+			this.nameChecked = false;		   
+		}else{
+			this.nameChecked = true;
+		}
+		return this.nameChecked;
+	}
 }
 export {
 	testData,user

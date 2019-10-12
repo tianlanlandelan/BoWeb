@@ -38,7 +38,7 @@
 							6
 						</el-col>
 						<el-col :span="4">
-							<img src="../../static/img/icon.png" />
+							<img src="../../static/icon/1.png" />
 						</el-col>
 						<el-col :span="16">
 							You

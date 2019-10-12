@@ -1,9 +1,8 @@
 <template>
   <el-row>
     <el-form label-position="left" 
-		label-width="0px" class="demo-ruleForm login-container"
-		>
-		  <h3 class="title">Log in</h3>
+		label-width="0px" class="demo-ruleForm login-container">
+		  <h3 class="title">Reset Password</h3>
 		    
 		    <el-form-item>
 				<!-- 用户名输入框 -->
@@ -18,18 +17,9 @@
 				<el-input type="password" v-model="user.password" auto-complete="off" 
 					placeholder="password" @blur="user.checkPassword()"></el-input>
 		    </el-form-item>
-		    <!-- 忘记密码和新用户注册按钮 -->
-		    <el-form-item>
-		      <el-col :span="12">
-		        <el-button type="text" @click="showPassword">Forgot password ?</el-button>
-		      </el-col>
-		      <el-col :span="12">
-		        <el-button type="text" @click="showRegister">New user signup</el-button>
-		      </el-col>
-		    </el-form-item>
 		    <!-- 登录按钮 -->
 		    <el-form-item style="width:100%;">
-		      <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogon" :loading="logining">LOG IN</el-button>
+		      <el-button type="primary" style="width:100%;" @click.native.prevent="commit()" :loading="logining">Commit</el-button>
 		    </el-form-item>
 		  </el-form> 
   </el-row>
@@ -48,10 +38,10 @@
       };
     },
     methods: {
-      //登录操作
-      handleLogon(ev) {
+      //提交修改密码的申请
+      commit() {
         //验证表单内容是否符合规则
-          if (this.user.checkPassword() && this.user.checkEmail()) {
+          if (this.user.checkEmail() && this.user.checkPassword()) {
             //显示加载动画
             this.logining = true;
             //调用登录接口，上传用户名和密码
@@ -73,22 +63,20 @@
                 this.$router.push({ path: '/Home' });
               }
             });
-          } 
-      },
-      showRegister(){
-        console.log('showRegister');
-        this.$router.push('/Register');
-      },
-	  showPassword(){
-	    console.log('showPassword');
-	    this.$router.push('/Password');
-	  }
+          }
+      }
     },mounted(){
-		let type = this.$route.params.type;
-		console.log("router",this.$route.path);
-		this.user.type = type;
-		sessionStorage.setItem('type', type);
-		sessionStorage.setItem('path',this.$route.path);
+		//获取用户类型
+		let type = sessionStorage.getItem('type');
+		let path = sessionStorage.getItem('path');
+		//如果不是从登录页面进来的，不能确定用户类型，此时，返回到错误页面
+		if(!type || !path){
+			this.$router.push({ path: "/404"});
+		}else{
+			this.user.type = type;
+			this.path = path;
+			console.log("password,type:",type,path);
+		}
 	}
   }
 

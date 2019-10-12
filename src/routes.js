@@ -3,6 +3,7 @@ import Register from './views/Register.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Main from './views/Main.vue'
+import Password from "./views/Password.vue"
 
 
 
@@ -13,6 +14,10 @@ let routes = [
         name: '',
         hidden: true
     },
+	{
+	    path: '/Password',
+	    component: Password
+	},
 	{
 	    path: '/Login/1',
 		component: Login,
