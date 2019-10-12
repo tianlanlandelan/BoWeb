@@ -3,33 +3,33 @@
     <el-form label-position="left" 
 		label-width="0px" class="demo-ruleForm login-container"
 		>
-		  <h3 class="title">系统登录</h3>
+		  <h3 class="title">Log in</h3>
 		    
 		    <el-form-item>
 				<!-- 用户名输入框 -->
-				<span class="tip">Uemail </span>
-				<span class="Danger" v-show="isShow.username"> (please enter your umail)</span>
-				<el-input type="text" v-model="user.username" auto-complete="off" 
+				<span class="tip">Umail </span>
+				<span class="Danger" v-show="isShow.email"> ( please enter your umail )</span>
+				<el-input type="text" v-model="user.email" auto-complete="off" 
 					placeholder="u1145615@YourUniversity.edu" @blur="checkUserName()"></el-input>
 		    
 				<!-- 密码输入框 -->
-				<span class="tip">Password</span>
-				<span class="Danger" v-show="isShow.password"> (please enter your password)</span>
+				<span class="tip">Password </span>
+				<span class="Danger" v-show="isShow.password"> ( please enter your password )</span>
 				<el-input type="password" v-model="user.password" auto-complete="off" 
 					placeholder="password" @blur="checkPassword()"></el-input>
 		    </el-form-item>
 		    <!-- 忘记密码和新用户注册按钮 -->
 		    <el-form-item>
 		      <el-col :span="12">
-		        <el-button type="text" @click="showRegister">忘记密码？</el-button>
+		        <el-button type="text" @click="showRegister">Forgot password ?</el-button>
 		      </el-col>
 		      <el-col :span="12">
-		        <el-button type="text" @click="showRegister">新用户注册</el-button>
+		        <el-button type="text" @click="showRegister">New user signup</el-button>
 		      </el-col>
 		    </el-form-item>
 		    <!-- 登录按钮 -->
 		    <el-form-item style="width:100%;">
-		      <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogon" :loading="logining">登录</el-button>
+		      <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogon" :loading="logining">LOG IN</el-button>
 		    </el-form-item>
 		  </el-form> 
   </el-row>
@@ -37,17 +37,14 @@
 
 <script>
   import { req_logon } from '../api/api';
+  import {user} from "../data.js";
   export default {
     data() {
       return {
         //登录用户数据
-        user: {
-		  type:0,
-          username: '',
-          password: ''
-        },
+        user: user,
 		isShow:{
-			username:false,
+			email:false,
 			password:false
 		},
         //登录按钮是否显示加载动画
@@ -76,8 +73,8 @@
                 });
               //应答成功，将用户信息缓存起来。跳转到默认页面
               } else {
-                let user =   {id: data.id,avatar: '../../static/img/icon.png',name: data.nickName};
-                sessionStorage.setItem('user', JSON.stringify(user));
+                this.user = data;
+                sessionStorage.setItem('user', JSON.stringify(this.user));
                 this.$router.push({ path: '/Home' });
               }
             });
@@ -86,14 +83,13 @@
       showRegister(){
         console.log('showRegister');
         this.$router.push('/Register');
-        console.log('RouterList',this.$router);
       },
 	  checkUserName(){
-	  		   if(this.user.username == "" || !this.user.username.endsWith("edu") || this.user.username.indexOf("@") < 0 ){
-	  		   		this.isShow.username = true;
+	  		   if(this.user.email == "" || !this.user.email.endsWith("edu") || this.user.email.indexOf("@") < 0 ){
+	  		   		this.isShow.email = true;
 	  				return false;
 	  		   }else{
-	  		   		this.isShow.username = false;
+	  		   		this.isShow.email = false;
 	  				return true;
 	  		   }
 	  },
@@ -107,7 +103,11 @@
 	  		   }
 	  }
     },mounted(){
-		
+		let type = this.$route.params.type;
+		console.log("router",this.$route.path);
+		this.user.type = type;
+		sessionStorage.setItem('type', type);
+		sessionStorage.setItem('path',this.$route.path);
 	}
   }
 

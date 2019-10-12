@@ -16,21 +16,23 @@ Vue.use(VueRouter)
 Vue.use(Vuex)
 
 const router = new VueRouter({
-  routes
+	//使用history模式来避免页面输入路由参数后自动加 # 
+	mode: 'history',
+	routes
 })
 
 //过滤路由，只有登录和注册页面允许未登录状态下访问
-router.beforeEach((to, from, next) => {
-  if (to.path == '/Login' || to.path == '/Register') {
-    sessionStorage.removeItem('user');
-  }
-  let user = JSON.parse(sessionStorage.getItem('user'));
-  if (!user && to.path != '/Login' && to.path != '/Register') {
-    next({ path: '/Login' })
-  } else {
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.path == '/Login' || to.path == '/Register') {
+//     sessionStorage.removeItem('user');
+//   }
+//   let user = JSON.parse(sessionStorage.getItem('user'));
+//   if (!user && to.path != '/Login' && to.path != '/Register') {
+//     next({ path: '/Login' })
+//   } else {
+//     next()
+//   }
+// })
 
 new Vue({
   router,

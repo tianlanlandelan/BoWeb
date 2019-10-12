@@ -85,23 +85,14 @@
 
 <script>
 	import {req_register,req_updateUserInfo} from '../api/api';
+	import {user} from "../data.js";
   export default {
     data() {
       return {
 		  showIcon:true,
 		  showSelected:false,
         //注册用户数据
-        user: {
-		  id:0,
-		  type:1,
-          sid: '',
-          email: '',
-          password: '',
-		  code:'',
-		  firstName:'',
-		  lastName:'',
-		  avatarId:0
-        },
+        user: user,
 		//控制是否显示的一系列开关
 		isShow:{
 			sid:false,
@@ -110,6 +101,7 @@
 			buttonDisable:false,
 			noName:true
 		},
+		path:"",
         //注册界面步骤条当前步骤Index
         stepsActive:0,
         showStep1:true,
@@ -195,7 +187,7 @@
 				       type: 'error'
 				     });
 				   } else{
-					   this.$router.push({ path: '/Login' });
+					   this.$router.push({ path: this.path});
 				   }
 				 });
 	   },
@@ -237,6 +229,18 @@
 				return true;
 		   }
 	   }
+    },mounted() {
+		//获取用户类型
+    	let type = sessionStorage.getItem('type');
+		let path = sessionStorage.getItem('path');
+		//如果不是从登录页面进来的，不能确定用户类型，此时，返回到错误页面
+		if(!type || !path){
+			this.$router.push({ path: "/404"});
+		}else{
+			this.user.type = type;
+			this.path = path;
+			console.log("register,type:",type,path);
+		}
     }
   }
 

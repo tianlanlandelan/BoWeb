@@ -41,8 +41,8 @@ export const req_updateUserInfo = (user) => {
  */
 export const req_logon = (user) => { 
     return axios.post(api, {
-        type:1,
-        name:user.username,
+        type:user.type,
+        name:user.email,
 		password:user.password
     },{
 		headers:{

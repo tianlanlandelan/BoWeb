@@ -175,7 +175,17 @@ const testData={
 	}
 	
 }
-
+const user={
+	id:0,
+	type:1,
+	sid: '',
+	email: '',
+	password: '',
+	code:'',
+	firstName:'',
+	lastName:'',
+	avatarId:0
+}
 export {
-	testData
+	testData,user
 }
