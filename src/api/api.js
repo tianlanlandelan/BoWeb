@@ -50,3 +50,14 @@ export const req_logon = (user) => {
 		}
 	}).then(res => res.data); 
 };
+export const req_forgetPassword = (user) => { 
+    return axios.post(api, {
+        type:user.type,
+        name:user.email
+    },{
+		headers:{
+			'method':'forgetPassword'
+		}
+	}).then(res => res.data); 
+};
+

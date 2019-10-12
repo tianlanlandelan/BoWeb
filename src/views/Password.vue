@@ -10,12 +10,6 @@
 				<span class="Danger" v-show="!user.emailChecked"> ( please enter your umail )</span>
 				<el-input type="text" v-model="user.email" auto-complete="off" 
 					placeholder="u1145615@YourUniversity.edu" @blur="user.checkEmail()"></el-input>
-		    
-				<!-- 密码输入框 -->
-				<span class="tip">Password </span>
-				<span class="Danger" v-show="!user.passChecked"> ( please enter your password )</span>
-				<el-input type="password" v-model="user.password" auto-complete="off" 
-					placeholder="password" @blur="user.checkPassword()"></el-input>
 		    </el-form-item>
 		    <!-- 登录按钮 -->
 		    <el-form-item style="width:100%;">
@@ -26,7 +20,7 @@
 </template>
 
 <script>
-  import { req_logon } from '../api/api';
+  import { req_forgetPassword } from '../api/api';
   import {user} from "../data.js";
   export default {
     data() {
@@ -41,11 +35,11 @@
       //提交修改密码的申请
       commit() {
         //验证表单内容是否符合规则
-          if (this.user.checkEmail() && this.user.checkPassword()) {
+          if (this.user.checkEmail()) {
             //显示加载动画
             this.logining = true;
             //调用登录接口，上传用户名和密码
-            req_logon(this.user).then(response => {
+            req_forgetPassword(this.user).then(response => {
               console.log("登录完毕，Response:",response);
               this.logining = false;
               //解析接口应答的json串
@@ -58,9 +52,10 @@
                 });
               //应答成功，将用户信息缓存起来。跳转到默认页面
               } else {
-                this.user = data;
-                sessionStorage.setItem('user', JSON.stringify(this.user));
-                this.$router.push({ path: '/Home' });
+                this.$message({
+                  message: data,
+                  type: 'success'
+                });
               }
             });
           }
