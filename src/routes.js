@@ -17,8 +17,7 @@ let routes = [
 	    iconCls: 'el-icon-message',//图标样式class
 	    children: [
 	        { path: '/TopicList', component: TopicList, name: '课程列表' },
-	    ],children: [
-	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课程' },
+	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课程' }
 	    ],
 		//是否显示在Admin页面的左侧菜单列表中
 		show:true

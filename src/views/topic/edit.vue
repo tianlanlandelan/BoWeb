@@ -4,6 +4,9 @@
 			<el-form-item label="课程标题">
 				<el-input v-model="topic.title" placeholder="请输入内容"></el-input>
 			</el-form-item>
+			<el-form-item label="课程内容">
+				<div id = "editor"></div>
+			</el-form-item>
 			<el-form-item label="上传视频">
 				<el-upload
 				    action="/upload/video"
@@ -15,20 +18,27 @@
 				    <el-button size="small" type="primary">点击上传</el-button>
 				    </el-upload>
 			</el-form-item>
-			<el-form-item label="视频标题">
+			<el-form-item label="视频标题" v-show="topic.videoUrl != ''">
 				<el-input v-model="topic.videoTitle" placeholder="请输入内容"></el-input>
+			</el-form-item>
+			<el-form-item>
+				<el-button type="primary" @click = "submit()">添加课程</el-button>
 			</el-form-item>
 		</el-form> 
 	</div>
 </template>
 
 <script>
+	import {req_saveTopic} from "../../api/api.js";
 	import {topic} from "../../data.js";
+	import E from 'wangeditor';
+	
 	export default{
 		data(){
 			return{
 				fileList:[],
-				topic:topic
+				topic:topic,
+				editor : new E("#editor")
 			}
 		},
 		methods:{
@@ -47,15 +57,46 @@
 			  },
 			handleRemove(file, fileList) {
 			},
-			handlePictureCardPreview(file) {
-			},
+			//上传视频成功
 			handleSuccess(response,file,fileList){
 			    if(response.success == 0){
 			        console.log(response);
+					this.topic.videoUrl = response.data;
 			    }
 			},
+			submit(){
+				if(this.editor.txt.text()){
+					this.topic.content = this.editor.txt.html();
+					console.log("html",this.editor.txt.html());	
+				}
+				
+				req_saveTopic(this.topic).then(response => {
+				  console.log("Topic Saved，Response:",response);
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+				    this.$message({
+				      message: message,
+				      type: 'error'
+				    });
+				  //应答成功，将用户信息缓存起来。跳转到默认页面
+				  } else {
+				    
+				  }
+				});
+			}
 		},mounted(){
-			
+			// this.editor.customConfig.uploadImgServer = '/upload/img';
+			// 将图片大小限制为 3M
+			// this.editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
+			// 限制一次最多上传 5 张图片
+			// this.editor.customConfig.uploadImgMaxLength = 5
+			// this.editor.customConfig.uploadImgShowBase64 = true ;
+			this.editor.create();
+			// 配置服务器端地址
+    
+    
 		}
 	}
 	
