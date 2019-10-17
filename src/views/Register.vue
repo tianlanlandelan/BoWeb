@@ -127,6 +127,7 @@
 			      message: message,
 			      type: 'error'
 			    });
+				this.$router.push({ path: this.path});
 			  } else{
 					this.user.id = data;
 					this.handleStep(2);

@@ -21,7 +21,7 @@
 		    <!-- 忘记密码和新用户注册按钮 -->
 		    <el-form-item>
 		      <el-col :span="12">
-		        <el-button type="text" @click="showPassword">Forgot password ?</el-button>
+		        <el-button type="text" @click="showPassword">Forgot password?</el-button>
 		      </el-col>
 		      <el-col :span="12">
 		        <el-button type="text" @click="showRegister">New user signup</el-button>
@@ -84,6 +84,11 @@
 	    this.$router.push('/Password');
 	  }
     },mounted(){
+		//每次访问登录页面，先清空session
+		sessionStorage.removeItem('user');
+		sessionStorage.removeItem('type');
+		sessionStorage.removeItem('path');
+		
 		let type = this.$route.params.type;
 		console.log("router",this.$route.path);
 		this.user.type = type;

@@ -48,7 +48,8 @@ export const req_logon = (user) => {
 		headers:{
 			'method':'login'
 		}
-	}).then(res => res.data); 
+	}).then(res => res.data)
+	.catch(err =>{console.log("loginError",err)}); 
 };
 export const req_forgetPassword = (user) => { 
     return axios.post(api, {

@@ -13,7 +13,7 @@
 		    </el-form-item>
 		    <!-- 登录按钮 -->
 		    <el-form-item style="width:100%;">
-		      <el-button type="primary" style="width:100%;" @click.native.prevent="commit()" :loading="logining">Commit</el-button>
+		      <el-button type="primary" style="width:100%;" @click.native.prevent="commit()" :loading="logining">Submit</el-button>
 		    </el-form-item>
 		  </el-form> 
   </el-row>
@@ -56,6 +56,7 @@
                   message: data,
                   type: 'success'
                 });
+				this.$router.push({ path:this.path});
               }
             });
           }

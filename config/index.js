@@ -7,7 +7,7 @@ module.exports = {
     index: path.resolve(__dirname, '../dist/index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/vue-admin/',
+    assetsPublicPath: '/',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.
@@ -28,16 +28,17 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-		target: 'http://127.0.0.1:8801',//设置你调用的接口域名和端口号 别忘了加http
+		// target: 'http://72.167.223.117:8080',
+		target: 'http://127.0.0.1:8080',
         changeOrigin: true,
         secure:false 
       },
-      '/base': {
-        target:'http://32gr2r.natappfree.cc',
-        // target: 'http://127.0.0.1:8805',//设置你调用的接口域名和端口号 别忘了加http
+      '/upload': {
+		// target: 'http://72.167.223.117:8080',
+        target:'http://127.0.0.1:8080',
         changeOrigin: true,
         secure:false 
-      },
+      }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

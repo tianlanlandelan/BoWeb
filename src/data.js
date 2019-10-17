@@ -224,6 +224,16 @@ const user={
 		return this.nameChecked;
 	}
 }
+
+const topic = {
+	id:0,
+	sort:0,
+	title:"",
+	content:"",
+	videoTitle:"",
+	videoUrl:"",
+	createTime:""
+}
 export {
-	testData,user
+	testData,user,topic
 }

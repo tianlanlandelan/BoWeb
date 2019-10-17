@@ -5,14 +5,28 @@ import Home from './views/Home.vue'
 import Main from './views/Main.vue'
 import Password from "./views/Password.vue"
 
-
+import Admin from "./views/Admin.vue"
+import TopicList from "./views/topic/list.vue"
+import TopicEdit from "./views/topic/edit.vue"
 
 let routes = [
+	{
+	    path: '/Manager',
+	    component: Admin,
+	    name: '课程管理',
+	    iconCls: 'el-icon-message',//图标样式class
+	    children: [
+	        { path: '/TopicList', component: TopicList, name: '课程列表' },
+	    ],children: [
+	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课程' },
+	    ],
+		//是否显示在Admin页面的左侧菜单列表中
+		show:true
+	},
     {
         path: '/Login/:type',
         component: Login,
-        name: '',
-        hidden: true
+        name: ''
     },
 	{
 	    path: '/Password',
@@ -56,14 +70,12 @@ let routes = [
     {
         path: '/Register',
         component: Register,
-        name: '',
-        hidden: true
+        name: ''
     },
     {
         path: '/404',
         component: NotFound,
-        name: '',
-        hidden: true
+        name: ''
     },
     {
         path: '/Home',
@@ -73,7 +85,6 @@ let routes = [
 	,
     {
         path: '*',
-        hidden: true,
         redirect: { path: '/404' }
     }
 ];
