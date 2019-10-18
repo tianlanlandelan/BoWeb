@@ -232,7 +232,16 @@ const topic = {
 	content:"",
 	videoTitle:"",
 	videoUrl:"",
-	createTime:""
+	createTime:"",
+	init(){
+		this.id=0,
+		this.sort=0,
+		this.title="",
+		this.content="",
+		this.videoTitle="",
+		this.videoUrl="",
+		this.createTime=""
+	}
 }
 
 const exercise = {
@@ -263,6 +272,20 @@ const exercise = {
                 ", optionD='" + this.optionD + '\'' +
                 ", answer='" + this.answer + '\'' +
                 '}';
+	},
+	init(){
+		this.id=0,
+		this.topicId=0,
+		this.sort=0,
+		this.title="",
+		this.content="",
+		this.img="",
+		this.question="",
+		this.optionA="",
+		this.optionB="",
+		this.optionC="",
+		this.optionD="",
+		this.answer=""
 	}
 }
 

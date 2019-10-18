@@ -5,7 +5,8 @@
 				<el-input v-model="exercise.title" placeholder="请输入内容"></el-input>
 			</el-form-item>
 			<el-form-item label="内容">
-				<div id = "editor"></div>
+				<div id = "editorTitle"></div>
+				<div id = "editorContent" class = "editorContent"></div>
 			</el-form-item>
 			<el-form-item label="图片">
 				<el-upload
@@ -22,16 +23,20 @@
 				<el-input v-model="exercise.question" placeholder="请输入内容"></el-input>
 			</el-form-item>
 			<el-form-item label="A" >
-				<el-input v-model="exercise.optionA" placeholder="请输入内容"></el-input>
+				<div id = "editorATitle" v-show="false"></div>
+				<div id = "editorAContent" class="editorContent"></div>
 			</el-form-item>
 			<el-form-item label="B" >
-				<el-input v-model="exercise.optionB" placeholder="请输入内容"></el-input>
+				<div id = "editorBTitle" v-show="false"></div>
+				<div id = "editorBContent" class="editorContent"></div>
 			</el-form-item>
 			<el-form-item label="C" >
-				<el-input v-model="exercise.optionC" placeholder="请输入内容"></el-input>
+				<div id = "editorCTitle" v-show="false"></div>
+				<div id = "editorCContent" class="editorContent"></div>
 			</el-form-item>
 			<el-form-item label="D" >
-				<el-input v-model="exercise.optionD" placeholder="请输入内容"></el-input>
+				<div id = "editorDTitle" v-show="false"></div>
+				<div id = "editorDContent" class="editorContent"></div>
 			</el-form-item>
 			<el-form-item label="答案" >
 				<el-radio-group v-model="exercise.answer">
@@ -42,7 +47,7 @@
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="primary" @click = "submit()">添加课程</el-button>
+				<el-button type="primary" @click = "submit()">添加练习</el-button>
 			</el-form-item>
 		</el-form> 
 	</div>
@@ -62,7 +67,11 @@
 			return{
 				fileList:[],
 				exercise:exercise,
-				editor : new E("#editor")
+				editor : new E("#editorTitle","#editorContent"),
+				editorA : new E("#editorATitle","#editorAContent"),
+				editorB : new E("#editorBTitle","#editorBContent"),
+				editorC : new E("#editorCTitle","#editorCContent"),
+				editorD : new E("#editorDTitle","#editorDContent")
 			}
 		},
 		methods:{
@@ -92,6 +101,18 @@
 				if(this.editor.txt.text()){
 					this.exercise.content = this.editor.txt.html();
 				}
+				if(this.editorA.txt.text()){
+					this.exercise.optionA = this.editorA.txt.html();
+				}
+				if(this.editorB.txt.text()){
+					this.exercise.optionB = this.editorB.txt.html();
+				}
+				if(this.editorC.txt.text()){
+					this.exercise.optionC = this.editorC.txt.html();
+				}
+				if(this.editorD.txt.text()){
+					this.exercise.optionD = this.editorD.txt.html();
+				}
 				console.log(this.exercise.toString());
 				req_saveExercise(this.exercise).then(response => {
 				  console.log("Topic Saved，Response:",response);
@@ -105,12 +126,23 @@
 				    });
 				
 				  } else {
-				    
+					  this.$message({
+					    message: "Exercise Save Success",
+					    type: 'success'
+					  });
+				    this.$router.push('/ExerciseList');
 				  }
 				});
 			}
 		},mounted(){
+			
 			this.editor.create();
+			this.editorA.create();
+			this.editorB.create();
+			this.editorC.create();
+			this.editorD.create();
+			
+			this.exercise.init();
 			this.exercise.id = utils.getParameter("id");
 			this.exercise.topicId = utils.getParameter("topicId");
 			
@@ -120,4 +152,22 @@
 </script>
 
 <style>
+	
+	.editor{
+		border: 1px solid #ccc;
+	}
+	.editorContent{
+		min-height: 100px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+	}
+	.editorContent{
+		min-height: 40px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+	}
+	.editorContent :hover{
+		border-color: #409eff;
+	}
+	
 </style>

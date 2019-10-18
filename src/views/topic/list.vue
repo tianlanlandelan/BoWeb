@@ -34,7 +34,6 @@
 			      message: message,
 			      type: 'error'
 			    });
-			  //应答成功，将用户信息缓存起来。跳转到默认页面
 			  } else {
 			    this.list = data;
 			  }

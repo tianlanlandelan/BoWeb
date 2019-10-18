@@ -80,13 +80,17 @@
 				      message: message,
 				      type: 'error'
 				    });
-				  //应答成功，将用户信息缓存起来。跳转到默认页面
 				  } else {
-				    
+				    this.$message({
+				      message: "Save Topic Success!",
+				      type: 'success'
+				    });
+					this.$router.push('/TopicList');
 				  }
 				});
 			}
 		},mounted(){
+			this.topic.init();
 			// this.editor.customConfig.uploadImgServer = '/upload/img';
 			// 将图片大小限制为 3M
 			// this.editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024

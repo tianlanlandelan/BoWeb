@@ -110,4 +110,11 @@ export const req_saveExercise = (exercise) => {
 		}
 	}).then(res => res.data); 
 };
+export const req_getExerciseList = () => { 
+    return axios.get(form, {
+		headers:{
+			'method':'exerciseInfo'
+		}
+	}).then(res => res.data); 
+};
 
