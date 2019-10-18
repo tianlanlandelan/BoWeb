@@ -9,6 +9,9 @@ import Admin from "./views/Admin.vue"
 import TopicList from "./views/topic/list.vue"
 import TopicEdit from "./views/topic/edit.vue"
 
+import ExerciseList from "./views/exercise/list.vue"
+import ExerciseEdit from "./views/exercise/edit.vue"
+
 let routes = [
 	{
 	    path: '/Manager',
@@ -17,7 +20,9 @@ let routes = [
 	    iconCls: 'el-icon-message',//图标样式class
 	    children: [
 	        { path: '/TopicList', component: TopicList, name: '课程列表' },
-	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课程' }
+	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课程' },
+			{ path: '/ExerciseList', component: ExerciseList, name: '练习列表' },
+			{ path: '/ExerciseEdit', component: ExerciseEdit, name: '编辑练习' ,props:true}
 	    ],
 		//是否显示在Admin页面的左侧菜单列表中
 		show:true

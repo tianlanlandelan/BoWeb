@@ -234,6 +234,57 @@ const topic = {
 	videoUrl:"",
 	createTime:""
 }
+
+const exercise = {
+	id:0,
+	topicId:0,
+	sort:0,
+	title:"",
+	content:"",
+	img:"",
+	question:"",
+	optionA:"",
+	optionB:"",
+	optionC:"",
+	optionD:"",
+	answer:"",
+	toString(){
+		return "ExerciseInfo{" +
+                "id=" + this.id +
+                ", topicId=" + this.topicId +
+                ", sort=" + this.sort +
+                ", title='" + this.title + '\'' +
+                ", content='" + this.content + '\'' +
+                ", img='" + this.img + '\'' +
+                ", question='" + this.question + '\'' +
+                ", optionA='" + this.optionA + '\'' +
+                ", optionB='" + this.optionB + '\'' +
+                ", optionC='" + this.optionC + '\'' +
+                ", optionD='" + this.optionD + '\'' +
+                ", answer='" + this.answer + '\'' +
+                '}';
+	}
+}
+
+const utils = {
+	/**
+	 * 获取url 中的带的查询参数
+	 * @param {Object} name
+	 */
+	getParameter(name) {
+		var query = window.location.search;
+		var iLen = name.length;
+		var iStart = query.indexOf(name);
+		if(iStart == -1)
+			return "";
+		var iEnd = query.indexOf("&", iStart);
+		if(iEnd != -1){
+			return query.substring(iStart + iLen + 1,iEnd);
+		}else{
+			return query.substring(iStart + iLen + 1);
+		}	
+	}
+}
 export {
-	testData,user,topic
+	testData,user,topic,exercise,utils
 }

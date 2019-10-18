@@ -5,7 +5,7 @@
 			<h4>{{topic.title}}</h4>
 		  </el-col>
 		  <el-col :span="12" >
-		  	<h4>{{topic.title}}</h4>
+		  	<el-button @click="addExcise(topic.id)">添加练习</el-button>
 		  </el-col>
 		</el-row>
 	</div>
@@ -20,7 +20,9 @@
 			}
 		},
 		methods:{
-			
+			addExcise(topicId){
+				this.$router.push({ path: '/ExerciseEdit',query:{id:0,topicId:topicId} });
+			}
 		},mounted(){
 			req_getTopicList().then(response => {
 			  console.log("Topic Saved，Response:",response);

@@ -64,7 +64,9 @@ export const req_forgetPassword = (user) => {
 		}
 	}).then(res => res.data); 
 };
-
+/**
+ * 添加课程
+ */
 export const req_saveTopic = (topic) => { 
     return axios.post(api, {
         sort		:topic.sort,
@@ -82,6 +84,29 @@ export const req_getTopicList = () => {
     return axios.get(form, {
 		headers:{
 			'method':'topicInfo'
+		}
+	}).then(res => res.data); 
+};
+
+/**
+ * 添加练习
+ */
+export const req_saveExercise = (exercise) => { 
+    return axios.post(api, {
+        topicId	:exercise.topicId	,
+		sort	:exercise.sort		,
+        title	:exercise.title		,
+        content	:exercise.content	,
+        img		:exercise.img		,
+        question:exercise.question	,
+        optionA	:exercise.optionA	,
+        optionB	:exercise.optionB	,
+        optionC	:exercise.optionC	,
+        optionD	:exercise.optionD	,
+        answer	:exercise.answer	
+    },{
+		headers:{
+			'method':'exerciseInfo'
 		}
 	}).then(res => res.data); 
 };
