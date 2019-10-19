@@ -27,9 +27,34 @@
 	<!-- 页面内容 -->
 	<el-row>
 		<!--左侧导航-->
-		<el-col :span="4" class= "left-bar">
+		<el-col :span="6" class= "left-bar">
 			<!-- <img class="portrait" :src="this.sysUserAvatar" />  -->
 			<el-collapse v-model="activeName">
+				<el-collapse-item :name="topic.id" v-for="topic in list" :key="topic.id">
+					<template slot="title">
+						<div class="topic">
+							{{topic.title}}
+							<i v-if="topic.status === 2" class="el-icon-success Success " ></i>
+							<i v-if="topic.status === 1" class="el-icon-loading Blue " ></i>
+							<i v-if="topic.status === 0" class="el-icon-remove-outline Info " ></i>
+						</div>
+					</template>
+					<!--课程视频-->
+					<div class="subtopic" v-show="topic.videoTitle != ''" >
+						- Video: {{topic.videoTitle}}
+					</div>
+					<div class="subtopic" v-for="exercise in topic.list" :key="exercise.id"
+						@click="showSubTopic(subtopic)">
+						- {{exercise.title}}
+						<i v-if="exercise.status === 2" class="el-icon-success Success " ></i>
+						<i v-if="exercise.status === 1" class="el-icon-loading Blue " ></i>
+						<i v-if="exercise.status === 0" class="el-icon-remove-outline Info " ></i>		
+					</div>
+				</el-collapse-item>
+			</el-collapse>
+			
+			
+			<!-- <el-collapse v-model="activeName">
 				<el-collapse-item :name="topic.id" v-for="topic in topics" :key="topic.id">
 					<template slot="title">
 						<div class="topic">
@@ -47,11 +72,12 @@
 						<i v-if="subtopic.status === 0" class="el-icon-remove-outline Info " ></i>		
 					</div>
 				</el-collapse-item>
-			</el-collapse>
+			</el-collapse> -->
 		</el-col>
 
 		<!--右侧内容-->
-		<el-col :span="20" class="right-content">
+		<el-col :span="18" class="right-content">
+			<Topic :topicId="activeName"></Topic>
 			<!--步骤条-->
 			<el-row>
 				<el-col>
@@ -105,11 +131,14 @@
 
 <script>
 	import LeaderBoard1 from "../components/leaderboard1.vue";
+	import Topic from "../components/topic.vue";
+	import {req_getMenu} from "../api/api.js";
 	import {testData} from "../data.js";
 	export default {
-		components:{LeaderBoard1,testData},
+		components:{LeaderBoard1,Topic,testData},
 		data() {
 			return {
+				list:[],
 				sysName:'内部培训',
 				sysUserName: '',
 				sysUserAvatar: '',
@@ -191,6 +220,21 @@
 				this.sysUserName = user.name || '';
 				this.sysUserAvatar = user.avatar || '';
 			}
+			
+			req_getMenu().then(response => {
+			  console.log("getMenu，Response:",response);
+			  //解析接口应答的json串
+			  let { data, message, success } = response;
+			  //应答不成功，提示错误信息
+			  if (success !== 0) {
+			    this.$message({
+			      message: message,
+			      type: 'error'
+			    });
+			  } else {
+			    this.list = data;
+			  }
+			});
 		}
 	}
 
@@ -208,7 +252,7 @@
 		padding-left: 20px;
 	}
 	.topic{
-		font-size: 24px;
+		font-size: 18px;
 	}
 	.subtopic{
 		padding-left: 20px;

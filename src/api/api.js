@@ -83,7 +83,18 @@ export const req_saveTopic = (topic) => {
 export const req_getTopicList = () => { 
     return axios.get(form, {
 		headers:{
-			'method':'topicInfo'
+			'method':'topicInfo/getAll'
+		}
+	}).then(res => res.data); 
+};
+
+export const req_getTopicInfo = (id) => { 
+    return axios.get(api, {
+		params:{
+			id:id
+		},
+		headers:{
+			'method':'topicInfo/getAll'
 		}
 	}).then(res => res.data); 
 };
@@ -114,6 +125,17 @@ export const req_getExerciseList = () => {
     return axios.get(form, {
 		headers:{
 			'method':'exerciseInfo'
+		}
+	}).then(res => res.data); 
+};
+
+/**
+ * 获取用户主页左侧导航菜单
+ */
+export const req_getMenu = () => { 
+    return axios.get(form, {
+		headers:{
+			'method':'topicInfo/getMenu'
 		}
 	}).then(res => res.data); 
 };

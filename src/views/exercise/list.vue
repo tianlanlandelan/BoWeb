@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<el-row v-for="exercise in list" :key = "exercise.id">
+		<el-row v-for="exercise in list" :key = "exercise.id" >
 		  <el-col :span="6" >
-			<h4>{{exercise.title}}</h4>
+			<h4 @click="show(exercise.id)">{{exercise.title}}</h4>
 		  </el-col>
 		  <el-col :span="18" >
 			  <div v-html="exercise.content"></div>
@@ -20,7 +20,10 @@
 			}
 		},
 		methods:{
-			
+			show(id){
+				console.log("show",id);
+				this.$router.push({ path: '/ExerciseShow',query:{id:id}});
+			}
 		},mounted(){
 			req_getExerciseList().then(response => {
 			  console.log("Topic Saved，Response:",response);
@@ -35,6 +38,7 @@
 			  //应答成功，将用户信息缓存起来。跳转到默认页面
 			  } else {
 			    this.list = data;
+				sessionStorage.setItem('exerciseList', JSON.stringify(this.list));
 			  }
 			});
 		}
