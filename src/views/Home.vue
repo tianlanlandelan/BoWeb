@@ -1,28 +1,9 @@
 <template>
-<el-row class="container">
-	<!-- 页头 -->
-<!-- 	<el-row>
-		<el-col :span="24" class="header">
-			<el-col :span="10" class="logo">
-				{{sysName}}
-			</el-col>
-			<el-col :span="4" class="userinfo">
-				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item @click.native="mymessage">我的消息</el-dropdown-item>
-						<el-dropdown-item @click.native="mysetting">设置</el-dropdown-item>
-						<el-dropdown-item divided @click.native="mylogout">退出登录</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
-			</el-col>
-		</el-col>
-	</el-row> -->
-	
+<el-row class="container">	
 	<!-- 页面内容 -->
 	<el-row>
 		<!--左侧导航-->
-		<el-col :span="6" class= "left-bar">
+		<el-col :lg="6" :md="8" :sm="10" class= "left-bar">
 			<div class="center">
 				<img class="portrait" :src="'../../static/icon/' + user.avatarId + '.png'" /> 
 			</div>
@@ -41,6 +22,10 @@
 							<i v-if="topic.status === 0" class="el-icon-remove-outline Info " ></i>
 						</div>
 					</template>
+					<!--课程内容-->
+					<div class="ColorCommon font16 marginLeft" v-show="!topic.videoTitle != ''" @click="showTopic(topic.id)">
+						- Text: {{topic.title}}
+					</div>
 					<!--课程视频-->
 					<div class="ColorCommon font16 marginLeft" v-show="topic.videoTitle != ''" @click="showTopic(topic.id)">
 						- Video: {{topic.videoTitle}}
@@ -57,12 +42,12 @@
 		</el-col>
 
 		<!--右侧内容-->
-		<el-col :span="18" class="right-content">
+		<el-col :lg="18" :md="16" :sm="14" class="right-content">
 			<!--课程展示-->
 			<div v-show="isShowTopic" class="showTopic">
 				<div v-show="topic.videoUrl == ''">
-					<div class="font18 ColorMain">{{topic.title}}</div>
-					<div class="content" v-html="topic.content"></div>
+					<div class="font24 ColorMain">{{topic.title}}</div>
+					<div class="font16 ColorMain lineHeight marginTop" v-html="topic.content"></div>
 				</div>
 				<div v-show="topic.videoUrl">
 					<div class="font24 ColorMain">{{topic.videoTitle}}</div>
@@ -249,6 +234,12 @@
 			}
 		},
 		mounted() {
+			
+			// this.$message({
+			//   message: document.body.clientWidth,
+			//   type: 'success'
+			// });
+			
 			var user = sessionStorage.getItem('user');
 			if (user) {
 				this.user = JSON.parse(user);
@@ -265,8 +256,11 @@
 			    });
 			  } else {
 			    this.list = data;
+				if(this.list){
+					this.showTopic(this.list[0].id);
+				}
 			  }
-			});
+			});	
 		}
 	}
 
@@ -302,7 +296,7 @@
 	}
 	.left-bar{
 		padding-left: 20px;
-		// border-right: 1px solid #409EFF;
+		min-width: 360px;
 	}
 
 	.right-content{
@@ -336,5 +330,7 @@
 	.inline{
 		display: inline;
 	}
-
+	.lineHeight{
+		line-height: 20px;
+	}
 </style>
