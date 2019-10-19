@@ -89,12 +89,12 @@ export const req_getTopicList = () => {
 };
 
 export const req_getTopicInfo = (id) => { 
-    return axios.get(api, {
+    return axios.get(form, {
 		params:{
 			id:id
 		},
 		headers:{
-			'method':'topicInfo/getAll'
+			'method':'topicInfo'
 		}
 	}).then(res => res.data); 
 };
@@ -124,11 +124,23 @@ export const req_saveExercise = (exercise) => {
 export const req_getExerciseList = () => { 
     return axios.get(form, {
 		headers:{
+			'method':'exerciseInfo/getAll'
+		}
+	}).then(res => res.data); 
+};
+/**
+ * get方法提交的参数要按照form表单的形式接收
+ */
+export const req_getExerciseInfo = (id) => { 
+    return axios.get(form, {
+		params:{
+			id:id
+		},
+		headers:{
 			'method':'exerciseInfo'
 		}
 	}).then(res => res.data); 
 };
-
 /**
  * 获取用户主页左侧导航菜单
  */

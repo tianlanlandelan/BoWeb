@@ -1,16 +1,11 @@
 <template>
 <el-row class="container">
 	<!-- 页头 -->
-	<el-row>
+<!-- 	<el-row>
 		<el-col :span="24" class="header">
 			<el-col :span="10" class="logo">
 				{{sysName}}
 			</el-col>
-			<!-- <el-col :span="10">
-				<div class="tools" @click.prevent="collapse">
-					<i class="fa fa-align-justify"></i>
-				</div>
-			</el-col> -->
 			<el-col :span="4" class="userinfo">
 				<el-dropdown trigger="hover">
 					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
@@ -22,29 +17,36 @@
 				</el-dropdown>
 			</el-col>
 		</el-col>
-	</el-row>
+	</el-row> -->
 	
 	<!-- 页面内容 -->
 	<el-row>
 		<!--左侧导航-->
 		<el-col :span="6" class= "left-bar">
-			<!-- <img class="portrait" :src="this.sysUserAvatar" />  -->
-			<el-collapse v-model="activeName">
+			<div class="center">
+				<img class="portrait" :src="'../../static/icon/' + user.avatarId + '.png'" /> 
+			</div>
+			<div class="center font24 ColorInfo">
+				Hello,{{user.firstName}} {{user.lastName}}!
+			</div>
+			
+			
+			<el-collapse v-model="activeName" accordion>
 				<el-collapse-item :name="topic.id" v-for="topic in list" :key="topic.id">
 					<template slot="title">
-						<div class="topic">
-							{{topic.title}}
+						<div class="ColorCommon font16">
+							- Topic{{topic.sort}}: {{topic.title}}
 							<i v-if="topic.status === 2" class="el-icon-success Success " ></i>
 							<i v-if="topic.status === 1" class="el-icon-loading Blue " ></i>
 							<i v-if="topic.status === 0" class="el-icon-remove-outline Info " ></i>
 						</div>
 					</template>
 					<!--课程视频-->
-					<div class="subtopic" v-show="topic.videoTitle != ''" >
+					<div class="ColorCommon font16 marginLeft" v-show="topic.videoTitle != ''" @click="showTopic(topic.id)">
 						- Video: {{topic.videoTitle}}
 					</div>
-					<div class="subtopic" v-for="exercise in topic.list" :key="exercise.id"
-						@click="showSubTopic(subtopic)">
+					<div class="ColorCommon font16 marginLeft" v-for="exercise in topic.list" :key="exercise.id"
+						@click="showExercise(exercise.id)">
 						- {{exercise.title}}
 						<i v-if="exercise.status === 2" class="el-icon-success Success " ></i>
 						<i v-if="exercise.status === 1" class="el-icon-loading Blue " ></i>
@@ -52,77 +54,78 @@
 					</div>
 				</el-collapse-item>
 			</el-collapse>
-			
-			
-			<!-- <el-collapse v-model="activeName">
-				<el-collapse-item :name="topic.id" v-for="topic in topics" :key="topic.id">
-					<template slot="title">
-						<div class="topic">
-							{{topic.title}}
-							<i v-if="topic.status === 2" class="el-icon-success Success " ></i>
-							<i v-if="topic.status === 1" class="el-icon-loading Blue " ></i>
-							<i v-if="topic.status === 0" class="el-icon-remove-outline Info " ></i>
-						</div>
-					</template>
-					<div class="subtopic" v-for="subtopic in topic.subtopics" :key="subtopic.id"
-						@click="showSubTopic(subtopic)">
-						{{subtopic.title}}
-						<i v-if="subtopic.status === 2" class="el-icon-success Success " ></i>
-						<i v-if="subtopic.status === 1" class="el-icon-loading Blue " ></i>
-						<i v-if="subtopic.status === 0" class="el-icon-remove-outline Info " ></i>		
-					</div>
-				</el-collapse-item>
-			</el-collapse> -->
 		</el-col>
 
 		<!--右侧内容-->
 		<el-col :span="18" class="right-content">
-			<Topic :topicId="activeName"></Topic>
-			<!--步骤条-->
-			<el-row>
-				<el-col>
-					<el-steps :active="1" >
-						<el-step :title="sub.title" 
-							v-for="sub in currentTopic" :key="sub.id">
-						</el-step>
-					</el-steps>
-				</el-col>
-			</el-row>
-			<!--课程内容-->
-			<el-row>
-				<el-col>
-					<div class="split"><i class="el-icon-tickets"></i> Python For Beginners</div>
-					<video src="http://127.0.0.1:8088/images/video/20191003065346873.mp4" controls="controls">
-					您的浏览器不支持 video 标签。
-					</video>
-					<p>Welcome! Are you completely new to programming? If not then we presume you will be looking for information about why and how to get started with Python. Fortunately an experienced programmer in any programming language (whatever it may be) can pick up Python very quickly. It's also easy for beginners to use and learn, so jump in!</p>
-					<p>Installing Python is generally easy, and nowadays many Linux and UNIX distributions include a recent Python. Even some Windows computers (notably those from HP) now come with Python already installed. If you do need to install Python and aren't confident about the task you can find a few notes on the BeginnersGuide/Download wiki page, but installation is unremarkable on most platforms.</p>
-					<p>Before getting started, you may want to find out which IDEs and text editors are tailored to make Python editing easy, browse the list of introductory books, or look at code samples that you might find helpful.</p>
-					<p>There is a list of tutorials suitable for experienced programmers on the BeginnersGuide/Tutorials page. There is also a list of resources in other languages which might be useful if English is not your first language.</p>
-				</el-col>
-			</el-row>
-			<!--问题标题-->
-			<el-row>
-				<el-col>
-					<div class="split"><i class="el-icon-question"></i> Exercise</div>
-					<h3>When to use Python？</h3>
-					<p>Python is a pretty versatile language.For which applications can you use Python?</p>
-				</el-col>
-			</el-row>
-			<!--问题选项-->
-			<el-row>
-				<el-col>
-					<div class="split"><i class="el-icon-edit-outline"></i> Possible Answers</div>
-					<el-radio-group class="options"  v-model="chosen" size="small" v-for="option in options" :key="option.id" @change="optionsChanged">
-						<el-radio :label="option.title">{{option.text}}</el-radio>
-					</el-radio-group>
-				</el-col>
-			</el-row>
+			<!--课程展示-->
+			<div v-show="isShowTopic" class="showTopic">
+				<div v-show="topic.videoUrl == ''">
+					<div class="font18 ColorMain">{{topic.title}}</div>
+					<div class="content" v-html="topic.content"></div>
+				</div>
+				<div v-show="topic.videoUrl">
+					<div class="font24 ColorMain">{{topic.videoTitle}}</div>
+					<video :src="topic.videoUrl" controls="controls" ></video>
+				</div>
+			</div>
+			
+			<!--练习展示-->
+			<div v-show="isShowExercise">
+				<div class="exercise">
+					<el-row>
+						<el-col class="font24 ColorMain">
+							Investment research
+						</el-col>
+					</el-row>
+					<div v-html="exercise.content" class="marginTop marginBottom"></div>
+					
+					<!--图片和问题展示区-->
+					<el-row>
+						<el-col :span="12" v-show="exercise.img" class="exerciseImg">
+							<img :src="exercise.img" />
+						</el-col>
+						<el-col :span="exercise.img?12:24">
+							<div class="font18">{{exercise.question}}</div>
+							<el-row class="marginTop10">
+								<table >
+									<td><el-radio v-model="answer" label="A">&nbsp;</el-radio></td>
+									<td>A.</td>
+									<td><div class="inline" v-html="exercise.optionA"></div></td>
+								</table>
+							</el-row>
+							<el-row class="marginTop10">
+								<table >
+									<td><el-radio v-model="answer" label="B">&nbsp;</el-radio></td>
+									<td>B.</td>
+									<td><div class="inline" v-html="exercise.optionB"></div></td>
+								</table>
+							</el-row>
+							<el-row class="marginTop10">
+								<table >
+									<td><el-radio v-model="answer" label="C">&nbsp;</el-radio></td>
+									<td>C.</td>
+									<td><div class="inline" v-html="exercise.optionC"></div></td>
+								</table>
+							</el-row>
+							<el-row class="marginTop10">
+								<table >
+									<table >
+										<td><el-radio v-model="answer" label="D">&nbsp;</el-radio></td>
+										<td>D.</td>
+										<td><div class="inline" v-html="exercise.optionD"></div></td>
+									</table>
+								</table>
+							</el-row>
+						</el-col>
+					</el-row>
+				</div>
+			</div>
+		
 			<!--LeaderBoard1-->
-			<el-row>
+			<!-- <el-row>
 				<LeaderBoard1></LeaderBoard1>
-			</el-row>
-			<!--答案与解析-->
+			</el-row> -->
 		</el-col>
 	</el-row>
 
@@ -131,34 +134,22 @@
 
 <script>
 	import LeaderBoard1 from "../components/leaderboard1.vue";
-	import Topic from "../components/topic.vue";
-	import {req_getMenu} from "../api/api.js";
-	import {testData} from "../data.js";
+	import {req_getMenu,req_getTopicInfo,req_getExerciseInfo} from "../api/api.js";
 	export default {
-		components:{LeaderBoard1,Topic,testData},
+		components:{LeaderBoard1},
 		data() {
 			return {
+				user:{},
 				list:[],
-				sysName:'内部培训',
-				sysUserName: '',
-				sysUserAvatar: '',
-				form: {
-					name: '',
-					region: '',
-					date1: '',
-					date2: '',
-					delivery: false,
-					type: [],
-					resource: '',
-					desc: ''
-				},
-				topics:testData.topics,
 				//折叠面板导航栏默认打开页面
-				activeName: 1001,
-				currentTopic:testData.currentTopic,
-				//备选项
-				options:testData.options,
-				chosen:""
+				activeName: 1,
+				//课程
+				topic:{},
+				//练习
+				exercise:{},
+				isShowTopic:false,
+				isShowExercise:false,
+				answer:""
 			}
 		},
 		methods: {
@@ -209,18 +200,59 @@
 				type: 'warning'
 				});
 			},
-			optionsChanged(label){
-				console.log("选择了",label);
+			getTopic(id){
+				console.log("getTopic id:",id);
+				req_getTopicInfo(id).then(response => {
+				  console.log("req_getTopicInfo，Response:",response);
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+				    this.$message({
+				      message: message,
+				      type: 'error'
+				    });
+				  } else {
+				    this.topic = data;
+				  }
+				});
+			},
+			getExersice(id){
+				console.log("getExersice id:",id);
+				req_getExerciseInfo(id).then(response => {
+				  console.log("req_getExerciseInfo，Response:",response);
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+				    this.$message({
+				      message: message,
+				      type: 'error'
+				    });
+				  } else {
+				    this.exercise = data;
+				  }
+				});
+			}
+			,
+			showTopic(id){
+				this.isShowExercise = false;
+				this.exercise = {};
+				this.getTopic(id);
+				this.isShowTopic = true;
+			},
+			showExercise(id){
+				this.isShowTopic = false;
+				this.topic = {};
+				this.getExersice(id);
+				this.isShowExercise = true;
 			}
 		},
 		mounted() {
 			var user = sessionStorage.getItem('user');
 			if (user) {
-				user = JSON.parse(user);
-				this.sysUserName = user.name || '';
-				this.sysUserAvatar = user.avatar || '';
+				this.user = JSON.parse(user);
 			}
-			
 			req_getMenu().then(response => {
 			  console.log("getMenu，Response:",response);
 			  //解析接口应答的json串
@@ -241,29 +273,40 @@
 </script>
 <style scoped lang="scss">
 	@import '~scss_vars';
+	table,td{
+		margin: 0px;padding: 0px;
+	}
+	video{
+		width: 100%;
+	}
+	.exerciseImg{
+		padding: 0 10px;
+	}
+	img{
+		width: 100%;
+	}
+	.exerciseOption{
+		max-width: 40px;
+		line-height: 30px;
+	}
+	.option{
+		line-height: 30px;
+	}
+	.exerciseTitle{
+		font-size: 1.6rem;
+	}
 	
 	.portrait{
 		width: 120px;
 		height: 120px;
-		border-radius: 40px;
-		margin: 10px 0px 10px 10px;
 	}
 	.left-bar{
 		padding-left: 20px;
+		// border-right: 1px solid #409EFF;
 	}
-	.topic{
-		font-size: 18px;
-	}
-	.subtopic{
-		padding-left: 20px;
-		font-size: 18px;
-	}
+
 	.right-content{
 		padding:20px;
-	}
-	.options{
-		display:block;
-		line-height: 30px;
 	}
 	.split{
 		background-color: #DCDFE6;
@@ -285,137 +328,13 @@
 	.iBig{
 		font-size: 24px;
 	}
-
-
-
-
-
-
-
-	.container {
-		position: absolute;
-		top: 0px;
-		bottom: 0px;
-		width: 100%;
-		.header {
-			height: 60px;
-			line-height: 60px;
-			background: $color-primary;
-			color:#fff;
-			.userinfo {
-				text-align: right;
-				padding-right: 35px;
-				float: right;
-				.userinfo-inner {
-					cursor: pointer;
-					color:#fff;
-					img {
-						width: 40px;
-						height: 40px;
-						border-radius: 20px;
-						margin: 10px 0px 10px 10px;
-						float: right;
-					}
-				}
-			}
-			.logo {
-				//width:230px;
-				height:60px;
-				font-size: 22px;
-				padding-left:20px;
-				padding-right:20px;
-				border-color: rgba(238,241,146,0.3);
-				border-right-width: 1px;
-				border-right-style: solid;
-				img {
-					width: 40px;
-					float: left;
-					margin: 10px 10px 10px 18px;
-				}
-				.txt {
-					color:#fff;
-				}
-			}
-			.logo-width{
-				width:230px;
-			}
-			.logo-collapse-width{
-				width:60px
-			}
-			.tools{
-				padding: 0px 23px;
-				width:14px;
-				height: 60px;
-				line-height: 60px;
-				cursor: pointer;
-			}
-		}
-		.main {
-			display: flex;
-			// background: #324057;
-			position: absolute;
-			top: 60px;
-			bottom: 0px;
-			overflow: hidden;
-			aside {
-				flex:0 0 230px;
-				width: 230px;
-				// position: absolute;
-				// top: 0px;
-				// bottom: 0px;
-				.el-menu{
-					height: 100%;
-				}
-				.collapsed{
-					width:60px;
-					.item{
-						position: relative;
-					}
-					.submenu{
-						position:absolute;
-						top:0px;
-						left:60px;
-						z-index:99999;
-						height:auto;
-						display:none;
-					}
-
-				}
-			}
-			.menu-collapsed{
-				flex:0 0 60px;
-				width: 60px;
-			}
-			.menu-expanded{
-				flex:0 0 230px;
-				width: 230px;
-			}
-			.content-container {
-				// background: #f1f2f7;
-				flex:1;
-				// position: absolute;
-				// right: 0px;
-				// top: 0px;
-				// bottom: 0px;
-				// left: 230px;
-				overflow-y: scroll;
-				padding: 20px;
-				.breadcrumb-container {
-					//margin-bottom: 15px;
-					.title {
-						width: 200px;
-						float: left;
-						color: #475669;
-					}
-					.breadcrumb-inner {
-						float: right;
-					}
-				}
-				.content-wrapper {
-					background-color: #fff;
-					box-sizing: border-box;
-				}
-			}
-		}
+	.exercise{
+		border: 5px solid #edf3f2;
+		padding: 10px;
 	}
+
+	.inline{
+		display: inline;
+	}
+
 </style>

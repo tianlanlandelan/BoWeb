@@ -1,7 +1,46 @@
 .Danger{
 	color: #F56C6C;
 }
-
+.ColorInfo{
+	color:#909399;
+}
+.ColorMain{
+	color:#303133
+}
+.ColorCommon{
+	color:#606266;
+}
 .tip{
 	color: #303133;
 }
+.center{
+	text-align: center;
+}
+
+.font24{
+		font-size:24px;
+	}
+	.font22{
+		font-size:22px;
+	}
+	.font20{
+		font-size:20px;
+	}
+	.font18{
+		font-size:18px;
+	}
+	.font16{
+		font-size:16px;
+	}
+	.marginTop{
+		margin-top: 20px;
+	}
+	.marginBottom{
+		margin-bottom: 20px;
+	}
+	.marginTop10{
+		margin-top: 10px;
+	}
+	.marginLeft{
+		margin-left: 20px;
+	}
