@@ -155,3 +155,26 @@ export const req_getMenu = (userId) => {
 	}).then(res => res.data); 
 };
 
+export const req_saveUserTopic = (userId,topicId) => { 
+    return axios.post(api, {
+        userId:userId,
+		topicId:topicId
+    },{
+		headers:{
+			'method':'userTopic'
+		}
+	}).then(res => res.data); 
+};
+
+export const req_saveScore = (userId,exerciseId,score) => { 
+    return axios.post(api, {
+        userId:userId,
+		exerciseId:exerciseId,
+		score:score
+    },{
+		headers:{
+			'method':'score'
+		}
+	}).then(res => res.data); 
+};
+

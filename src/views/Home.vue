@@ -23,7 +23,7 @@
 						</div>
 					</template>
 					<!--课程内容-->
-					<div class="ColorCommon font16 marginLeft" v-show="!topic.videoTitle != ''" @click="showTopic(topic.id,topic.status)">
+					<div class="ColorCommon font16 marginLeft" v-show="topic.videoTitle == ''" @click="showTopic(topic.id,topic.status)">
 						- Text: {{topic.title}}
 						<i v-if="topic.status === 2" class="el-icon-success Success " ></i>
 						<i v-if="topic.status === 1" class="el-icon-loading Blue " ></i>
@@ -38,7 +38,7 @@
 					</div>
 					<!--课程练习-->
 					<div class="ColorCommon font16 marginLeft" v-for="exercise in topic.list" :key="exercise.id"
-						@click="showExercise(exercise.id)">
+						@click="showExercise(exercise.id,exercise.status)">
 						- {{exercise.title}}
 						<i v-if="exercise.status === 2" class="el-icon-success Success " ></i>
 						<i v-if="exercise.status === 1" class="el-icon-loading Blue " ></i>
@@ -52,10 +52,15 @@
 		<el-col :lg="18" :md="16" :sm="14" class="right-content">
 			<!--课程展示-->
 			<div v-show="isShowTopic" class="showTopic">
+				<!--展示文字内容-->
 				<div v-show="topic.videoUrl == ''">
 					<div class="font24 ColorMain">{{topic.title}}</div>
 					<div class="font16 ColorMain lineHeight marginTop" v-html="topic.content"></div>
+					<div class="alignRight">
+						<el-button type="primary" @click="onSaveUserTopic(topic.id)" v-show="topic.status != 2">Got it!</el-button>
+					</div>
 				</div>
+				<!--展示视频-->
 				<div v-show="topic.videoUrl">
 					<div class="font24 ColorMain">{{topic.videoTitle}}</div>
 					<video :src="topic.videoUrl" controls="controls" @play="onPlay()"></video>
@@ -145,7 +150,7 @@
 
 <script>
 	import LeaderBoard1 from "../components/leaderboard1.vue";
-	import {req_getMenu,req_getTopicInfo,req_getExerciseInfo} from "../api/api.js";
+	import {req_getMenu,req_getTopicInfo,req_getExerciseInfo,req_saveUserTopic,req_saveScore} from "../api/api.js";
 	export default {
 		components:{LeaderBoard1},
 		data() {
@@ -203,18 +208,20 @@
 				}).catch(() => {
 
 				});
-			},
-			showSubTopic(subtopic){
-				console.log("showSubTopic",subtopic.id,subtopic.status,subtopic.title);
-				if(subtopic.status === 0){
-					this.warningCannotStudy();
-				}
 			}
 			,
 			warningCannotStudy(){
 				this.$notify({
 				title: '您不能开始学习本课程',
 				message: '只有学完了本课程之前的全部课程内容，才能开始本课程的学习',
+				type: 'warning'
+				});
+			}
+			,
+			warningCannotDoExercise(){
+				this.$notify({
+				title: '您不能开始做本练习',
+				message: '只有学完了本课程对应的内容，并做完了本练习前的所有练习，才能开始',
 				type: 'warning'
 				});
 			}
@@ -259,8 +266,12 @@
 			 * 查询练习并显示
 			 * @param {Object} id 练习ID
 			 */
-			showExercise(id){
+			showExercise(id,status){
 				console.log("showExercise id:",id);
+				if(status === 0){
+					this.warningCannotDoExercise();
+					return;
+				}
 				this.time = 90;
 				this.clearInterval();
 				this.answer = "";
@@ -320,16 +331,19 @@
 				let i = 0;
 				for(i = 0;i < this.list.length;i++){
 					if(this.list[i].id == id && this.list[i].list){
-						this.showExercise(this.list[i].list[0].id);
+						this.showExercise(this.list[i].list[0].id,1);
+						this.list[i].list[0].status = 1;
 					}
 				}
 			},
 			onSubmitAnswer(answer){
+				let score = 0;
 				if(this.answer == answer){
 					this.$message({
 					  message: "Answer Right!",
 					  type: 'success'
 					});
+					score = 100 + this.time;
 				}else{
 					this.$message({
 					  message: "Answer Error!",
@@ -337,6 +351,64 @@
 					});
 					this.isShowAnswer = true;
 				}
+				req_saveScore(this.user.id,this.exercise.id,score).then(response=>{
+					console.log("req_saveScore，Response:",response);
+					let { data, message, success } = response;
+					//应答不成功，提示错误信息
+					if (success !== 0) {
+					  this.$message({
+					    message: message,
+					    type: 'error'
+					  });
+					} 
+				});
+			},
+			/**
+			 * 设置本课程已学习
+			 * @param {Object} id
+			 */
+			onSaveUserTopic(id){
+				req_saveUserTopic(this.user.id,id).then(response=>{
+					console.log("req_saveUserTopic，Response:",response);
+					//解析接口应答的json串
+					let { data, message, success } = response;
+					//应答不成功，提示错误信息
+					if (success !== 0) {
+					  this.$message({
+					    message: message,
+					    type: 'error'
+					  });
+					} else {
+						this.getMenu();
+					}
+				});
+			},
+			getMenu(){
+				//查询左侧菜单，查询回来的数据为：课程id、课程标题、视频地址、课程对应的练习等
+				req_getMenu(this.user.id).then(response => {
+				  console.log("getMenu，Response:",response);
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+				    this.$message({
+				      message: message,
+				      type: 'error'
+				    });
+				  } else {
+				    this.list = data;
+					if(this.list){
+						for(let i = 0 ; i < this.list.length ; i ++){
+							if(this.list[i].status == 1){
+								this.activeName = this.list[i].id;
+								this.showTopic(this.list[i].id,1);
+								return;
+							}
+						}
+					}
+					
+				  }
+				});	
 			}
 		},
 		mounted() {
@@ -352,25 +424,8 @@
 			}else{
 				this.$router.push({ path: '/404' });
 			}
+			this.getMenu();
 			
-			//查询左侧菜单，查询回来的数据为：课程id、课程标题、视频地址、课程对应的练习等
-			req_getMenu(this.user.id).then(response => {
-			  console.log("getMenu，Response:",response);
-			  //解析接口应答的json串
-			  let { data, message, success } = response;
-			  //应答不成功，提示错误信息
-			  if (success !== 0) {
-			    this.$message({
-			      message: message,
-			      type: 'error'
-			    });
-			  } else {
-			    this.list = data;
-				if(this.list){
-					this.showTopic(this.list[0].id,this.list[0].status);
-				}
-			  }
-			});	
 		}
 	}
 
