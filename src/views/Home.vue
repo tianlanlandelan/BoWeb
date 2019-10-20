@@ -23,13 +23,20 @@
 						</div>
 					</template>
 					<!--课程内容-->
-					<div class="ColorCommon font16 marginLeft" v-show="!topic.videoTitle != ''" @click="showTopic(topic.id)">
+					<div class="ColorCommon font16 marginLeft" v-show="!topic.videoTitle != ''" @click="showTopic(topic.id,topic.status)">
 						- Text: {{topic.title}}
+						<i v-if="topic.status === 2" class="el-icon-success Success " ></i>
+						<i v-if="topic.status === 1" class="el-icon-loading Blue " ></i>
+						<i v-if="topic.status === 0" class="el-icon-remove-outline Info " ></i>
 					</div>
 					<!--课程视频-->
-					<div class="ColorCommon font16 marginLeft" v-show="topic.videoTitle != ''" @click="showTopic(topic.id)">
+					<div class="ColorCommon font16 marginLeft" v-show="topic.videoTitle != ''" @click="showTopic(topic.id,topic.status)">
 						- Video: {{topic.videoTitle}}
+						<i v-if="topic.status === 2" class="el-icon-success Success " ></i>
+						<i v-if="topic.status === 1" class="el-icon-loading Blue " ></i>
+						<i v-if="topic.status === 0" class="el-icon-remove-outline Info " ></i>
 					</div>
+					<!--课程练习-->
 					<div class="ColorCommon font16 marginLeft" v-for="exercise in topic.list" :key="exercise.id"
 						@click="showExercise(exercise.id)">
 						- {{exercise.title}}
@@ -51,7 +58,11 @@
 				</div>
 				<div v-show="topic.videoUrl">
 					<div class="font24 ColorMain">{{topic.videoTitle}}</div>
-					<video :src="topic.videoUrl" controls="controls" ></video>
+					<video :src="topic.videoUrl" controls="controls" @play="onPlay()"></video>
+					<!--按钮，点击按钮开始答题-->
+					<div class="alignRight">
+						<el-button type="primary" :disabled="gotItDisabled" @click="onGotItClick(topic.id)">Got it!</el-button>
+					</div>
 				</div>
 			</div>
 			
@@ -61,9 +72,12 @@
 					<el-row>
 						<!--左边的文字部分-->
 						<el-col :span="exercise.img?12:24">
+							<div class="font24 alignRight">
+								Timer:{{time}} sec
+							</div>
 							<!--练习内容部分的Header-->
 							<div class="font18 padding5 exreciseTitle" v-show="exercise.content">
-								<i class="el-icon-question"></i>Exercise
+								<i class="el-icon-question"></i>{{exercise.title}}
 							</div>
 							<!--练习内容-->
 							<div v-html="exercise.content" class="marginTop marginBottom" v-show="exercise.content"></div>
@@ -104,7 +118,10 @@
 									</table>
 								</table>
 							</div>
-							
+							<div class="alignRight">
+								<span class="ColorDanger font18" v-show="isShowAnswer">Correct Answer:{{exercise.answer}}</span>
+								<el-button type="success" :disabled="answer == ''" @click="onSubmitAnswer(exercise.answer)">Submit Answer</el-button>
+							</div>
 						</el-col><!--左边的文字部分-->
 						<!--右边展示图片-->
 						<el-col :span="12" v-show="exercise.img" class="exerciseImg">
@@ -143,7 +160,14 @@
 				exercise:{},
 				isShowTopic:false,
 				isShowExercise:false,
-				answer:""
+				//gotIt按钮是否禁用，默认禁用，观看视频2分钟后启用
+				gotItDisabled:true,
+				//用户选择的答案
+				answer:"",
+				//习题的计时器，从90秒开始倒计时
+				time:90,
+				interval:{},
+				isShowAnswer:false
 			}
 		},
 		methods: {
@@ -193,9 +217,25 @@
 				message: '只有学完了本课程之前的全部课程内容，才能开始本课程的学习',
 				type: 'warning'
 				});
-			},
-			getTopic(id){
-				console.log("getTopic id:",id);
+			}
+			,
+			/**
+			 * 显示课程 
+			 * 隐藏练习显示区
+			 * 显示课程显示区
+			 * 查询课程信息并显示
+			 * @param {Object} id 课程ID
+			 * @param {Object} status 课程状态，只有状态为2或1的课程可以查看
+			 */
+			showTopic(id,status){
+				console.log("showTopic id:",id);
+				if(status === 0){
+					this.warningCannotStudy();
+					return;
+				}
+				this.gotItDisabled = true;
+				this.isShowExercise = false;
+				this.exercise = {};
 				req_getTopicInfo(id).then(response => {
 				  console.log("req_getTopicInfo，Response:",response);
 				  //解析接口应答的json串
@@ -210,9 +250,23 @@
 				    this.topic = data;
 				  }
 				});
+				this.isShowTopic = true;
 			},
-			getExersice(id){
-				console.log("getExersice id:",id);
+			/**
+			 * 显示练习
+			 * 隐藏课程显示区
+			 * 显示练习显示区
+			 * 查询练习并显示
+			 * @param {Object} id 练习ID
+			 */
+			showExercise(id){
+				console.log("showExercise id:",id);
+				this.time = 90;
+				this.clearInterval();
+				this.answer = "";
+				this.isShowTopic = false;
+				this.isShowAnswer = false;
+				this.topic = {};
 				req_getExerciseInfo(id).then(response => {
 				  console.log("req_getExerciseInfo，Response:",response);
 				  //解析接口应答的json串
@@ -227,19 +281,62 @@
 				    this.exercise = data;
 				  }
 				});
+				this.isShowExercise = true;
+				let that = this;
+				that.interval = setInterval((function () {
+					that.time --;
+					if(that.time <=0){
+						that.clearInterval();
+					}
+				}),1000);
+			},
+			/**
+			 * 清除页面的计时器
+			 */
+			clearInterval(){
+				window.clearInterval(this.interval);
+			},
+			
+			/**
+			 * 要求观看视频至少2分钟后，才能答题
+			 * 在用户开始播放视频时计时开始
+			 * 在调用setTimeout时要注意，不要在函数里用this调用data的数据，函数里的this不是页面的this
+			 */
+			onPlay(){
+				let that = this;
+				console.log("onPlay");
+				setTimeout(function(){
+					that.gotItDisabled = false;
+					console.log("gotItDisabled",that.gotItDisabled);
+				//在测试时，先设置为3秒，实际改成3000 * 60 * 2 就是2分钟
+				},3000);
 			}
 			,
-			showTopic(id){
-				this.isShowExercise = false;
-				this.exercise = {};
-				this.getTopic(id);
-				this.isShowTopic = true;
+			/**
+			 * 点击视频课程的Git it!按钮，显示练习
+			 * @param {Object} id 课程ID
+			 */
+			onGotItClick(id){
+				let i = 0;
+				for(i = 0;i < this.list.length;i++){
+					if(this.list[i].id == id && this.list[i].list){
+						this.showExercise(this.list[i].list[0].id);
+					}
+				}
 			},
-			showExercise(id){
-				this.isShowTopic = false;
-				this.topic = {};
-				this.getExersice(id);
-				this.isShowExercise = true;
+			onSubmitAnswer(answer){
+				if(this.answer == answer){
+					this.$message({
+					  message: "Answer Right!",
+					  type: 'success'
+					});
+				}else{
+					this.$message({
+					  message: "Answer Error!",
+					  type: 'error'
+					});
+					this.isShowAnswer = true;
+				}
 			}
 		},
 		mounted() {
@@ -248,12 +345,16 @@
 			//   message: document.body.clientWidth,
 			//   type: 'success'
 			// });
-			
+			//从Session里拿到用户信息并解析，主要为了显示用户头像和昵称
 			var user = sessionStorage.getItem('user');
 			if (user) {
 				this.user = JSON.parse(user);
+			}else{
+				this.$router.push({ path: '/404' });
 			}
-			req_getMenu().then(response => {
+			
+			//查询左侧菜单，查询回来的数据为：课程id、课程标题、视频地址、课程对应的练习等
+			req_getMenu(this.user.id).then(response => {
 			  console.log("getMenu，Response:",response);
 			  //解析接口应答的json串
 			  let { data, message, success } = response;
@@ -266,7 +367,7 @@
 			  } else {
 			    this.list = data;
 				if(this.list){
-					this.showTopic(this.list[0].id);
+					this.showTopic(this.list[0].id,this.list[0].status);
 				}
 			  }
 			});	

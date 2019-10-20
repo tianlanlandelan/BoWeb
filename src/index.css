@@ -1,6 +1,9 @@
 .Danger{
 	color: #F56C6C;
 }
+.ColorDanger{
+	color: #F56C6C;
+}
 .ColorInfo{
 	color:#909399;
 }
@@ -15,6 +18,9 @@
 }
 .center{
 	text-align: center;
+}
+.alignRight{
+	text-align: right;
 }
 
 .font24{

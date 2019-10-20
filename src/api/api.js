@@ -144,10 +144,13 @@ export const req_getExerciseInfo = (id) => {
 /**
  * 获取用户主页左侧导航菜单
  */
-export const req_getMenu = () => { 
+export const req_getMenu = (userId) => { 
     return axios.get(form, {
+		params:{
+			userId:userId
+		},
 		headers:{
-			'method':'topicInfo/getMenu'
+			'method':'getMenu'
 		}
 	}).then(res => res.data); 
 };
