@@ -59,41 +59,43 @@
 			<div v-show="isShowExercise">
 				<div class="exercise">
 					<el-row>
-						<el-col class="font24 ColorMain">
-							Investment research
-						</el-col>
-					</el-row>
-					<div v-html="exercise.content" class="marginTop marginBottom"></div>
-					
-					<!--图片和问题展示区-->
-					<el-row>
-						<el-col :span="12" v-show="exercise.img" class="exerciseImg">
-							<img :src="exercise.img" />
-						</el-col>
+						<!--左边的文字部分-->
 						<el-col :span="exercise.img?12:24">
-							<div class="font18">{{exercise.question}}</div>
-							<el-row class="marginTop10">
+							<!--练习内容部分的Header-->
+							<div class="font18 padding5 exreciseTitle" v-show="exercise.content">
+								<i class="el-icon-question"></i>Exercise
+							</div>
+							<!--练习内容-->
+							<div v-html="exercise.content" class="marginTop marginBottom" v-show="exercise.content"></div>
+							<!--问题部分的Header-->
+							<div class="font18 padding5 exerciseQuestion">
+								<i class="el-icon-success"></i>Answer the question
+							</div>
+							<!--问题-->
+							<div class="font18 ">{{exercise.question}}</div>
+							<!--选项-->
+							<div class="marginTop10">
 								<table >
 									<td><el-radio v-model="answer" label="A">&nbsp;</el-radio></td>
 									<td>A.</td>
 									<td><div class="inline" v-html="exercise.optionA"></div></td>
 								</table>
-							</el-row>
-							<el-row class="marginTop10">
+							</div>
+							<div class="marginTop10">
 								<table >
 									<td><el-radio v-model="answer" label="B">&nbsp;</el-radio></td>
 									<td>B.</td>
 									<td><div class="inline" v-html="exercise.optionB"></div></td>
 								</table>
-							</el-row>
-							<el-row class="marginTop10">
+							</div>
+							<div class="marginTop10">
 								<table >
 									<td><el-radio v-model="answer" label="C">&nbsp;</el-radio></td>
 									<td>C.</td>
 									<td><div class="inline" v-html="exercise.optionC"></div></td>
 								</table>
-							</el-row>
-							<el-row class="marginTop10">
+							</div>
+							<div class="marginTop10">
 								<table >
 									<table >
 										<td><el-radio v-model="answer" label="D">&nbsp;</el-radio></td>
@@ -101,9 +103,16 @@
 										<td><div class="inline" v-html="exercise.optionD"></div></td>
 									</table>
 								</table>
-							</el-row>
+							</div>
+							
+						</el-col><!--左边的文字部分-->
+						<!--右边展示图片-->
+						<el-col :span="12" v-show="exercise.img" class="exerciseImg">
+							<img :src="exercise.img" />
 						</el-col>
+						
 					</el-row>
+	
 				</div>
 			</div>
 		
@@ -332,5 +341,12 @@
 	}
 	.lineHeight{
 		line-height: 20px;
+	}
+	
+	.exreciseTitle{
+		background-color: #dbdfe6;
+	}
+	.exerciseQuestion{
+		background-color: #cfdcdf;
 	}
 </style>
