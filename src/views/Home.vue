@@ -126,6 +126,7 @@
 							<div class="alignRight">
 								<span class="ColorDanger font18" v-show="isShowAnswer">Correct Answer:{{exercise.answer}}</span>
 								<el-button type="success" :disabled="answer == ''" @click="onSubmitAnswer(exercise.answer)">Submit Answer</el-button>
+								<el-button type="primary" @click="onNextClick(exercise.topicId,exercise.id)">Next</el-button>
 							</div>
 						</el-col><!--左边的文字部分-->
 						<!--右边展示图片-->
@@ -330,12 +331,37 @@
 			onGotItClick(id){
 				let i = 0;
 				for(i = 0;i < this.list.length;i++){
+					//如果菜单中课程的id等于传入的id,且课程有练习题，显示第1个练习
 					if(this.list[i].id == id && this.list[i].list){
 						this.showExercise(this.list[i].list[0].id,1);
 						this.list[i].list[0].status = 1;
+						return;
 					}
 				}
 			},
+			onNextClick(topicId,id){
+				let i = 0 ;
+				for(i = 0;i < this.list.length;i++){
+					//如果菜单中课程的id等于传入的id,且课程有练习题，找到当前练习题，显示下一个练习题
+					if(this.list[i].id == topicId && this.list[i].list){
+						let exerList = this.list[i].list;
+						let j = 0;
+						for(j = 0 ; j < exerList.length;j++){
+							//有下一题，显示下一题
+							if(id == exerList[j].id && j < exerList.length - 1){
+								this.showExercise(exerList[j+1],1);
+								this.list[i].list[j+1].status = 1;
+								return;
+							}
+							//没下一题，显示下一课程
+							if(id == exerList[j].id && j == exerList.length -1){
+								this.onSaveUserTopic(topicId);
+							}
+						}
+					}
+				}
+			}
+			,
 			onSubmitAnswer(answer){
 				let score = 0;
 				if(this.answer == answer){
