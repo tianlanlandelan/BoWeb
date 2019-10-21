@@ -70,7 +70,7 @@
               } else {
                 this.user = data;
                 sessionStorage.setItem('user', JSON.stringify(this.user));
-                this.$router.push({ path: '/Home' });
+                this.$router.push({ path: '/Topic' });
               }
             });
           } 
