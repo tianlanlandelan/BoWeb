@@ -22,7 +22,9 @@
 .alignRight{
 	text-align: right;
 }
-
+.float{
+		float: left;
+	}
 .font24{
 		font-size:24px;
 	}

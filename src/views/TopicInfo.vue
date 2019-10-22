@@ -3,15 +3,14 @@
 	<!-- 页面内容 -->
 	<el-row>
 		<!--左侧导航-->
-		<el-col :lg="6" :md="8" :sm="10" class= "left-bar">
+		<div class="left-bar float">
 			<div class="center">
 				<img class="portrait" :src="'../../static/icon/' + user.avatarId + '.png'" /> 
 			</div>
 			<div class="center font24 ColorInfo">
 				Hello,{{user.firstName}} {{user.lastName}}!
 			</div>
-			
-			
+	
 			<el-collapse v-model="this.topic.id" accordion>
 				<el-collapse-item :name="topic.id" v-for="topic in list" :key="topic.id">
 					<template slot="title">
@@ -46,10 +45,10 @@
 					</div>
 				</el-collapse-item>
 			</el-collapse>
-		</el-col>
+		</div>
 
 		<!--右侧内容-->
-		<el-col :lg="18" :md="16" :sm="14" class="right-content">
+		<div class="right-content" :style="'float: left;width:' + reWidth + 'px;'">
 			<div>
 				<!--展示文字内容-->
 				<div v-show="topic.videoUrl == ''">
@@ -69,7 +68,7 @@
 					</div>
 				</div>
 			</div>
-		</el-col>
+		</div>
 	</el-row>
 
 </el-row>
@@ -86,7 +85,8 @@
 				list:[],
 				topic:{},
 				//gotIt按钮是否禁用，默认禁用，观看视频2分钟后启用
-				gotItDisabled:true
+				gotItDisabled:true,
+				reWidth:0
 			}
 		},
 		methods: {
@@ -201,6 +201,7 @@
 			}
 		},
 		mounted() {
+			this.reWidth = window.innerWidth - 410;
 			var user = sessionStorage.getItem('user');
 			if (user) {
 				this.user = JSON.parse(user);
@@ -208,7 +209,15 @@
 			}else{
 				this.$router.push({ path: '/404' });
 			}
-			
+			var that = this;
+			window.onresize = function () {
+				that.reWidth = window.innerWidth - 410;
+				var Width = window.innerWidth;
+				var Height = window.innerHeight;
+				 
+				console.log(Width, Height);
+				 
+			}
 			
 		}
 	}
@@ -222,11 +231,13 @@
 	}
 	.left-bar{
 		padding-left: 20px;
-		min-width: 360px;
+		width: 350px;
+		float: left;
 	}
 
 	.right-content{
 		padding:20px;
+		min-width: 400px;
 	}
 	.split{
 		background-color: #DCDFE6;

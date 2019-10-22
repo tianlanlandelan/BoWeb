@@ -3,15 +3,15 @@
 	<!-- 页面内容 -->
 	<el-row>
 		<!--左侧导航-->
-		<el-col :lg="6" :md="8" :sm="10" class= "left-bar">
+		<!-- <el-col :lg="6" :md="8" :sm="10" class= "left-bar"> -->
+		<div class="left-bar float">
 			<div class="center">
 				<img class="portrait" :src="'../../static/icon/' + user.avatarId + '.png'" /> 
 			</div>
 			<div class="center font24 ColorInfo">
 				Hello,{{user.firstName}} {{user.lastName}}!
 			</div>
-			
-			
+		
 			<el-collapse v-model="this.exercise.topicId" accordion>
 				<el-collapse-item :name="topic.id" v-for="topic in list" :key="topic.id">
 					<template slot="title">
@@ -46,15 +46,18 @@
 					</div>
 				</el-collapse-item>
 			</el-collapse>
-		</el-col>
+		</div>
+		<!-- </el-col> -->
 
 		<!--右侧内容-->
-		<el-col :lg="18" :md="16" :sm="14" class="right-content">
+		<!-- <el-col :lg="18" :md="16" :sm="14" class="right-content"> -->
+		<div class="right-content" :style="'float: left;width:' + reWidth + 'px;'">
 			<!--课程或练习内容展示-->
 			<div class="exercise">
 				<el-row>
 					<!--左边的文字部分-->
-					<el-col :span="exercise.img?12:24">
+					<!-- <el-col :span="exercise.img?12:24"> -->
+					<el-col :span="24">
 						<div class="font24 alignRight">
 							Timer:{{time}} sec
 						</div>
@@ -64,6 +67,10 @@
 						</div>
 						<!--练习内容-->
 						<div v-html="exercise.content" class="marginTop marginBottom" v-show="exercise.content"></div>
+						<!--练习题图片-->
+						<div  v-show="exercise.img" class="exerciseImg">
+							<img :src="exercise.img" />
+						</div>
 						<!--问题部分的Header-->
 						<div class="font18 padding5 exerciseQuestion">
 							<i class="el-icon-success"></i>Answer the question
@@ -109,12 +116,13 @@
 						</div>
 					</el-col><!--左边的文字部分-->
 					<!--右边展示图片-->
-					<el-col :span="12" v-show="exercise.img" class="exerciseImg">
+					<!-- <el-col :span="12" v-show="exercise.img" class="exerciseImg">
 						<img :src="exercise.img" />
-					</el-col>
+					</el-col> -->
 				</el-row>
 			</div>
-		</el-col>
+		</div>
+		<!-- </el-col> -->
 	</el-row>
 
 </el-row>
@@ -137,7 +145,8 @@
 				time:"",
 				interval:{},
 				isShowAnswer:false,
-				isShowNext:false
+				isShowNext:false,
+				reWidth:0
 			}
 		},
 		methods: {
@@ -261,7 +270,14 @@
 			onSubmitAnswer(answer){
 				this.clearInterval();
 				let score = 0;
-				if(this.answer == answer){
+				if(this.answer == ''){
+					score = 0;
+					this.$message({
+					  message: "Not Anwer!",
+					  type: 'error'
+					});
+					this.isShowAnswer = true;
+				}else if(this.answer == answer){
 					this.$message({
 					  message: "Answer Right!",
 					  type: 'success'
@@ -296,6 +312,7 @@
 			}
 		},
 		mounted() {
+			this.reWidth = window.innerWidth - 410;
 			this.init();
 			var user = sessionStorage.getItem('user');
 			if (user) {
@@ -305,6 +322,15 @@
 			}else{
 				this.$router.push({ path: '/404' });
 			}	
+			var that = this;
+			window.onresize = function () {
+				that.reWidth = window.innerWidth - 410;
+				var Width = window.innerWidth;
+				var Height = window.innerHeight;
+				 
+				console.log(Width, Height);
+				 
+			}
 		}
 	}
 
@@ -317,11 +343,13 @@
 	}
 	.left-bar{
 		padding-left: 20px;
-		min-width: 360px;
+		width: 350px;
+		float: left;
 	}
 
 	.right-content{
 		padding:20px;
+		min-width: 400px;
 	}
 	.split{
 		background-color: #DCDFE6;
@@ -380,5 +408,6 @@
 	.option{
 		line-height: 30px;
 	}
+	
 	
 </style>
