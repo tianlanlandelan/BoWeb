@@ -206,7 +206,8 @@
 				});	
 			},
 			init(){
-				if(this.exercise.timer){
+				//如果this.exercise.timer有值就设置time,这里再判断下0值的情况
+				if(this.exercise.timer || this.exercise.timer == 0){
 					console.log("this.exercise.timer",this.exercise.timer);
 					this.time = this.exercise.timer;
 				}else{
@@ -220,12 +221,17 @@
 			startInterval(){
 				let that = this;
 				that.interval = setInterval((function () {
-					that.time --;
-					that.setTimer();
-					if(that.time <=0){
-						that.onSubmitAnswer(that.answer);
+					if(that.time >0){
+						that.time --;
+						that.setTimer();
+						if(that.time <=0){
+							// that.onSubmitAnswer(that.answer);
+							that.clearInterval();
+						}
+					}else{
 						that.clearInterval();
 					}
+					
 				}),1000);
 			}
 			,
@@ -267,16 +273,15 @@
 				  }
 				});
 			},
+			/**
+			 * 提交答案
+			 * @param {Object} answer
+			 */
 			onSubmitAnswer(answer){
 				this.clearInterval();
 				let score = 0;
 				if(this.answer == ''){
-					score = 0;
-					this.$message({
-					  message: "Not Anwer!",
-					  type: 'error'
-					});
-					this.isShowAnswer = true;
+					return;
 				}else if(this.answer == answer){
 					this.$message({
 					  message: "Answer Right!",
