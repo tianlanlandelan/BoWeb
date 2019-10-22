@@ -1,7 +1,10 @@
 import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import NotFound from './views/404.vue'
-import Home from './views/Home.vue'
+
+import Topic from "./views/TopicInfo.vue"
+import Exercise from "./views/ExerciseInfo.vue"
+
 import Main from './views/Main.vue'
 import Password from "./views/Password.vue"
 
@@ -29,6 +32,8 @@ let routes = [
 		//是否显示在Admin页面的左侧菜单列表中
 		show:true
 	},
+	{ path: '/Topic', component: Topic, name: 'Topic' },
+	{ path: '/Exercise', component: Exercise, name: 'Exercise' },
     {
         path: '/Login/:type',
         component: Login,
@@ -81,11 +86,6 @@ let routes = [
     {
         path: '/404',
         component: NotFound,
-        name: ''
-    },
-    {
-        path: '/Home',
-        component: Home,
         name: ''
     }
 	,

@@ -37,6 +37,16 @@ export const req_updateUserInfo = (user) => {
 		}
 	}).then(res => res.data); 
 };
+export const req_setTimer = (userId,timer) => { 
+    return axios.put(api, {
+		userId:userId,
+		timer:timer
+    },{
+		headers:{
+			'method':'userInfo/timer'
+		}
+	}).then(res => res.data); 
+};
 /**
  * 登录接口
  */
@@ -84,6 +94,26 @@ export const req_getTopicList = () => {
     return axios.get(form, {
 		headers:{
 			'method':'topicInfo/getAll'
+		}
+	}).then(res => res.data); 
+};
+export const req_getCurrent = (userId) => { 
+    return axios.get(form, {
+		params:{
+			userId:userId
+		},
+		headers:{
+			'method':'topicInfo/getCurrent'
+		}
+	}).then(res => res.data); 
+};
+export const req_getNext = (userId) => { 
+    return axios.get(form, {
+		params:{
+			userId:userId
+		},
+		headers:{
+			'method':'topicInfo/getNext'
 		}
 	}).then(res => res.data); 
 };
