@@ -31,9 +31,9 @@
 					<!--课程视频-->
 					<div class="ColorCommon font16 marginLeft" v-show="topic.videoTitle != ''" @click="showTopic(topic.id,topic.status)">
 						- Video: {{topic.videoTitle}}
-						<i v-if="topic.status === 2" class="el-icon-success Success " ></i>
-						<i v-if="topic.status === 1" class="el-icon-loading Blue " ></i>
-						<i v-if="topic.status === 0" class="el-icon-remove-outline Info " ></i>
+						<i v-if="topic.videoStatus === 2" class="el-icon-success Success " ></i>
+						<i v-if="topic.videoStatus === 1" class="el-icon-loading Blue " ></i>
+						<i v-if="topic.videoStatus === 0" class="el-icon-remove-outline Info " ></i>
 					</div>
 					<!--课程练习-->
 					<div class="ColorCommon font16 marginLeft" v-for="exercise in topic.list" :key="exercise.id"

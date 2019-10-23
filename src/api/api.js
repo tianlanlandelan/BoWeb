@@ -43,7 +43,7 @@ export const req_setTimer = (userId,timer) => {
 		timer:timer
     },{
 		headers:{
-			'method':'userInfo/timer'
+			'method':'rate'
 		}
 	}).then(res => res.data); 
 };
@@ -185,16 +185,6 @@ export const req_getMenu = (userId) => {
 	}).then(res => res.data); 
 };
 
-export const req_saveUserTopic = (userId,topicId) => { 
-    return axios.post(api, {
-        userId:userId,
-		topicId:topicId
-    },{
-		headers:{
-			'method':'userTopic'
-		}
-	}).then(res => res.data); 
-};
 
 export const req_saveScore = (userId,exerciseId,score) => { 
     return axios.post(api, {
@@ -203,7 +193,17 @@ export const req_saveScore = (userId,exerciseId,score) => {
 		score:score
     },{
 		headers:{
-			'method':'score'
+			'method':'rate'
+		}
+	}).then(res => res.data); 
+};
+export const req_getLeaderBoard1 = (userId) => { 
+    return axios.get(form, {
+		params:{
+			userId:userId
+		},
+		headers:{
+			'method':'rate/getUp'
 		}
 	}).then(res => res.data); 
 };
