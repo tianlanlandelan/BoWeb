@@ -90,7 +90,7 @@
 				});	
 		  },
 		  close(){
-			 this.$emit('func',false);
+			 this.$emit('func');
 		  }
 	  }
 	}

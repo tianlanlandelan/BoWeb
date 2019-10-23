@@ -112,7 +112,6 @@
 							<span class="ColorDanger font18" v-show="isShowAnswer">Correct Answer:{{exercise.answer}}</span>
 							<el-button type="success" :disabled="answer == ''" @click="onSubmitAnswer(exercise.answer)" v-show="!isShowNext">Submit Answer</el-button>
 							<el-button type="primary" @click="getCurrent()()" v-show="isShowNext">Next</el-button>
-							<el-button @click="test()">Test</el-button>
 						</div>
 					</el-col><!--左边的文字部分-->
 					<!--右边展示图片-->
@@ -124,10 +123,11 @@
 		</div>
 		
 	</el-row>
-	<div class="box" v-show="isShowBox" :style="'width:' + box.width + 'px;height:' + box.height + 'px;'">
+	<div class="box" v-show="box.show" :style="'width:' + box.width + 'px;height:' + box.height + 'px;'">
 		
 	</div>
-	<LeaderBoard1 @func="closeBox" v-show = "isShowBox" class="boxCenter" ref="leaderBoard1"></LeaderBoard1>
+	<!---->
+	<LeaderBoard1 @func="closeBox()" v-show = "box.show" class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" ref="leaderBoard1"></LeaderBoard1>
 </el-row>
 </template>
 
@@ -154,8 +154,10 @@
 				isShowBox:false,
 				//遮罩层
 				box:{
+					show:false,
 					width:0,
-					height:0
+					height:0,
+					contentHeight:0
 				}
 			}
 		},
@@ -235,7 +237,6 @@
 						that.time --;
 						that.setTimer();
 						if(that.time <=0){
-							// that.onSubmitAnswer(that.answer);
 							that.clearInterval();
 						}
 					}else{
@@ -303,7 +304,7 @@
 					  message: "Answer Error!",
 					  type: 'error'
 					});
-					this.isShowAnswer = true;
+					this.showBox();
 				}
 				req_saveScore(this.user.id,this.exercise.id,score).then(response=>{
 					console.log("req_saveScore，Response:",response);
@@ -315,8 +316,9 @@
 					    type: 'error'
 					  });
 					}else{
-						this.isShowBox = true;
+						this.box.show = true;
 						this.isShowNext = true;
+						//调用子组件LeaderBoard1 的 load方法，并传入userId，开始查询排行榜
 						this.$refs.leaderBoard1.load(this.user.id);
 					}
 				});
@@ -328,10 +330,16 @@
 				window.clearInterval(this.interval);
 			}
 			,
-			closeBox(show){
-				this.isShowBox = show;
+			/**
+			 * 关闭遮罩层和遮罩层上的排行榜
+			 */
+			closeBox(){
+				this.box.show = false;
 			},
-			test(){
+			/**
+			 * 显示遮罩层和遮罩层上的排行榜，调整遮罩层遮住整个页面，调整排行榜的位置在当前屏幕
+			 */
+			showBox(){
 				/**
 					获取网页被滚动条卷去的高度：
 　　　　				scrollHeight = $(window).scrollTop();
@@ -342,12 +350,16 @@
 　　					获取某个元素的高度——利用DOM对象的属性：
 　　　　				domHeight = domElement.height();
 				 */
+				this.box.show = true;
+				this.box.width = $(document).width();
+				this.box.height = $(document).height();
+				this.box.contentHeight = $(window).scrollTop();
 				console.log($(document).height(),$(window).height(),$(window).scrollTop());
 				console.log($(document).width(),$(window).width(),$(window).scrollLeft());
 			}
 		},
 		mounted() {
-			this.reWidth = window.innerWidth - 410;
+			this.reWidth = $(window).width() - 410;
 			this.init();
 			var user = sessionStorage.getItem('user');
 			if (user) {
@@ -359,21 +371,8 @@
 			}	
 			var that = this;
 			window.onresize = function () {
-				that.reWidth = window.innerWidth - 410;
-				var width = window.innerWidth;
-				var height = window.innerHeight;
-				 
-				console.log(width, height);
-				 
+				that.reWidth = $(window).width() - 410;	 
 			}
-			
-			
-			// this.isShowBox = true;
-			// var Width = window.innerWidth;
-			// var Height = window.innerHeight;
-			//  
-			// console.log(Width, Height);
-			
 		}
 	}
 

@@ -75,10 +75,9 @@
 </template>
 
 <script>
-	import LeaderBoard1 from "../components/leaderboard1.vue";
+	import $ from 'jquery';
 	import {req_getMenu,req_getCurrent,req_getNext} from "../api/api.js";
 	export default {
-		components:{LeaderBoard1},
 		data() {
 			return {
 				user:{},
@@ -201,7 +200,8 @@
 			}
 		},
 		mounted() {
-			this.reWidth = window.innerWidth - 410;
+			//减410是减去左边导航栏固定宽度350、左边导航栏左右padding各20、右边内容区padding-left 20
+			this.reWidth = $(window).width() - 410;
 			var user = sessionStorage.getItem('user');
 			if (user) {
 				this.user = JSON.parse(user);
@@ -211,12 +211,7 @@
 			}
 			var that = this;
 			window.onresize = function () {
-				that.reWidth = window.innerWidth - 410;
-				var Width = window.innerWidth;
-				var Height = window.innerHeight;
-				 
-				console.log(Width, Height);
-				 
+				that.reWidth = $(window).width() - 410;
 			}
 			
 		}
