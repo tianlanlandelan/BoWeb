@@ -55,3 +55,27 @@
 	.padding5{
 		padding: 5px;
 	}
+	
+	/* 遮罩层 */
+	.box{
+	        width: 100%;
+	        height: 100%;
+	        background-color:#000000;
+			opacity:0.4;
+	        position: absolute;
+	        top: 0;
+	        left: 0;
+	    }
+	/* 遮罩层里的内容 */
+	.boxCenter{
+		position: absolute;
+		top: 0;
+		left: 0;
+		width:60%;
+		margin-left: 20%;
+		margin-top: 10%;
+		background-color: #FFFFFF;
+		opacity: 1;
+		border-radius: 20px;
+		z-index: 999;
+	}

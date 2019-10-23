@@ -32,9 +32,9 @@
 					<!--课程视频-->
 					<div class="ColorCommon font16 marginLeft" v-show="topic.videoTitle != ''" @click="showTopic(topic.id,topic.status)">
 						- Video: {{topic.videoTitle}}
-						<i v-if="topic.status === 2" class="el-icon-success Success " ></i>
-						<i v-if="topic.status === 1" class="el-icon-loading Blue " ></i>
-						<i v-if="topic.status === 0" class="el-icon-remove-outline Info " ></i>
+						<i v-if="topic.videoStatus === 2" class="el-icon-success Success " ></i>
+						<i v-if="topic.videoStatus === 1" class="el-icon-loading Blue " ></i>
+						<i v-if="topic.videoStatus === 0" class="el-icon-remove-outline Info " ></i>
 					</div>
 					<!--课程练习-->
 					<div class="ColorCommon font16 marginLeft" v-for="exercise in topic.list" :key="exercise.id"
@@ -112,7 +112,6 @@
 							<span class="ColorDanger font18" v-show="isShowAnswer">Correct Answer:{{exercise.answer}}</span>
 							<el-button type="success" :disabled="answer == ''" @click="onSubmitAnswer(exercise.answer)" v-show="!isShowNext">Submit Answer</el-button>
 							<el-button type="primary" @click="getCurrent()()" v-show="isShowNext">Next</el-button>
-							
 						</div>
 					</el-col><!--左边的文字部分-->
 					<!--右边展示图片-->
@@ -122,15 +121,20 @@
 				</el-row>
 			</div>
 		</div>
-		<!-- </el-col> -->
+		
 	</el-row>
-
+	<div class="box" v-show="box.show" :style="'width:' + box.width + 'px;height:' + box.height + 'px;'">
+		
+	</div>
+	<!---->
+	<LeaderBoard1 @func="closeBox()" v-show = "box.show" class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" ref="leaderBoard1"></LeaderBoard1>
 </el-row>
 </template>
 
 <script>
 	import LeaderBoard1 from "../components/leaderboard1.vue";
 	import {req_getMenu,req_getCurrent,req_saveScore,req_setTimer} from "../api/api.js";
+	import $ from 'jquery';
 	export default {
 		components:{LeaderBoard1},
 		data() {
@@ -146,7 +150,15 @@
 				interval:{},
 				isShowAnswer:false,
 				isShowNext:false,
-				reWidth:0
+				reWidth:0,
+				isShowBox:false,
+				//遮罩层
+				box:{
+					show:false,
+					width:0,
+					height:0,
+					contentHeight:0
+				}
 			}
 		},
 		methods: {
@@ -225,7 +237,6 @@
 						that.time --;
 						that.setTimer();
 						if(that.time <=0){
-							// that.onSubmitAnswer(that.answer);
 							that.clearInterval();
 						}
 					}else{
@@ -293,7 +304,7 @@
 					  message: "Answer Error!",
 					  type: 'error'
 					});
-					this.isShowAnswer = true;
+					this.showBox();
 				}
 				req_saveScore(this.user.id,this.exercise.id,score).then(response=>{
 					console.log("req_saveScore，Response:",response);
@@ -305,7 +316,10 @@
 					    type: 'error'
 					  });
 					}else{
+						this.box.show = true;
 						this.isShowNext = true;
+						//调用子组件LeaderBoard1 的 load方法，并传入userId，开始查询排行榜
+						this.$refs.leaderBoard1.load(this.user.id);
 					}
 				});
 			},
@@ -315,9 +329,37 @@
 			clearInterval(){
 				window.clearInterval(this.interval);
 			}
+			,
+			/**
+			 * 关闭遮罩层和遮罩层上的排行榜
+			 */
+			closeBox(){
+				this.box.show = false;
+			},
+			/**
+			 * 显示遮罩层和遮罩层上的排行榜，调整遮罩层遮住整个页面，调整排行榜的位置在当前屏幕
+			 */
+			showBox(){
+				/**
+					获取网页被滚动条卷去的高度：
+　　　　				scrollHeight = $(window).scrollTop();
+　　					获取网页全文的高度——兼容写法：
+　　　　				windowHeight = $(document).height();
+　　					获取网页可视区域的高度——兼容写法：
+　　　　				screenHeight = $(window).height();
+　　					获取某个元素的高度——利用DOM对象的属性：
+　　　　				domHeight = domElement.height();
+				 */
+				this.box.show = true;
+				this.box.width = $(document).width();
+				this.box.height = $(document).height();
+				this.box.contentHeight = $(window).scrollTop();
+				console.log($(document).height(),$(window).height(),$(window).scrollTop());
+				console.log($(document).width(),$(window).width(),$(window).scrollLeft());
+			}
 		},
 		mounted() {
-			this.reWidth = window.innerWidth - 410;
+			this.reWidth = $(window).width() - 410;
 			this.init();
 			var user = sessionStorage.getItem('user');
 			if (user) {
@@ -329,12 +371,7 @@
 			}	
 			var that = this;
 			window.onresize = function () {
-				that.reWidth = window.innerWidth - 410;
-				var Width = window.innerWidth;
-				var Height = window.innerHeight;
-				 
-				console.log(Width, Height);
-				 
+				that.reWidth = $(window).width() - 410;	 
 			}
 		}
 	}
@@ -342,6 +379,11 @@
 </script>
 <style scoped lang="scss">
 	@import '~scss_vars';
+	
+	.container{
+		width: 100%;
+		height: 100%;
+	}
 	.portrait{
 		width: 120px;
 		height: 120px;
@@ -413,6 +455,7 @@
 	.option{
 		line-height: 30px;
 	}
+	
 	
 	
 </style>

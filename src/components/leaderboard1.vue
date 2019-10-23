@@ -1,89 +1,109 @@
 <template>
 	<!--第一个网站的排行榜-->
-	<div>
-		<el-button v-popover:popover1 type="primary" @click="onClick">submit</el-button>
-		<el-popover
-			ref="popover1"
-			placement="top-start"
-			width="800"
-			trigger="click">
-			<div class = "popover-bg">
-				<div class = "popover-div">
-					<div v-for="score in scores" :key = "score.id">
-						<!--其他人成绩的遮罩层-->
-						<el-row class = "popover-margin" :style="{width: score.width + '%'}"></el-row>
-						<!--其他人成绩-->
-						<el-row class = "popover-row">
-							<el-col :span="2">
-								{{score.sort}}
-							</el-col>
-							<el-col :span="4">
-								<img :src="score.portrait" />
-							</el-col>
-							<el-col :span="16">
-								{{score.name}}
-							</el-col>
-							<el-col :span="2">
-								{{score.score}}
-							</el-col>
-						</el-row>
-						<!--分割栏-->
-						<el-row class = "popover-split"></el-row>
-					</div>
-				</div>
-				<div class = "me-bg">
-					<el-row class = "me-margin" :style="{width: myScore.width + '%'}"></el-row>
-					<!--自己的成绩-->
-					<el-row class = "me-row">
+	<div class="bg" v-show="show">
+		<div class = "popover-bg">
+			<div class = "popover-div">
+				<div v-for="score in scores" :key = "score.id" v-if="score.id != id">
+					<!--其他人成绩的遮罩层-->
+					<el-row class = "popover-margin" :style="{width: score.percentage + '%'}"></el-row>
+					<!--其他人成绩-->
+					<el-row class = "popover-row">
 						<el-col :span="2">
-							6
+							{{score.sort}}
 						</el-col>
 						<el-col :span="4">
-							<img src="../../static/icon/1.png" />
+							<img :src="'../../static/icon/' + score.avatarId + '.png'" /> 
 						</el-col>
 						<el-col :span="16">
-							You
+							{{score.firstName}} {{score.lastName}}
 						</el-col>
 						<el-col :span="2">
-							40
+							{{score.score}}
 						</el-col>
 					</el-row>
+					<!--分割栏-->
+					<el-row class = "popover-split"></el-row>
 				</div>
-				<el-row class = "popover-split"></el-row>
 			</div>
-		</el-popover>
+			<div class = "me-bg">
+				<el-row class = "me-margin" :style="{width: myScore.percentage + '%'}"></el-row>
+				<!--自己的成绩-->
+				<el-row class = "me-row">
+					<el-col :span="2">
+						{{myScore.sort}}
+					</el-col>
+					<el-col :span="4">
+						<img :src="'../../static/icon/' + myScore.avatarId + '.png'" /> 
+					</el-col>
+					<el-col :span="16">
+						You
+					</el-col>
+					<el-col :span="2">
+						{{myScore.score}}
+					</el-col>
+				</el-row>
+			</div>
+			
+			
+			<el-row class = "popover-split"></el-row>
+			<div class="center">
+				<el-button @click="close()">Continue</el-button>
+			</div>
+			<br>
+		</div>
+	
 	</div>
 </template>
 
 <script>
-	import {testData} from "../data.js";
+	import {req_getLeaderBoard1} from "../api/api.js";
+	
 	export default {
-		props:{
-			
-		},
-	  components:{testData},
 	  data () {
 		return {
-		  scores:[],
-		  myScore:{
-			  width:40
-		  }
+			show:false,
+			scores:[],
+			myScore:{},
+		  id:0
 		}
 	  }
 	  ,mounted() {
-			
+			console.log("LeaderBoard1",this.id);
 	  },methods:{
-		  onClick(){
-			  this.scores = testData.scores1;
-			  console.log("prop",this.scores);
+		  load(userId){
+			  this.id = userId;
+			  req_getLeaderBoard1(userId).then(response => {
+				  console.log("req_getLeaderBoard1，Response:",response);
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+				    this.$message({
+				      message: message,
+				      type: 'error'
+				    });
+				  } else {
+				    this.scores = data;
+					this.myScore = data[data.length - 1];
+				    this.show = true;
+				  }
+				});	
+		  },
+		  close(){
+			 this.$emit('func');
 		  }
 	  }
 	}
 </script>
 
 <style>
+	.bg{
+		background: #000000;
+		padding: 20px;
+	}
 	.popover-bg{
 		background-color: #409EFF;
+		opacity: 1;
 	}
 	.popover-div{
 		padding:20px;
