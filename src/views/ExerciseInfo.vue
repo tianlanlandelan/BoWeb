@@ -359,6 +359,8 @@
 			}
 		},
 		mounted() {
+			
+			
 			this.reWidth = $(window).width() - 410;
 			this.init();
 			var user = sessionStorage.getItem('user');
@@ -373,6 +375,10 @@
 			window.onresize = function () {
 				that.reWidth = $(window).width() - 410;	 
 			}
+			
+			//Test
+			this.showBox();
+			this.$refs.leaderBoard1.load(this.user.id);
 		}
 	}
 
