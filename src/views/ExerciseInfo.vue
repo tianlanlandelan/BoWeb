@@ -52,6 +52,11 @@
 		<!--右侧内容-->
 		<!-- <el-col :lg="18" :md="16" :sm="14" class="right-content"> -->
 		<div class="right-content" :style="'float: left;width:' + reWidth + 'px;'">
+			<!-- <iframe src="http://www.xdocin.com/xdoc?_func=to&_format=html&_cache=true&_key=tr3ycpaoxbbidkmaajczqmsxhu&_xdoc=http://72.167.226.78:8081/images/index.pdf" 
+			width='100%' height='500px'></iframe>
+			
+			<iframe  src='http://www.xdocin.com/xdoc?_func=to&_format=html&_cache=1&_xdoc=http://72.167.226.78:8081/images/index.pptx' 
+			width='100%' height='500px' ></iframe> -->
 			<!--课程或练习内容展示-->
 			<div class="exercise">
 				<el-row>
@@ -123,20 +128,27 @@
 		</div>
 		
 	</el-row>
-	<div class="box" v-show="box.show" :style="'width:' + box.width + 'px;height:' + box.height + 'px;'">
+	<div class="box" v-show="box.show" :style="'width:' + box.width + 'px;height:' + box.height + 'px;'" v-if="box.show">
 		
 	</div>
 	<!---->
-	<LeaderBoard1 @func="closeBox()" v-show = "box.show" class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" ref="leaderBoard1"></LeaderBoard1>
+	<LeaderBoard1 @func="closeBox()" v-show = "box.show" 
+	class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" 
+	ref="leaderBoard1"></LeaderBoard1>
+	<!-- <LeaderBoard2 @func="closeBox()" v-show = "box.show" 
+	class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" 
+	ref="leaderBoard1"></LeaderBoard2> -->
 </el-row>
 </template>
 
 <script>
-	import LeaderBoard1 from "../components/leaderboard1.vue";
+	import LeaderBoard1 from "../components/Leaderboard1.vue";
+	import LeaderBoard2 from "../components/Leaderboard2.vue";
+	
 	import {req_getMenu,req_getCurrent,req_saveScore,req_setTimer} from "../api/api.js";
 	import $ from 'jquery';
 	export default {
-		components:{LeaderBoard1},
+		components:{LeaderBoard1,LeaderBoard2},
 		data() {
 			return {
 				user:{},
@@ -155,6 +167,7 @@
 				//遮罩层
 				box:{
 					show:false,
+					index:0,
 					width:0,
 					height:0,
 					contentHeight:0
@@ -351,6 +364,7 @@
 　　　　				domHeight = domElement.height();
 				 */
 				this.box.show = true;
+				// this.box.index = index;
 				this.box.width = $(document).width();
 				this.box.height = $(document).height();
 				this.box.contentHeight = $(window).scrollTop();
@@ -377,8 +391,8 @@
 			}
 			
 			//Test
-			this.showBox();
-			this.$refs.leaderBoard1.load(this.user.id);
+			// this.showBox();
+			// this.$refs.leaderBoard1.load(this.user.id);
 		}
 	}
 

@@ -197,6 +197,9 @@ export const req_saveScore = (userId,exerciseId,score) => {
 		}
 	}).then(res => res.data); 
 };
+/**
+ * 获取排行榜
+ */
 export const req_getLeaderBoard1 = (userId) => { 
     return axios.get(form, {
 		params:{
@@ -204,6 +207,17 @@ export const req_getLeaderBoard1 = (userId) => {
 		},
 		headers:{
 			'method':'rate/getUp'
+		}
+	}).then(res => res.data); 
+};
+
+export const req_getLeaderBoard2 = (userId) => { 
+    return axios.get(form, {
+		params:{
+			userId:userId
+		},
+		headers:{
+			'method':'rate/getDown'
 		}
 	}).then(res => res.data); 
 };
