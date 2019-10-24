@@ -1,6 +1,16 @@
 .Danger{
 	color: #F56C6C;
 }
+
+.Success{
+	color:#67C23A;
+}
+.Blue{
+	color:#409EFF;
+}
+.Info{
+	color:#909399;
+}
 .ColorDanger{
 	color: #F56C6C;
 }

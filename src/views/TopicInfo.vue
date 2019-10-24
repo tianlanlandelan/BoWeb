@@ -62,7 +62,8 @@
 				<div v-show="topic.videoUrl">
 					<div class="font24 ColorMain">{{topic.videoTitle}}</div>
 					<!-- <video :src="topic.videoUrl" controls="controls" @play="onPlay()"></video> -->
-					<iframe src="https://onedrive.live.com/embed?cid=EFF3B846380AF0CE&resid=EFF3B846380AF0CE%211163&authkey=ADrVFdTbhHtSp7Q&em=2" width="802" height="627" frameborder="0" scrolling="no"></iframe>
+					<iframe src="https://onedrive.live.com/embed?cid=EFF3B846380AF0CE&resid=EFF3B846380AF0CE%211163&authkey=ADrVFdTbhHtSp7Q&em=2"
+					 width="100%" height="627" frameborder="0" scrolling="no"></iframe>
 					
 					<!--按钮，点击按钮开始答题-->
 					<div class="alignRight">

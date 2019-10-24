@@ -52,11 +52,6 @@
 		<!--右侧内容-->
 		<!-- <el-col :lg="18" :md="16" :sm="14" class="right-content"> -->
 		<div class="right-content" :style="'float: left;width:' + reWidth + 'px;'">
-			<!-- <iframe src="http://www.xdocin.com/xdoc?_func=to&_format=html&_cache=true&_key=tr3ycpaoxbbidkmaajczqmsxhu&_xdoc=http://72.167.226.78:8081/images/index.pdf" 
-			width='100%' height='500px'></iframe>
-			
-			<iframe  src='http://www.xdocin.com/xdoc?_func=to&_format=html&_cache=1&_xdoc=http://72.167.226.78:8081/images/index.pptx' 
-			width='100%' height='500px' ></iframe> -->
 			<!--课程或练习内容展示-->
 			<div class="exercise">
 				<el-row>
@@ -116,23 +111,19 @@
 						<div class="alignRight">
 							<span class="ColorDanger font18" v-show="isShowAnswer">Correct Answer:{{exercise.answer}}</span>
 							<el-button type="success" :disabled="answer == ''" @click="onSubmitAnswer(exercise.answer)" v-show="!isShowNext">Submit Answer</el-button>
-							<el-button type="primary" @click="getCurrent()()" v-show="isShowNext">Next</el-button>
+							<el-button type="primary" @click="getCurrent()" v-show="isShowNext">Next</el-button>
 						</div>
-					</el-col><!--左边的文字部分-->
-					<!--右边展示图片-->
-					<!-- <el-col :span="12" v-show="exercise.img" class="exerciseImg">
-						<img :src="exercise.img" />
-					</el-col> -->
+					</el-col>
 				</el-row>
 			</div>
 		</div>
 		
 	</el-row>
-	<div class="box" v-show="box.show" :style="'width:' + box.width + 'px;height:' + box.height + 'px;'" v-if="box.show">
+	<div class="box" v-show="box.show" :style="'width:' + box.width + 'px;height:' + box.height + 'px;'">
 		
 	</div>
 	<!---->
-	<LeaderBoard1 @func="closeBox()" v-show = "box.show" 
+	<LeaderBoard1 @func="closeBox()" v-show= "box.show" 
 	class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" 
 	ref="leaderBoard1"></LeaderBoard1>
 	<!-- <LeaderBoard2 @func="closeBox()" v-show = "box.show" 
@@ -317,7 +308,6 @@
 					  message: "Answer Error!",
 					  type: 'error'
 					});
-					this.showBox();
 				}
 				req_saveScore(this.user.id,this.exercise.id,score).then(response=>{
 					console.log("req_saveScore，Response:",response);
@@ -329,7 +319,7 @@
 					    type: 'error'
 					  });
 					}else{
-						this.box.show = true;
+						this.showBox();
 						this.isShowNext = true;
 						//调用子组件LeaderBoard1 的 load方法，并传入userId，开始查询排行榜
 						this.$refs.leaderBoard1.load(this.user.id);
@@ -364,17 +354,15 @@
 　　　　				domHeight = domElement.height();
 				 */
 				this.box.show = true;
-				// this.box.index = index;
+				this.initBox();
+			},
+			initBox(){
 				this.box.width = $(document).width();
 				this.box.height = $(document).height();
 				this.box.contentHeight = $(window).scrollTop();
-				console.log($(document).height(),$(window).height(),$(window).scrollTop());
-				console.log($(document).width(),$(window).width(),$(window).scrollLeft());
 			}
 		},
 		mounted() {
-			
-			
 			this.reWidth = $(window).width() - 410;
 			this.init();
 			var user = sessionStorage.getItem('user');
@@ -387,12 +375,9 @@
 			}	
 			var that = this;
 			window.onresize = function () {
-				that.reWidth = $(window).width() - 410;	 
+				that.reWidth = $(window).width() - 410;	
+				that.initBox();
 			}
-			
-			//Test
-			// this.showBox();
-			// this.$refs.leaderBoard1.load(this.user.id);
 		}
 	}
 
