@@ -1,12 +1,12 @@
-<!--第一种排行榜，只显示比自己排名靠前的人的数据-->
+<!-- 排行榜 -->
 <template>
 	<div class="bg">
 		<div class = "popover-bg">
 			<div class = "popover-div">
 				<div v-for="score in scores" :key = "score.id" >
-					<ScoreRow class = "score-row" :score="score" v-if="score.id != user.id && score.id != 0"></ScoreRow>
+					<ScoreRow class = "score-row" :score="score" :showScore="type.showOthers" v-if="score.id != user.id && score.id != 0"></ScoreRow>
 					<OtherScoreRow class = "score-row" v-if="score.id == 0" ></OtherScoreRow>
-					<MyScoreRow :score="score" v-if="score.id == user.id && score.id != 0"></MyScoreRow>
+					<MyScoreRow :score="score" :showScore="type.showMe" v-if="score.id == user.id && score.id != 0"></MyScoreRow>
 					<!--分割栏-->
 					<el-row class = "popover-split"></el-row>
 				</div>
@@ -35,7 +35,11 @@
 			/**
 			 * 排行榜
 			 */
-			scores:[]
+			scores:[],
+			type:{
+				showOthers:true,
+				showMe:true
+			}
 		}
 	  }
 	  ,mounted() {
@@ -66,6 +70,19 @@
 				  case 1:req_getLeaderBoard1(this.user.id).then(response => {this.handlerResponse(response)});break;
 				  case 2:req_getLeaderBoard2(this.user.id).then(response => {this.handlerResponse(response)});break;
 				  case 3:req_getLeaderBoard3(this.user.id).then(response => {this.handlerResponse(response)});break;
+				  case 4:{
+						this.type.showMe = false;
+						req_getLeaderBoard3(this.user.id).then(response => {this.handlerResponse(response)})
+				  };break;
+				  case 5:{
+						this.type.showOthers = false;
+						req_getLeaderBoard3(this.user.id).then(response => {this.handlerResponse(response)})	  
+				  };break;
+				  case 6:{
+						this.type.showMe = false;
+						this.type.showOthers = false;
+				  		req_getLeaderBoard3(this.user.id).then(response => {this.handlerResponse(response)})			  
+				  };break;
 				  default:this.$router.push({ path: '/404' });
 			  }
 		  },

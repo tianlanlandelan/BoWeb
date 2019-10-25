@@ -122,31 +122,20 @@
 	<div class="box" v-show="box.show" :style="'width:' + box.width + 'px;height:' + box.height + 'px;'">
 		
 	</div>
-	<!---->
-	<!-- <LeaderBoard1 @func="closeBox()" v-show= "box.show" 
+	<!-- 排行榜  -->
+	<LeaderBoard @func="closeBox()" v-show= "box.show" 
 	class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" 
-	ref="leaderBoard1"></LeaderBoard1> -->
-	
-	
-	<!-- <LeaderBoard2 @func="closeBox()" v-show= "box.show" 
-	class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" 
-	ref="leaderBoard2"></LeaderBoard2> -->
-	
-	<LeaderBoard3 @func="closeBox()" v-show= "box.show" 
-	class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" 
-	ref="leaderBoard3"></LeaderBoard3>
+	ref="leaderBoard"></LeaderBoard>
 </el-row>
 </template>
 
 <script>
-	import LeaderBoard1 from "../components/Leaderboard1.vue";
-	import LeaderBoard2 from "../components/Leaderboard2.vue";
-	import LeaderBoard3 from "../components/Leaderboard3.vue";
+	import LeaderBoard from "../components/Leaderboard.vue";
 	
 	import {req_getMenu,req_getCurrent,req_saveScore,req_setTimer} from "../api/api.js";
 	import $ from 'jquery';
 	export default {
-		components:{LeaderBoard1,LeaderBoard2,LeaderBoard3},
+		components:{LeaderBoard},
 		data() {
 			return {
 				user:{},
@@ -329,7 +318,7 @@
 						this.showBox();
 						this.isShowNext = true;
 						//调用子组件LeaderBoard 的 load方法，开始加载排行榜
-						this.$refs.leaderBoard3.load();
+						this.$refs.leaderBoard.load();
 					}
 				});
 			},

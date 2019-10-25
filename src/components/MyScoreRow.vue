@@ -5,7 +5,8 @@
     	<!--自己的成绩-->
     	<el-row class = "me-row">
     		<el-col :span="2">
-    			{{score.sort}}
+    			<span v-if="showScore">{{score.sort}}</span>
+    			<span v-else>&nbsp;</span>
     		</el-col>
     		<el-col :span="4">
     			<img :src="'../../static/icon/' + score.avatarId + '.png'" /> 
@@ -14,7 +15,8 @@
     			You
     		</el-col>
     		<el-col :span="3" class="center">
-    			{{score.score}}
+    			<span v-if="showScore">{{score.score}}</span>
+    			<span v-else>&nbsp;</span>
     		</el-col>
     	</el-row>
     </div>
@@ -23,7 +25,11 @@
 <script>
     export default{
 		props:{
-			score:{}
+			score:{},
+			/**
+			 * 是否显示排名和得分
+			 */
+			showScore:true
 		},
 		data(){
 			return{

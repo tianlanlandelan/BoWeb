@@ -7,7 +7,8 @@
         <el-row class = "popover-row">
 			<!--名次-->
         	<el-col :span="2">
-        		{{score.sort}}
+				<span v-if="showScore">{{score.sort}}</span>
+				<span v-else>&nbsp;</span>
         	</el-col>
 			<!--头像-->
         	<el-col :span="4">
@@ -19,7 +20,8 @@
         	</el-col>
 			<!--得分-->
         	<el-col :span="2">
-        		{{score.score}}
+				<span v-if="showScore">{{score.score}}</span>
+				<span v-else>&nbsp;</span>
         	</el-col>
         </el-row>
         
@@ -29,7 +31,11 @@
 <script>
     export default{
 		props:{
-			score:{}
+			score:{},
+			/**
+			 * 是否显示排名和得分
+			 */
+			showScore:true
 		},
 		data(){
 			return{
