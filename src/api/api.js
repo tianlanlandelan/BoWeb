@@ -186,17 +186,21 @@ export const req_getMenu = (userId) => {
 };
 
 
-export const req_saveScore = (userId,exerciseId,score) => { 
+export const req_saveScore = (userId,exerciseId,score,answer) => { 
     return axios.post(api, {
         userId:userId,
 		exerciseId:exerciseId,
-		score:score
+		score:score,
+		answer:answer
     },{
 		headers:{
 			'method':'rate'
 		}
 	}).then(res => res.data); 
 };
+/**
+ * 获取排行榜
+ */
 export const req_getLeaderBoard1 = (userId) => { 
     return axios.get(form, {
 		params:{
@@ -204,6 +208,27 @@ export const req_getLeaderBoard1 = (userId) => {
 		},
 		headers:{
 			'method':'rate/getUp'
+		}
+	}).then(res => res.data); 
+};
+
+export const req_getLeaderBoard2 = (userId) => { 
+    return axios.get(form, {
+		params:{
+			userId:userId
+		},
+		headers:{
+			'method':'rate/getDown'
+		}
+	}).then(res => res.data); 
+};
+export const req_getLeaderBoard3 = (userId) => { 
+    return axios.get(form, {
+		params:{
+			userId:userId
+		},
+		headers:{
+			'method':'rate/getMiddle'
 		}
 	}).then(res => res.data); 
 };
