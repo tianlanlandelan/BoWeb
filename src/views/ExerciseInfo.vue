@@ -123,23 +123,30 @@
 		
 	</div>
 	<!---->
-	<LeaderBoard1 @func="closeBox()" v-show= "box.show" 
+	<!-- <LeaderBoard1 @func="closeBox()" v-show= "box.show" 
 	class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" 
-	ref="leaderBoard1"></LeaderBoard1>
-	<!-- <LeaderBoard2 @func="closeBox()" v-show = "box.show" 
+	ref="leaderBoard1"></LeaderBoard1> -->
+	
+	
+	<!-- <LeaderBoard2 @func="closeBox()" v-show= "box.show" 
 	class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" 
-	ref="leaderBoard1"></LeaderBoard2> -->
+	ref="leaderBoard2"></LeaderBoard2> -->
+	
+	<LeaderBoard3 @func="closeBox()" v-show= "box.show" 
+	class="boxCenter" :style="'top:'+ box.contentHeight+ 'px;'" 
+	ref="leaderBoard3"></LeaderBoard3>
 </el-row>
 </template>
 
 <script>
 	import LeaderBoard1 from "../components/Leaderboard1.vue";
 	import LeaderBoard2 from "../components/Leaderboard2.vue";
+	import LeaderBoard3 from "../components/Leaderboard3.vue";
 	
 	import {req_getMenu,req_getCurrent,req_saveScore,req_setTimer} from "../api/api.js";
 	import $ from 'jquery';
 	export default {
-		components:{LeaderBoard1,LeaderBoard2},
+		components:{LeaderBoard1,LeaderBoard2,LeaderBoard3},
 		data() {
 			return {
 				user:{},
@@ -309,7 +316,7 @@
 					  type: 'error'
 					});
 				}
-				req_saveScore(this.user.id,this.exercise.id,score).then(response=>{
+				req_saveScore(this.user.id,this.exercise.id,score,this.answer).then(response=>{
 					console.log("req_saveScore，Response:",response);
 					let { data, message, success } = response;
 					//应答不成功，提示错误信息
@@ -321,8 +328,8 @@
 					}else{
 						this.showBox();
 						this.isShowNext = true;
-						//调用子组件LeaderBoard1 的 load方法，并传入userId，开始查询排行榜
-						this.$refs.leaderBoard1.load(this.user.id);
+						//调用子组件LeaderBoard 的 load方法，开始加载排行榜
+						this.$refs.leaderBoard3.load();
 					}
 				});
 			},

@@ -2,24 +2,24 @@
 <template>
     <div>
         <!--排行的遮罩层-->
-        <el-row class = "popover-margin" :style="{width: score.percentage + '%'}"></el-row>
+        <el-row class = "popover-margin" ></el-row>
         <!--排行数据-->
         <el-row class = "popover-row">
 			<!--名次-->
         	<el-col :span="2">
-        		{{score.sort}}
+        		&nbsp;
         	</el-col>
 			<!--头像-->
         	<el-col :span="4">
-        		<img :src="'../../static/icon/' + score.avatarId + '.png'" /> 
+        		<img src="../../static/icon/0.png" /> 
         	</el-col>
 			<!--名称-->
         	<el-col :span="16">
-        		{{score.firstName}} {{score.lastName}}
+        		&nbsp;
         	</el-col>
 			<!--得分-->
         	<el-col :span="2">
-        		{{score.score}}
+        		&nbsp;
         	</el-col>
         </el-row>
         
@@ -28,9 +28,6 @@
 
 <script>
     export default{
-		props:{
-			score:{}
-		},
 		data(){
 			return{
 				
@@ -45,7 +42,6 @@
 </script>
 
 <style>
-	
 	.popover-row{
 		padding:5px 20px;
 		height: 40px;
@@ -60,6 +56,7 @@
 		height: 40px;
 		opacity:0.5;
 		border-radius: 10px;
+		width: 0;
 	}
 
 </style>

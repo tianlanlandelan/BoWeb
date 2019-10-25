@@ -8,7 +8,7 @@
 			<div class = "popover-div">
 				<div v-for="score in scores" :key = "score.id" >
 					<ScoreRow :score="score" v-if="score.id != id && score.id != 0"></ScoreRow>
-					<div v-if="score.id == 0" class="center others">... ...</div>
+					<OtherScoreRow v-if="score.id == 0" ></OtherScoreRow>
 					<!--分割栏-->
 					<el-row class = "popover-split"></el-row>
 				</div>
@@ -26,8 +26,9 @@
 	import {req_getLeaderBoard2} from "../api/api.js";
 	import MyScoreRow from "./MyScoreRow.vue"
 	import ScoreRow from "./ScoreRow.vue"
+	import OtherScoreRow from "./OtherScoreRow.vue"
 	export default {
-	components:{MyScoreRow,ScoreRow},
+	components:{MyScoreRow,ScoreRow,OtherScoreRow},
 	  data () {
 		return {
 			show:false,
