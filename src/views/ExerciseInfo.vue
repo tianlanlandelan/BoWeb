@@ -12,26 +12,26 @@
 				Hello,{{user.firstName}} {{user.lastName}}!
 			</div>
 		
-			<el-collapse v-model="this.exercise.topicId" accordion>
+			<el-collapse v-model="exercise.topicId" accordion>
 				<el-collapse-item :name="topic.id" v-for="topic in list" :key="topic.id">
 					<template slot="title">
-						<div class="ColorCommon font16">
-							- Topic{{topic.sort}}: {{topic.title}}
+						<div class="ColorCommon">
+							- {{topic.title}}
 							<i v-if="topic.status === 2" class="el-icon-success Success " ></i>
 							<i v-if="topic.status === 1" class="el-icon-loading Blue " ></i>
 							<i v-if="topic.status === 0" class="el-icon-remove-outline Info " ></i>
 						</div>
 					</template>
 					<!--课程内容-->
-					<div class="ColorCommon font16 marginLeft" v-show="topic.videoTitle == ''" @click="showTopic(topic.id,topic.status)">
-						- Text: {{topic.title}}
+					<div class="ColorCommon font16 marginLeft" v-if="topic.title1" @click="showTopic(topic.id,topic.status)">
+						- {{topic.title1}}
 						<i v-if="topic.status === 2" class="el-icon-success Success " ></i>
 						<i v-if="topic.status === 1" class="el-icon-loading Blue " ></i>
 						<i v-if="topic.status === 0" class="el-icon-remove-outline Info " ></i>
 					</div>
-					<!--课程视频-->
-					<div class="ColorCommon font16 marginLeft" v-show="topic.videoTitle != ''" @click="showTopic(topic.id,topic.status)">
-						- Video: {{topic.videoTitle}}
+					<!--课程PPT-->
+					<div class="ColorCommon font16 marginLeft" v-if="!topic.title1" @click="showTopic(topic.id,topic.status)">
+						- Slides: {{topic.title1}}
 						<i v-if="topic.videoStatus === 2" class="el-icon-success Success " ></i>
 						<i v-if="topic.videoStatus === 1" class="el-icon-loading Blue " ></i>
 						<i v-if="topic.videoStatus === 0" class="el-icon-remove-outline Info " ></i>
@@ -43,6 +43,20 @@
 						<i v-if="exercise.status === 2" class="el-icon-success Success " ></i>
 						<i v-if="exercise.status === 1" class="el-icon-loading Blue " ></i>
 						<i v-if="exercise.status === 0" class="el-icon-remove-outline Info " ></i>		
+					</div>
+				</el-collapse-item>
+				<el-collapse-item name="7">
+					<template slot="title">
+						<div class="ColorCommon">
+							- Thank you page
+						</div>
+					</template>
+					<!--课程内容-->
+					<div class="ColorCommon font16 marginLeft">
+						- One more thing
+					</div>
+					<div class="ColorCommon font16 marginLeft">
+						- Thank you and congratulations!	
 					</div>
 				</el-collapse-item>
 			</el-collapse>
@@ -58,11 +72,11 @@
 					<!--左边的文字部分-->
 					<!-- <el-col :span="exercise.img?12:24"> -->
 					<el-col :span="24">
-						<div class="font24 alignRight">
+						<div class="font24 alignRight Danger font-bold">
 							Timer:{{time}} sec
 						</div>
 						<!--练习内容部分的Header-->
-						<div class="font18 padding5 exreciseTitle" v-show="exercise.content">
+						<div class="font18 padding5 exreciseTitle">
 							<i class="el-icon-question"></i>{{exercise.title}}
 						</div>
 						<!--练习内容-->
@@ -71,10 +85,7 @@
 						<div  v-show="exercise.img" class="exerciseImg">
 							<img :src="exercise.img" />
 						</div>
-						<!--问题部分的Header-->
-						<div class="font18 padding5 exerciseQuestion">
-							<i class="el-icon-success"></i>Answer the question
-						</div>
+			
 						<!--问题-->
 						<div class="font18 ">{{exercise.question}}</div>
 						<!--选项-->
@@ -108,7 +119,7 @@
 								</table>
 							</table>
 						</div>
-						<div class="alignRight">
+						<div>
 							<span class="ColorDanger font18" v-show="isShowAnswer">Correct Answer:{{exercise.answer}}</span>
 							<el-button type="success" :disabled="answer == ''" @click="onSubmitAnswer(exercise.answer)" v-show="!isShowNext">Submit Answer</el-button>
 							<el-button type="primary" @click="getCurrent()" v-show="isShowNext">Next</el-button>
@@ -162,13 +173,6 @@
 			}
 		},
 		methods: {
-			handleOpen(key, keyPath) {
-				console.log(key, keyPath);
-			},
-			handleClose(key, keyPath) {
-				console.log(key, keyPath);
-			}
-			,
 			warningCannotStudy(){
 				this.$notify({
 				title: '您不能开始学习本课程',
@@ -267,6 +271,9 @@
 				  let { data, message, success } = response;
 				  //应答不成功，提示错误信息
 				  if (success !== 0) {
+					if(message == "Topic Over"){
+						this.$router.push({ path: '/End1' });
+					}
 				    this.$message({
 				      message: message,
 				      type: 'error'
@@ -359,7 +366,7 @@
 			}
 		},
 		mounted() {
-			this.reWidth = $(window).width() - 410;
+			this.reWidth = $(window).width() - 420;
 			this.init();
 			var user = sessionStorage.getItem('user');
 			if (user) {
@@ -371,7 +378,7 @@
 			}	
 			var that = this;
 			window.onresize = function () {
-				that.reWidth = $(window).width() - 410;	
+				that.reWidth = $(window).width() - 420;	
 				that.initBox();
 			}
 		}
@@ -391,7 +398,7 @@
 	}
 	.left-bar{
 		padding-left: 20px;
-		width: 350px;
+		width: 340px;
 		float: left;
 	}
 
@@ -433,7 +440,9 @@
 	}
 	
 	img{
-		width: 100%;
+		width: 50%;
+		max-width: 500px;
+		max-height: 450px;
 	}
 	.exercise{
 		border: 5px solid #edf3f2;

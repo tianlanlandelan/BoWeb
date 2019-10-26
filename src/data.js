@@ -189,6 +189,7 @@ const user={
 	sidChecked:true,
 	emailChecked:true,
 	passChecked:true,
+	codeChecked:true,
 	//没有输入用户名时，提交按钮是禁用状态
 	nameChecked:false,
 	checkSid(){
@@ -214,6 +215,14 @@ const user={
 			this.passChecked = true;
 		}
 		return this.passChecked;
+	},
+	checkCode(){
+		if(this.code == ""){
+			this.codeChecked = false;
+		}else{
+			this.codeChecked = true;
+		}
+		return this.codeChecked;
 	},
 	checkUserName(){
 		if(this.firstName == "" || this.lastName == ""){

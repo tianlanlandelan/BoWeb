@@ -4,6 +4,8 @@ import NotFound from './views/404.vue'
 
 import Topic from "./views/TopicInfo.vue"
 import Exercise from "./views/ExerciseInfo.vue"
+import End1 from "./views/End1.vue"
+import End2 from "./views/End2.vue"
 
 import Main from './views/Main.vue'
 import Password from "./views/Password.vue"
@@ -34,6 +36,8 @@ let routes = [
 	},
 	{ path: '/Topic', component: Topic, name: 'Topic' },
 	{ path: '/Exercise', component: Exercise, name: 'Exercise' },
+	{ path: '/End1', component: End1, name: 'End1' },
+	{ path: '/End2', component: End2, name: 'End2' },
     {
         path: '/Login/:type',
         component: Login,

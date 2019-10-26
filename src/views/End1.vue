@@ -64,26 +64,81 @@
 		<div class="right-content" :style="'float: left;width:' + reWidth + 'px;'">
 			<div>
 				<!--展示文字内容-->
-				<div v-if="topic.content">
-					<div class="font24 ColorMain font-bold">{{topic.title}}</div>
-					<div class="font22 ColorMain lineHeight marginTop" v-html="topic.content"></div>
-					<div class="alignRight">
-						<el-button type="primary" @click="getNext()" v-show="topic.status != 2">Got it!</el-button>
-					</div>
-				</div>
-				<!--展示PPT-->
-				<div v-else>
-					<div class="font24 Danger margin20 center ">Your time to study this topic is: [{{Math.floor(time/60)}}m {{time%60}}s]</div>
-					<!-- <video :src="topic.videoUrl" controls="controls" @play="onPlay()"></video> -->
-					<div>
-						<iframe src="https://onedrive.live.com/embed?cid=EFF3B846380AF0CE&resid=EFF3B846380AF0CE%211163&authkey=ADrVFdTbhHtSp7Q&em=2"
-					 width="100%" height="627" frameborder="0" scrolling="no"></iframe>
-					 </div>
-					
-					<!--按钮，点击按钮开始答题-->
-					<div class="alignRight">
-						<!-- <el-button type="primary" :disabled="gotItDisabled" @click="getNext()">Got it!</el-button> -->
-						<el-button type="primary"  @click="getNext()">Got it!</el-button>
+				<div>
+					<div class="font24 ColorMain font-bold exreciseTitle">One more thing</div>
+					<div class = "font16 ColorMain margin20">
+						Congratulations! You’ve successfully completed this learning module. Please answer the following two questions.
+						<br>
+						<br>
+						1) What was the leaderboard layout shown to you during this learning module?
+						<div class="marginTop10">
+							<table >
+								<td><el-radio v-model="answer1" label="A">&nbsp;</el-radio></td>
+								<td>A.</td>
+								<td>I don’t know</td>
+							</table>
+						</div>
+						<div class="marginTop10">
+							<table >
+								<td><el-radio v-model="answer1" label="B">&nbsp;</el-radio></td>
+								<td>B.</td>
+								<td>Leaderboard only showed people who ranked higher than me.</td>
+							</table>
+						</div>
+						<div class="marginTop10">
+							<table >
+								<td><el-radio v-model="answer1" label="C">&nbsp;</el-radio></td>
+								<td>C.</td>
+								<td>Leaderboard only showed people who ranked lower than me.</td>
+							</table>
+						</div>
+						<div class="marginTop10">
+							<table >
+								<td><el-radio v-model="answer1" label="D">&nbsp;</el-radio></td>
+								<td>D.</td>
+								<td>Leaderboard only showed people who ranked closely to me.</td>
+							</table>
+						</div>
+						<br>
+						<br>
+						2) What was the amount of performance information shown on the leaderboard?
+						<div class="marginTop10">
+							<table >
+								<td><el-radio v-model="answer2" label="A">&nbsp;</el-radio></td>
+								<td>A.</td>
+								<td>Leaderboard showed exact score and ranking in numbers for me and others.</td>
+							</table>
+						</div>
+						<div class="marginTop10">
+							<table >
+								<td><el-radio v-model="answer2" label="B">&nbsp;</el-radio></td>
+								<td>B.</td>
+								<td>Leaderboard showed exact score and ranking in numbers for me but not for others.</td>
+							</table>
+						</div>
+						<div class="marginTop10">
+							<table >
+								<td><el-radio v-model="answer2" label="C">&nbsp;</el-radio></td>
+								<td>C.</td>
+								<td>Leaderboard showed exact score and ranking in numbers for others but not for me.</td>
+							</table>
+						</div>
+						<div class="marginTop10">
+							<table >
+								<td><el-radio v-model="answer2" label="D">&nbsp;</el-radio></td>
+								<td>D.</td>
+								<td>Leaderboard did not show exact score and ranking in numbers for everyone (both me and others).</td>
+							</table>
+						</div>
+						<div class="marginTop10">
+							<table >
+								<td><el-radio v-model="answer2" label="E">&nbsp;</el-radio></td>
+								<td>E.</td>
+								<td>I don’t know</td>
+							</table>
+						</div>
+						<br>
+						<el-button type="primary" @click="getNext()">Next</el-button>
 					</div>
 				</div>
 			</div>
@@ -95,7 +150,7 @@
 
 <script>
 	import $ from 'jquery';
-	import {req_getMenu,req_getCurrent,req_getNext,req_setTimer} from "../api/api.js";
+	import {req_getMenu,req_feedBack} from "../api/api.js";
 	export default {
 		data() {
 			return {
@@ -105,6 +160,8 @@
 				reWidth:0,
 				time:330,
 				interval:{},
+				answer1:"",
+				answer2:""
 			}
 		},
 		methods: {
@@ -138,7 +195,6 @@
 					return;
 				}
 			},
-	
 			getMenu(){
 				//查询左侧菜单，查询回来的数据为：课程id、课程标题、视频地址、课程对应的练习等
 				req_getMenu(this.user.id).then(response => {
@@ -147,113 +203,43 @@
 				  let { data, message, success } = response;
 				  //应答不成功，提示错误信息
 				  if (success !== 0) {
-				    this.handleError(message);
+				    this.$message({
+				      message: message,
+				      type: 'error'
+				    });
 				  } else {
 				    this.list = data;
-					this.getCurrent();
 				  }
 				});	
 			},
-			handleError(message){
-				if(message == "Topic Over"){
-				  	this.$router.push({ path: '/End2' });
-				  }
-				this.$message({
-				  message: message,
-				  type: 'error'
-				});
-			},
-			getCurrent(){
-				req_getCurrent(this.user.id).then(response => {
-				  console.log("req_getCurrent，Response:",response);
-				  //解析接口应答的json串
-				  let { data, message, success } = response;
-				  //应答不成功，提示错误信息
-				  if (success !== 0) {
-					  this.handleError(message);
-				  } else {
-					  if(data.topicId){
-						  this.clearInterval();
-						  this.$router.push({ path: '/Exercise' });
-					  }else{
-						  this.topic = data;
-						  this.init();
-						  this.startInterval();
-					  }
-				  }
-				});
-			},
 			getNext(){
-				this.clearInterval();
-				req_getNext(this.user.id).then(response => {
-				  console.log("req_getNext，Response:",response);
+				console.log("aa",this.answer1,this.answer2);
+				if(this.answer1 == "" || this.answer2 == ""){
+					 this.$message({
+					  message: " Please answer the following two questions",
+					  type: 'error'
+					});
+					return;
+				}
+				
+				req_feedBack(this.user.id,this.answer1,this.answer2).then(response => {
+				  console.log("getMenu，Response:",response);
 				  //解析接口应答的json串
 				  let { data, message, success } = response;
 				  //应答不成功，提示错误信息
 				  if (success !== 0) {
-					  this.handleError(message);
+				    this.$message({
+				      message: message,
+				      type: 'error'
+				    });
 				  } else {
-					  this.getMenu();
-				    if(data.topicId){
-						  this.clearInterval();
-				    	  this.$router.push({ path: '/Exercise' });
-				      }else{
-						  this.topic = data;
-						  this.init();
-						  this.startInterval();
-					  }
-				    
+				    this.list = data;
 				  }
-				});
-			},
-			init(){
-				this.clearInterval();
-				//如果this.topic.timer有值就设置time,这里再判断下0值的情况
-				if(this.topic.timer || this.topic.timer == 0){
-					console.log("this.topic.timer",this.topic.timer);
-					this.time = this.topic.timer;
-				}else{
-					this.time = 10;
-					console.log("this.topic.timer",this.topic.timer);
-				}
-			},startInterval(){
-				let that = this;
-				that.interval = setInterval((function () {
-					//倒计时结束后跳到习题页面
-					if(that.time >0){
-						that.time --;
-						that.setTimer();
-						if(that.time <=0){
-							that.clearInterval();
-							that.getNext();
-						}
-					}else{
-						that.clearInterval();
-					}
-					
-				}),1000);
-			}
-			,
-			/**
-			 * 清除页面的计时器
-			 */
-			clearInterval(){
-				window.clearInterval(this.interval);
-			},
-			setTimer(){
-				req_setTimer(this.user.id,this.time).then(response=>{
-					console.log("req_setTimer，Response:",response);
-					//解析接口应答的json串
-					let { data, message, success } = response;
-					//应答不成功，提示错误信息
-					if (success !== 0) {
-					  this.handleError(message);
-					} 
-				});
+				});	
+				this.$router.push({ path: '/End2' });
 			}
 		},
 		mounted() {
-			this.init();
 			//减410是减去左边导航栏固定宽度350、左边导航栏左右padding各20、右边内容区padding-left 20
 			this.reWidth = $(window).width() - 420;
 			var user = sessionStorage.getItem('user');
@@ -319,6 +305,9 @@
 	video{
 		width: 100%;
 	}
-	
+	.exreciseTitle{
+		padding:5px 20px;
+		background-color: #dbdfe6;
+	}
 	
 </style>

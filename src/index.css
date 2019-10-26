@@ -50,6 +50,9 @@
 	.font16{
 		font-size:16px;
 	}
+	.margin20{
+		margin: 20px;
+	}
 	.marginTop{
 		margin-top: 20px;
 	}
@@ -64,6 +67,9 @@
 	}
 	.padding5{
 		padding: 5px;
+	}
+	.font-bold{
+		font-weight:bold;
 	}
 	
 	/* 遮罩层 */

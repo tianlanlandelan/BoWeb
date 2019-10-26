@@ -24,6 +24,10 @@
 			 <span class="tip">Set Password</span>
 			 <span class="Danger" v-show="!user.passChecked"> (please use 6 or more characters)</span>
 			 <el-input type="password" v-model="user.password" placeholder="Set Password" @blur="user.checkPassword()"></el-input>
+			 <!-- 邀请码，必填 -->
+			 <span class="tip">Invitation Code</span>
+			 <span class="Danger" v-show="!user.codeChecked"> (please enter invitation code)</span>
+			 <el-input type="text" v-model="user.code" placeholder="Invitation Code" @blur="user.checkCode()"></el-input>
 		</el-form-item>
       </el-form-item>
       <el-form-item style="width:100%;">
@@ -115,7 +119,7 @@
       },
       //校验验证码
       handleRegister(){
-		if(this.user.checkSid() && this.user.checkEmail() && this.user.checkPassword()){
+		if(this.user.checkSid() && this.user.checkEmail() && this.user.checkPassword() && this.user.checkCode()){
 			//调用注册接口
 			req_register(this.user).then(response => {
 			  //解析接口应答的json串
@@ -132,6 +136,12 @@
 					this.user.id = data;
 					this.handleStep(2);
 			  }
+			}).catch(response=>{
+				let { data, message, success } = response;
+				this.$message({
+				  message: message,
+				  type: 'error'
+				});
 			});
 		}else{
 			console.log("信息不全");

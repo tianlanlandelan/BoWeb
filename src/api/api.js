@@ -15,7 +15,8 @@ export const req_register = (user) => {
 		type:user.type,
         email:user.email,
 		sid:user.sid,
-        password:user.password
+        password:user.password,
+		code:user.code
     },{
 		headers:{
 			'method':'register'
@@ -44,6 +45,18 @@ export const req_setTimer = (userId,timer) => {
     },{
 		headers:{
 			'method':'rate'
+		}
+	}).then(res => res.data); 
+};
+
+export const req_feedBack = (userId,feedback1,feedback2) => { 
+    return axios.put(api, {
+		userId:userId,
+		feedback1:feedback1,
+		feedback2:feedback2
+    },{
+		headers:{
+			'method':'rate/feedback'
 		}
 	}).then(res => res.data); 
 };
@@ -82,7 +95,7 @@ export const req_saveTopic = (topic) => {
         sort		:topic.sort,
         title		:topic.title,
         content		:topic.content,	
-        videoTitle	:topic.videoTitle,
+        pptUrl		:topic.pprUrl,
         videoUrl	:topic.videoUrl	
     },{
 		headers:{

@@ -18,8 +18,8 @@
 				    <el-button size="small" type="primary">点击上传</el-button>
 				    </el-upload>
 			</el-form-item>
-			<el-form-item label="视频标题" v-show="topic.videoUrl != ''">
-				<el-input v-model="topic.videoTitle" placeholder="请输入内容"></el-input>
+			<el-form-item label="ppt预览地址" >
+				<el-input v-model="topic.pptUrl" placeholder="请输入内容"></el-input>
 			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" @click = "submit()">添加课程</el-button>
