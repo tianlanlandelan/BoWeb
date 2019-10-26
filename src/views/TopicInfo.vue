@@ -172,16 +172,24 @@
 				  if (success !== 0) {
 					  this.handleError(message);
 				  } else {
-					  if(data.topicId){
-						  this.clearInterval();
-						  this.$router.push({ path: '/Exercise' });
+					  this.handleResponse(data);
+				  }
+				});
+			},
+			handleResponse(data){
+				if(data.topicId){
+					  this.clearInterval();
+					  this.$router.push({ path: '/Exercise' });
+				}else{
+					  this.topic = data;
+					  if(data.content){
+						  
 					  }else{
-						  this.topic = data;
 						  this.init();
 						  this.startInterval();
 					  }
-				  }
-				});
+					  
+				}
 			},
 			getNext(){
 				this.clearInterval();
@@ -194,15 +202,7 @@
 					  this.handleError(message);
 				  } else {
 					  this.getMenu();
-				    if(data.topicId){
-						  this.clearInterval();
-				    	  this.$router.push({ path: '/Exercise' });
-				      }else{
-						  this.topic = data;
-						  this.init();
-						  this.startInterval();
-					  }
-				    
+					  this.handleResponse(data);
 				  }
 				});
 			},

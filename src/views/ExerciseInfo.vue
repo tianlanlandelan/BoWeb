@@ -120,6 +120,7 @@
 							</table>
 						</div>
 						<div>
+							<br>
 							<span class="ColorDanger font18" v-show="isShowAnswer">Correct Answer:{{exercise.answer}}</span>
 							<el-button type="success" :disabled="answer == ''" @click="onSubmitAnswer(exercise.answer)" v-show="!isShowNext">Submit Answer</el-button>
 							<el-button type="primary" @click="getCurrent()" v-show="isShowNext">Next</el-button>
