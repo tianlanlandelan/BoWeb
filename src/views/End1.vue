@@ -101,40 +101,33 @@
 						</div>
 						<br>
 						<br>
-						2) What was the amount of performance information shown on the leaderboard?
+						2) Which of the following score information is conveyed by the leaderboard shown to you?
 						<div class="marginTop10">
 							<table >
 								<td><el-radio v-model="answer2" label="A">&nbsp;</el-radio></td>
 								<td>A.</td>
-								<td>Leaderboard showed exact score and ranking in numbers for me and others.</td>
+								<td>Both my current score and others' scores were available.</td>
 							</table>
 						</div>
 						<div class="marginTop10">
 							<table >
 								<td><el-radio v-model="answer2" label="B">&nbsp;</el-radio></td>
 								<td>B.</td>
-								<td>Leaderboard showed exact score and ranking in numbers for me but not for others.</td>
+								<td>My current score was available but others' scores were not available. </td>
 							</table>
 						</div>
 						<div class="marginTop10">
 							<table >
 								<td><el-radio v-model="answer2" label="C">&nbsp;</el-radio></td>
 								<td>C.</td>
-								<td>Leaderboard showed exact score and ranking in numbers for others but not for me.</td>
+								<td>Others' scores were available but my current score was not available.</td>
 							</table>
 						</div>
 						<div class="marginTop10">
 							<table >
 								<td><el-radio v-model="answer2" label="D">&nbsp;</el-radio></td>
 								<td>D.</td>
-								<td>Leaderboard did not show exact score and ranking in numbers for everyone (both me and others).</td>
-							</table>
-						</div>
-						<div class="marginTop10">
-							<table >
-								<td><el-radio v-model="answer2" label="E">&nbsp;</el-radio></td>
-								<td>E.</td>
-								<td>I don’t know</td>
+								<td>Both my current score and others' scores are unavailable.</td>
 							</table>
 						</div>
 						<br>

@@ -113,8 +113,6 @@
        * 发送验证码
        */
       handleSendCode(){
-		//TODO 发送验证码之前，先校验学号、邮箱是否已注册
-		console.log("学号",this.user.sid,"学校邮箱",this.user.email,"密码",this.user.password);
 		this.handleStep(2);
       },
       //校验验证码
@@ -124,7 +122,6 @@
 			req_register(this.user).then(response => {
 			  //解析接口应答的json串
 			  let { data, message, success } = response;
-			   console.log("登录完毕，Response:",data,message,success);
 			  //应答不成功，提示错误信息
 			  if (success !== 0) {
 			    this.$message({

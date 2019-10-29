@@ -40,7 +40,6 @@
             this.logining = true;
             //调用登录接口，上传用户名和密码
             req_forgetPassword(this.user).then(response => {
-              console.log("登录完毕，Response:",response);
               this.logining = false;
               //解析接口应答的json串
               let { data, message, success } = response;
