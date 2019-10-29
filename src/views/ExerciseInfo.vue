@@ -143,7 +143,6 @@
 
 <script>
 	import LeaderBoard from "../components/Leaderboard.vue";
-	import {utils} from "../data.js";
 	import {req_getMenu,req_getCurrent,req_saveScore,req_setTimer} from "../api/api.js";
 	import $ from 'jquery';
 	export default {
@@ -174,23 +173,54 @@
 			}
 		},
 		methods: {
+				warningCannotStudy(){
+				this.$notify({
+				title: 'Please follow the specified learning path', 
+				message: 'You can\'t preview the topic not yet started!',
+				type: 'warning'
+				});
+			}
+			,
+			warningCannotDoExercise(){
+				this.$notify({
+				title: 'Please follow the specified learning path', 
+				message: 'You can\'t preview the exercises not yet started!',
+				type: 'warning'
+				});
+			}
+			,
+			warningReStudy(){
+				this.$notify({
+				title: 'Please follow the specified learning path', 
+				message: 'You can\'t review the topic completed previously!',
+				type: 'warning'
+				});
+			}
+			,
+			warningReExercise(){
+				this.$notify({
+				title: 'Please follow the specified learning path',
+				message: 'You can\'t review the submitted exercises!',
+				type: 'warning'
+				});
+			},
 			showTopic(id,status){
 				if(status === 0){
-					utils.warningCannotStudy();
+					this.warningCannotStudy();
 					return;
 				}
 				if(status === 2){
-					utils.warningReStudy();
+					this.warningReStudy();
 					return;
 				}
 			},
 			showExercise(id,status){
 				if(status === 0){
-					utils.warningCannotDoExercise();
+					this.warningCannotDoExercise();
 					return;
 				}
 				if(status === 2){
-					utils.warningReExercise();
+					this.warningReExercise();
 					return;
 				}
 			},
