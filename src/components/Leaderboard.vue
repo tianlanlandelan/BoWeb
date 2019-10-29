@@ -4,7 +4,7 @@
 		<div class = "popover-bg">
 			<div class = "popover-div">
 				<!-- 标题 -->
-				<el-row class="score-row">
+				<el-row class="score-row marginBottom10">
 					<el-col :span="2" class="font-underline font-bold">
 						Rank
 					</el-col>
@@ -14,7 +14,7 @@
 					<el-col :span="15" class="font-underline font-bold">
 						Username
 					</el-col>
-					<el-col :span="3" class="font-underline font-bold">
+					<el-col :span="3" class="font-underline font-bold" v-if="type.showMe || type.showOthers">
 						Scores
 					</el-col>
 				</el-row>

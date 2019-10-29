@@ -2,13 +2,13 @@
 <template>
     <div>
         <!--排行的遮罩层-->
-        <el-row class = "popover-margin" :style="{width: score.percentage + '%'}"></el-row>
+        <el-row class = "popover-margin" :style="{width: score.percentage + '%'}" v-if="showScore"></el-row>
+		<el-row class = "popover-margin" :style="{width: 100 + '%'}" v-if="!showScore"></el-row>
         <!--排行数据-->
         <el-row class = "popover-row">
 			<!--名次-->
         	<el-col :span="2">
-				<span v-if="showScore">{{score.sort}}</span>
-				<span v-else>&nbsp;</span>
+				{{score.sort}}
         	</el-col>
 			<!--头像-->
         	<el-col :span="4">

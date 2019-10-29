@@ -372,11 +372,7 @@
 				that.reWidth = $(window).width() - 420;	
 				that.initBox();
 			}
-			//test
-			this.showBox();
-			this.isShowNext = true;
-			//调用子组件LeaderBoard 的 load方法，开始加载排行榜
-			this.$refs.leaderBoard.load();
+			
 		}
 	}
 

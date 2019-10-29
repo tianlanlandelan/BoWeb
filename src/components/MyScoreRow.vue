@@ -1,12 +1,14 @@
 <!--排行榜上自己排名的显示-->
 <template>
     <div class = "me-bg">
-    	<el-row class = "me-margin" :style="{width: score.percentage + '%'}"></el-row>
+		<!-- :style="'float: left;width:' + reWidth + 'px;'" -->
+    	
+		<el-row class = "me-margin" :style="{width: score.percentage + '%'}" v-if="showScore"></el-row>
+		<el-row class = "me-margin" :style="{width: 0 + '%'}" v-if="!showScore"></el-row>
     	<!--自己的成绩-->
     	<el-row class = "me-row">
     		<el-col :span="2">
-    			<span v-if="showScore">{{score.sort}}</span>
-    			<span v-else>&nbsp;</span>
+    			{{score.sort}}
     		</el-col>
     		<el-col :span="4">
     			<img :src="'../../static/icon/' + score.avatarId + '.png'" /> 
