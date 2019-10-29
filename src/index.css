@@ -71,6 +71,10 @@
 	.font-bold{
 		font-weight:bold;
 	}
+	.font-underline{
+		text-decoration: underline;
+	}
+	
 	
 	/* 遮罩层 */
 	.box{

@@ -143,7 +143,7 @@
 
 <script>
 	import LeaderBoard from "../components/Leaderboard.vue";
-	
+	import {utils} from "../data.js";
 	import {req_getMenu,req_getCurrent,req_saveScore,req_setTimer} from "../api/api.js";
 	import $ from 'jquery';
 	export default {
@@ -174,33 +174,23 @@
 			}
 		},
 		methods: {
-			warningCannotStudy(){
-				this.$notify({
-				title: '您不能开始学习本课程',
-				message: '只有学完了本课程之前的全部课程内容，才能开始本课程的学习',
-				type: 'warning'
-				});
-			}
-			,
-			warningCannotDoExercise(){
-				this.$notify({
-				title: '您不能开始做本练习',
-				message: '只有学完了本课程对应的内容，并做完了本练习前的所有练习，才能开始',
-				type: 'warning'
-				});
-			}
-			,
 			showTopic(id,status){
-				console.log("showTopic id:",id);
-				if(status !== 1){
-					this.warningCannotStudy();
+				if(status === 0){
+					utils.warningCannotStudy();
+					return;
+				}
+				if(status === 2){
+					utils.warningReStudy();
 					return;
 				}
 			},
 			showExercise(id,status){
-				console.log("showExercise id:",id);
-				if(status !== 1){
-					this.warningCannotDoExercise();
+				if(status === 0){
+					utils.warningCannotDoExercise();
+					return;
+				}
+				if(status === 2){
+					utils.warningReExercise();
 					return;
 				}
 			},
