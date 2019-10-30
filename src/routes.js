@@ -17,6 +17,7 @@ import TopicEdit from "./views/topic/edit.vue"
 import ExerciseList from "./views/exercise/list.vue"
 import ExerciseEdit from "./views/exercise/edit.vue"
 import ExerciseShow from "./views/exercise/show.vue"
+import SroceList from "./views/admin/ScoreList.vue"
 
 let routes = [
 	{
@@ -25,6 +26,7 @@ let routes = [
 	    name: '课程管理',
 	    iconCls: 'el-icon-message',//图标样式class
 	    children: [
+			{ path: '/SroceList', component: SroceList, name: 'SroceList' },
 	        { path: '/TopicList', component: TopicList, name: '课程列表' },
 	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课程' },
 			{ path: '/ExerciseList', component: ExerciseList, name: '练习列表' },

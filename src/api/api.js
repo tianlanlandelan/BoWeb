@@ -49,6 +49,9 @@ export const req_setTimer = (userId,timer) => {
 	}).then(res => res.data); 
 };
 
+/**
+ * 用户反馈
+ */
 export const req_feedBack = (userId,feedback1,feedback2) => { 
     return axios.put(api, {
 		userId:userId,
@@ -246,3 +249,67 @@ export const req_getLeaderBoard3 = (userId) => {
 	}).then(res => res.data); 
 };
 
+/**
+ * 设置邀请码
+ */
+export const req_admin_setInviteCode = (value) => { 
+    return axios.put(api, {
+		value:value
+    },{
+		headers:{
+			'method':'admin/setInviteCode'
+		}
+	}).then(res => res.data); 
+};
+
+/**
+ * 获取忘记密码的用户
+ */
+export const req_admin_getFotPasswordUser = () => { 
+    return axios.get(form, {
+		params:{
+			
+		},
+		headers:{
+			'method':'admin/getFotPasswordUser'
+		}
+	}).then(res => res.data); 
+};
+/**
+ * 重置用户密码
+ */
+export const req_admin_resetPassword = (userId,password) => { 
+    return axios.put(api, {
+		userId:userId,
+		password:password
+    },{
+		headers:{
+			'method':'admin/resetPassword'
+		}
+	}).then(res => res.data); 
+};
+/**
+ * 获取用户总数
+ */
+export const req_admin_getUserCount = () => { 
+    return axios.get(form, {
+		params:{
+			
+		},
+		headers:{
+			'method':'admin/getUserCount'
+		}
+	}).then(res => res.data); 
+};
+
+
+export const req_admin_getInfoByType = (type) => { 
+    return axios.get(form, {
+		params:{
+			type:type
+		},
+		headers:{
+			'method':'admin/getInfoByType'
+		}
+	}).then(res => res.data); 
+};
