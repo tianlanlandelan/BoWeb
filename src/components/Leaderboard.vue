@@ -15,7 +15,7 @@
 						Username
 					</el-col>
 					<el-col :span="3" class="font-underline font-bold" v-if="type.showMe || type.showOthers">
-						Scores
+						Score
 					</el-col>
 				</el-row>
 				
