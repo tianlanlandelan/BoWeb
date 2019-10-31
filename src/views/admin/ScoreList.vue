@@ -38,6 +38,7 @@
 	  　　　　require.ensure([], () => {
 	  　　　　　　const { export_json_to_excel } = require('@/vendor/Export2Excel');
 	  　　　　　　const tHeader = ['userId','uid','uemail','firstName','lastName',
+							'sort','score','topic','exercise','feedback1','feedback2',
 							'1 Time','1.1 Score','1.1 Time','1.2 Score','1.2 Time','1.3 Score','1.3 Time',
 							'2 Time','2.1 Score','2.1 Time','2.2 Score','2.2 Time','2.3 Score','2.3 Time',
 							'3 Time','3.1 Score','3.1 Time','3.2 Score','3.2 Time','3.3 Score','3.3 Time',
@@ -46,6 +47,7 @@
 							'6 Time','6.1 Score','6.1 Time','6.2 Score','6.2 Time','6.3 Score','6.3 Time'
 							];
 	  　　　　　　const filterVal = ['userId','uid','uemail','firstName','lastName',
+							'sort','score','topic','exercise','feedback1','feedback2',
 							'topicTime1','score1' ,'time1' ,'score2' ,'time2' ,'score3' ,'time3' ,
 							'topicTime2','score4' ,'time4' ,'score5' ,'time5' ,'score6' ,'time6' ,
 							'topicTime3','score7' ,'time7' ,'score8' ,'time8' ,'score9' ,'time9' ,
