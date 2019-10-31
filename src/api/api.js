@@ -262,6 +262,17 @@ export const req_admin_setInviteCode = (value) => {
 	}).then(res => res.data); 
 };
 
+export const req_admin_getInviteCode = () => { 
+    return axios.get(form, {
+		params:{
+			
+		},
+		headers:{
+			'method':'admin/getInviteCode'
+		}
+	}).then(res => res.data); 
+};
+
 /**
  * 获取忘记密码的用户
  */

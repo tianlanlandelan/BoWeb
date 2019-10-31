@@ -1,21 +1,11 @@
 <template>
 	<el-row class="container">
 		<el-col :span="24" class="header">
-			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-				{{collapsed?'':sysName}}
+			<el-col :span="10" class="logo">
+				{{sysName}}
 			</el-col>
-			<el-col :span="10">
-				
-			</el-col>
-			<el-col :span="4" class="userinfo">
-				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
-					<el-dropdown-menu slot="dropdown">
-						<el-dropdown-item @click.native="mymessage">我的消息</el-dropdown-item>
-						<el-dropdown-item @click.native="mysetting">设置</el-dropdown-item>
-						<el-dropdown-item divided @click.native="mylogout">退出登录</el-dropdown-item>
-					</el-dropdown-menu>
-				</el-dropdown>
+			<el-col :span="10" class="userinfo">
+				<span class="el-dropdown-link userinfo-inner" @click="mylogout"><img :src="this.sysUserAvatar" />退出登录</span>
 			</el-col>
 		</el-col>
 		<el-col :span="24" class="main">
@@ -57,20 +47,10 @@
 	export default {
 		data() {
 			return {
-				sysName:'VUEADMIN',
+				sysName:'Admin',
 				collapsed:false,
-				sysUserName: '',
-				sysUserAvatar: '',
-				form: {
-					name: '',
-					region: '',
-					date1: '',
-					date2: '',
-					delivery: false,
-					type: [],
-					resource: '',
-					desc: ''
-				}
+				sysUserName: 'admin',
+				sysUserAvatar: '../../static/icon/9.png',
 			}
 		},
 		methods: {
@@ -99,8 +79,8 @@
 				this.$confirm('确认退出吗?', '提示', {
 					//type: 'warning'
 				}).then(() => {
-					sessionStorage.removeItem('user');
-					_this.$router.push('/login');
+					sessionStorage.removeItem('admin');
+					_this.$router.push('/admin');
 				}).catch(() => {
 
 				});

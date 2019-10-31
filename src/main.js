@@ -21,17 +21,36 @@ const router = new VueRouter({
 })
 
 //过滤路由，只有登录和注册页面允许未登录状态下访问
-// router.beforeEach((to, from, next) => {
-//   if (to.path == '/Login' || to.path == '/Register') {
-//     sessionStorage.removeItem('user');
-//   }
-//   let user = JSON.parse(sessionStorage.getItem('user'));
-//   if (!user && to.path != '/Login' && to.path != '/Register') {
-//     next({ path: '/Login' })
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if (to.path == '/Login' || to.path == '/Register') {
+    sessionStorage.removeItem('user');
+  }
+  let user = JSON.parse(sessionStorage.getItem('user'));
+  let admin = sessionStorage.getItem('admin');
+  //未登录状态下访问用户页面
+  if (!user 
+		&& (to.path == '/Topic' 
+			|| to.path == '/Exercise'
+			|| to.path == '/End1'
+			|| to.path == '/End2'
+			) 
+		) {
+    next({ path: '/404' });
+  } 
+  
+  //非管理员访问管理员页面
+  if(admin!="admin"
+	&& (to.path == '/SroceList' 
+		|| to.path == '/Settings'
+		|| to.path == '/UserList'
+		)
+	){
+		next({ path: '/404' });	
+	}
+	
+    next();
+  
+})
 
 new Vue({
   router,

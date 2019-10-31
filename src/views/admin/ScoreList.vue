@@ -1,8 +1,31 @@
 <!-- 浏览、下载用户成绩 -->
 <template>
-    <div>
-		<el-button type="primary" @click="export2Excel()"></el-button>
+    <div class="marginTop">
+		<el-select v-model="label" placeholder="请选择" @change="onSelected">
+		<el-option
+		  v-for="item in options"
+		  :key="item.value"
+		  :label="item.label"
+		  :value="item.value">
+		</el-option>
+	  </el-select>
+		<el-button type="primary" @click="export2Excel()">导出明细</el-button>
+		<br>
+		<br>
+		<el-table  :data="list" element-loading-text="拼命加载中" border fit highlight-current-row>
+		  <el-table-column label="uid" prop="uid"></el-table-column>
+		  <el-table-column label="uemail" prop="uemail"></el-table-column>
+		  <el-table-column label="firstName"  prop="firstName"></el-table-column>
+		  <el-table-column label="lastName" prop="lastName" ></el-table-column>
+		  <el-table-column label="排名" prop="sort"></el-table-column>
+		  <el-table-column label="总分" prop="score"> </el-table-column>
+		  <el-table-column label="当前学习进度"  prop="topic"></el-table-column>
+		  <el-table-column label="当前答题进度" prop="exercise" ></el-table-column>
+		  <el-table-column label="答卷1" prop="feedback1"></el-table-column>
+		  <el-table-column label="答卷2" prop="feedback2"></el-table-column>
+		</el-table>
     </div>
+	
 </template>
 
 <script>
@@ -11,10 +34,37 @@
 		data(){
 			return{
 				type:1,
-				list:[]
+				label:"LeaderBoard1",
+				list:[],
+				options: [{
+				  value: '1',
+				  label: 'LeaderBoard1'
+				}, {
+				  value: '2',
+				  label: 'LeaderBoard2'
+				}, {
+				  value: '3',
+				  label: 'LeaderBoard3'
+				}, {
+				  value: '4',
+				  label: 'LeaderBoard4'
+				}, {
+				  value: '5',
+				  label: 'LeaderBoard5'
+				}, {
+				  value: '6',
+				  label: 'LeaderBoard6'
+				}]
+			  
 			}
 		},
 		methods:{
+			onSelected(value){
+				console.log("onSelected",value);
+				this.type = value;
+				this.getInfo();
+			}
+			,
 			getInfo(){
 				req_admin_getInfoByType(this.type).then(response => {
 				  //解析接口应答的json串
@@ -38,13 +88,13 @@
 	  　　　　require.ensure([], () => {
 	  　　　　　　const { export_json_to_excel } = require('@/vendor/Export2Excel');
 	  　　　　　　const tHeader = ['userId','uid','uemail','firstName','lastName',
-							'sort','score','topic','exercise','feedback1','feedback2',
-							'1 Time','1.1 Score','1.1 Time','1.2 Score','1.2 Time','1.3 Score','1.3 Time',
-							'2 Time','2.1 Score','2.1 Time','2.2 Score','2.2 Time','2.3 Score','2.3 Time',
-							'3 Time','3.1 Score','3.1 Time','3.2 Score','3.2 Time','3.3 Score','3.3 Time',
-							'4 Time','4.1 Score','4.1 Time','4.2 Score','4.2 Time','4.3 Score','4.3 Time',
-							'5 Time','5.1 Score','5.1 Time','5.2 Score','5.2 Time','5.3 Score','5.3 Time',
-							'6 Time','6.1 Score','6.1 Time','6.2 Score','6.2 Time','6.3 Score','6.3 Time'
+							'排名','总分','当前学习进度','当前答题进度','答卷1','答卷2',
+							'第1课学习时间','第1.1题得分','第1.1题用时','第1.2题得分','第1.2题用时','第1.3题得分','第1.3题用时',
+							'第2课学习时间','第2.1题得分','第2.1题用时','第2.2题得分','第2.2题用时','第2.3题得分','第2.3题用时',
+							'第3课学习时间','第3.1题得分','第3.1题用时','第3.2题得分','第3.2题用时','第3.3题得分','第3.3题用时',
+							'第4课学习时间','第4.1题得分','第4.1题用时','第4.2题得分','第4.2题用时','第4.3题得分','第4.3题用时',
+							'第5课学习时间','第5.1题得分','第5.1题用时','第5.2题得分','第5.2题用时','第5.3题得分','第5.3题用时',
+							'第6课学习时间','第6.1题得分','第6.1题用时','第6.2题得分','第6.2题用时','第6.3题得分','第6.3题用时'
 							];
 	  　　　　　　const filterVal = ['userId','uid','uemail','firstName','lastName',
 							'sort','score','topic','exercise','feedback1','feedback2',
@@ -57,7 +107,7 @@
 							];
 	  　　　　　　const list = this.list;
 	  　　　　　　const data = this.formatJson(filterVal, list);
-	  　　　　　　export_json_to_excel(tHeader, data, '商品管理列表');
+	  　　　　　　export_json_to_excel(tHeader, data, 'LeaderBoard' + this.type + "学习记录明细表");
 	  　　　　});
 	  　 }
 		},mounted(){

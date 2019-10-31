@@ -18,8 +18,8 @@
 				<el-input type="password" v-model="user.password" auto-complete="off" 
 					placeholder="password" @blur="user.checkPassword()"></el-input>
 		    </el-form-item>
-		    <!-- 忘记密码和新用户注册按钮 -->
-		    <el-form-item>
+		    <!-- 忘记密码和新用户注册按钮 Admin登录页面不显示-->
+		    <el-form-item v-if="!admin">
 		      <el-col :span="12">
 		        <el-button type="text" @click="showPassword">Forgot password?</el-button>
 		      </el-col>
@@ -44,7 +44,8 @@
         //登录用户数据
         user: user,
         //登录按钮是否显示加载动画
-        logining: false
+        logining: false,
+		admin:false
       };
     },
     methods: {
@@ -68,8 +69,15 @@
               //应答成功，将用户信息缓存起来。跳转到默认页面
               } else {
                 this.user = data;
-                sessionStorage.setItem('user', JSON.stringify(this.user));
-                this.$router.push({ path: '/Topic' });
+				//如果是管理员，在Session中记录,跳转到管理员页面
+				if(this.admin){
+					sessionStorage.setItem('admin', "admin");
+					this.$router.push({ path: '/SroceList' });
+				}else{
+					sessionStorage.setItem('user', JSON.stringify(this.user));
+					this.$router.push({ path: '/Topic' });
+				}
+              
               }
             });
           } 
@@ -89,7 +97,11 @@
 		sessionStorage.removeItem('path');
 		
 		let type = this.$route.params.type;
-		console.log("router",this.$route.path);
+		let path = this.$route.path;
+		console.log("router",path);
+		if(path == "/admin"){
+			this.admin = true;
+		}
 		this.user.type = type;
 		sessionStorage.setItem('type', type);
 		sessionStorage.setItem('path',this.$route.path);
