@@ -316,6 +316,37 @@ const utils = {
 		}else{
 			return query.substring(iStart + iLen + 1);
 		}	
+	},
+	warningCannotStudy(){
+		this.$notify({
+		title: 'Please follow the specified learning path', 
+		message: 'You can\'t preview the topic not yet started!',
+		type: 'warning'
+		});
+	}
+	,
+	warningCannotDoExercise(){
+		this.$notify({
+		title: 'Please follow the specified learning path', 
+		message: 'You can\'t preview the exercises not yet started!',
+		type: 'warning'
+		});
+	}
+	,
+	warningReStudy(){
+		this.$notify({
+		title: 'Please follow the specified learning path', 
+		message: 'You can\'t review the topic completed previously!',
+		type: 'warning'
+		});
+	}
+	,
+	warningReExercise(){
+		this.$notify({
+		title: 'Please follow the specified learning path',
+		message: 'You can\'t review the submitted exercises!',
+		type: 'warning'
+		});
 	}
 }
 export {

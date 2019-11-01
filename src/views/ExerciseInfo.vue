@@ -143,7 +143,6 @@
 
 <script>
 	import LeaderBoard from "../components/Leaderboard.vue";
-	
 	import {req_getMenu,req_getCurrent,req_saveScore,req_setTimer} from "../api/api.js";
 	import $ from 'jquery';
 	export default {
@@ -174,33 +173,54 @@
 			}
 		},
 		methods: {
-			warningCannotStudy(){
+				warningCannotStudy(){
 				this.$notify({
-				title: '您不能开始学习本课程',
-				message: '只有学完了本课程之前的全部课程内容，才能开始本课程的学习',
+				title: 'Please follow the specified learning path', 
+				message: 'You can\'t preview the topic not yet started!',
 				type: 'warning'
 				});
 			}
 			,
 			warningCannotDoExercise(){
 				this.$notify({
-				title: '您不能开始做本练习',
-				message: '只有学完了本课程对应的内容，并做完了本练习前的所有练习，才能开始',
+				title: 'Please follow the specified learning path', 
+				message: 'You can\'t preview the exercises not yet started!',
 				type: 'warning'
 				});
 			}
 			,
+			warningReStudy(){
+				this.$notify({
+				title: 'Please follow the specified learning path', 
+				message: 'You can\'t review the topic completed previously!',
+				type: 'warning'
+				});
+			}
+			,
+			warningReExercise(){
+				this.$notify({
+				title: 'Please follow the specified learning path',
+				message: 'You can\'t review the submitted exercises!',
+				type: 'warning'
+				});
+			},
 			showTopic(id,status){
-				console.log("showTopic id:",id);
-				if(status !== 1){
+				if(status === 0){
 					this.warningCannotStudy();
+					return;
+				}
+				if(status === 2){
+					this.warningReStudy();
 					return;
 				}
 			},
 			showExercise(id,status){
-				console.log("showExercise id:",id);
-				if(status !== 1){
+				if(status === 0){
 					this.warningCannotDoExercise();
+					return;
+				}
+				if(status === 2){
+					this.warningReExercise();
 					return;
 				}
 			},
@@ -382,11 +402,7 @@
 				that.reWidth = $(window).width() - 420;	
 				that.initBox();
 			}
-			//test
-			this.showBox();
-			this.isShowNext = true;
-			//调用子组件LeaderBoard 的 load方法，开始加载排行榜
-			this.$refs.leaderBoard.load();
+			
 		}
 	}
 

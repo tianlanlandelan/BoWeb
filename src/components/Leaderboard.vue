@@ -3,6 +3,22 @@
 	<div class="bg">
 		<div class = "popover-bg">
 			<div class = "popover-div">
+				<!-- 标题 -->
+				<el-row class="score-row marginBottom10">
+					<el-col :span="2" class="font-underline font-bold">
+						Rank
+					</el-col>
+					<el-col :span="4">
+						&nbsp;
+					</el-col>
+					<el-col :span="15" class="font-underline font-bold">
+						Username
+					</el-col>
+					<el-col :span="3" class="font-underline font-bold" v-if="type.showMe || type.showOthers">
+						Score
+					</el-col>
+				</el-row>
+				
 				<div v-for="score in scores" :key = "score.id" >
 					<ScoreRow class = "score-row" :score="score" :showScore="type.showOthers" v-if="score.id != user.id && score.id != 0"></ScoreRow>
 					<OtherScoreRow class = "score-row" v-if="score.id == 0" ></OtherScoreRow>

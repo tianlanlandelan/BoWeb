@@ -16,7 +16,10 @@ import TopicEdit from "./views/topic/edit.vue"
 
 import ExerciseList from "./views/exercise/list.vue"
 import ExerciseEdit from "./views/exercise/edit.vue"
-import ExerciseShow from "./views/exercise/show.vue"
+
+import SroceList from "./views/admin/ScoreList.vue"
+import Settings from "./views/admin/Settings.vue"
+import UserList from "./views/admin/UserList.vue"
 
 let routes = [
 	{
@@ -25,11 +28,13 @@ let routes = [
 	    name: '课程管理',
 	    iconCls: 'el-icon-message',//图标样式class
 	    children: [
-	        { path: '/TopicList', component: TopicList, name: '课程列表' },
-	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课程' },
-			{ path: '/ExerciseList', component: ExerciseList, name: '练习列表' },
-			{ path: '/ExerciseEdit', component: ExerciseEdit, name: '编辑练习' },
-			{ path: '/ExerciseShow', component: ExerciseShow, name: '练习详情' }
+			{ path: '/SroceList', component: SroceList, name: '分类数据' },
+			{ path: '/Settings', component: Settings, name: '设置' },
+			{ path: '/UserList', component: UserList, name: '概览' }
+	  //       { path: '/TopicList', component: TopicList, name: '课程列表' },
+	  //       { path: '/TopicEdit', component: TopicEdit, name: '编辑课程' },
+			// { path: '/ExerciseList', component: ExerciseList, name: '练习列表' },
+			// { path: '/ExerciseEdit', component: ExerciseEdit, name: '编辑练习' }
 	    ],
 		//是否显示在Admin页面的左侧菜单列表中
 		show:true
