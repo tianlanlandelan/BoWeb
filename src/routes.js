@@ -2,7 +2,7 @@ import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import NotFound from './views/404.vue'
 
-import Topic from "./views/TopicInfo.vue"
+import Topic from "./views/Topic.vue"
 import Exercise from "./views/ExerciseInfo.vue"
 import End1 from "./views/End1.vue"
 import End2 from "./views/End2.vue"
@@ -30,11 +30,11 @@ let routes = [
 	    children: [
 			{ path: '/SroceList', component: SroceList, name: '分类数据' },
 			{ path: '/Settings', component: Settings, name: '设置' },
-			{ path: '/UserList', component: UserList, name: '概览' }
-	  //       { path: '/TopicList', component: TopicList, name: '课程列表' },
-	  //       { path: '/TopicEdit', component: TopicEdit, name: '编辑课程' },
-			// { path: '/ExerciseList', component: ExerciseList, name: '练习列表' },
-			// { path: '/ExerciseEdit', component: ExerciseEdit, name: '编辑练习' }
+			{ path: '/UserList', component: UserList, name: '概览' },
+	        { path: '/TopicList', component: TopicList, name: '课程列表' },
+	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课程' },
+			{ path: '/ExerciseList', component: ExerciseList, name: '练习列表' },
+			{ path: '/ExerciseEdit', component: ExerciseEdit, name: '编辑练习' }
 	    ],
 		//是否显示在Admin页面的左侧菜单列表中
 		show:true
@@ -55,32 +55,7 @@ let routes = [
 	{
 	    path: '/Login/1',
 		component: Login,
-		alias: '/up1'
-	},
-	{
-	    path: '/Login/2',
-		component: Login,
-		alias: '/down2'
-	},
-	{
-	    path: '/Login/3',
-		component: Login,
-		alias: '/inter3'
-	},
-	{
-	    path: '/Login/4',
-		component: Login,
-		alias: '/intra4'
-	},
-	{
-	    path: '/Login/5',
-		component: Login,
-		alias: '/vague5'
-	},
-	{
-	    path: '/Login/6',
-		component: Login,
-		alias: '/control6'
+		alias: '/'
 	},
 	{
 	    path: '/Login/99',

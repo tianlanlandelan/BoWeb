@@ -2,7 +2,7 @@ import axios from 'axios';
 import md5 from 'js-md5';
 /** 需要先登录再访问的路由 */
 let api = 'api';
-let form = "api/form"
+let form = "form"
 
 /** 不需要登录就能访问的路由 */
 let base = 'base';
