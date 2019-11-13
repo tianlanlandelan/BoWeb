@@ -1,17 +1,22 @@
-
+<!-- 课程列表 -->
 <template>
     <div>
-		
-        <!-- <el-row v-for="course in list" :key = "course.id">
-          <el-col :span="12" >
-        	<h4>{{course.title}}</h4>
-          </el-col>
-          
-        </el-row> -->
+		<el-row>
+			<el-col>
+				<el-button type="primary" @click="handleAddCourse()">添加课程</el-button>
+			</el-col>
+		</el-row>
 		
 		<el-row v-for="course in list" :key = "course.id">
-			<el-col :span="20">
+			<el-col :span="16">
+				<!-- 课程总览 -->
 				<CourseRow :course="course"></CourseRow>
+			</el-col>
+			<el-col :span="8">
+				<!-- 课程管理 -->
+				<el-button type="primary" @click="handleEditCourse(course.id)">编辑课程</el-button>
+				<el-button type="primary" @click="handleTopicList(course.id)">管理课时</el-button>
+				<el-button type="primary">查看评价</el-button>
 			</el-col>
 		</el-row>
 		
@@ -30,7 +35,15 @@
 		},
 		components:{CourseRow},
 		methods:{
-			
+			handleAddCourse(){
+				this.$router.push('/CourseEidt');	
+			},
+			handleEditCourse(courseId){
+				this.$router.push({ path: '/CourseEidt', query: { courseId: courseId }});
+			},
+			handleTopicList(courseId){
+				this.$router.push({ path: '/TopicList', query: { courseId: courseId }});
+			}
 		},mounted(){
 			req_getCourseList().then(response => {
 			  //解析接口应答的json串

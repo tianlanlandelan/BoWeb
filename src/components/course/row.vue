@@ -2,10 +2,10 @@
 <template>
     <div>
         <el-row class="row padding5 margin5">
-			<el-col :span="6">
+			<el-col :span="8">
 				<img :src="config.nginxUrl + course.img" />
 			</el-col>
-			<el-col :span="18" class="padding0-5">
+			<el-col :span="16" class="padding0-5">
 				<div class="font20 ColorMain font-bold" >{{course.title}}</div>
 				<div class="font16 ColorCommon margin5-0">{{course.subTitle}}</div>
 				<div class="ColorInfo margin5-0">52课时 | 5649人已学 | 10评论</div>

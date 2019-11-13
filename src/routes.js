@@ -33,16 +33,27 @@ let routes = [
 			{ path: '/SroceList', component: SroceList, name: '分类数据' },
 			{ path: '/Settings', component: Settings, name: '设置' },
 			{ path: '/UserList', component: UserList, name: '概览' },
+			{ path: '/CourseList', component: CourseList, name: '课程列表' }
+	    ],
+		//是否显示在Admin页面的左侧菜单列表中
+		show:true
+	},
+	{
+	    path: '/SubManager',
+	    component: Admin,
+	    name: '课程管理',
+	    iconCls: 'el-icon-message',//图标样式class
+	    children: [
+
 	        { path: '/TopicList', component: TopicList, name: '课时列表' },
 	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课时' },
 			{ path: '/ExerciseList', component: ExerciseList, name: '练习列表' },
 			{ path: '/ExerciseEdit', component: ExerciseEdit, name: '编辑练习' },
 			{ path: '/CourseEidt', component: CourseEidt, name: '编辑课程' },
-			{ path: '/CourseList', component: CourseList, name: '课程列表' },
 			{ path: '/CourseView', component: CourseView, name: '课程展示' }
 	    ],
 		//是否显示在Admin页面的左侧菜单列表中
-		show:true
+		show:false
 	},
 	{ 	path: '/Topic', component: Topic, name: 'Topic' },
 	{ 	path: '/Exercise', component: Exercise, name: 'Exercise' },

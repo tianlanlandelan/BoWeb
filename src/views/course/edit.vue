@@ -40,7 +40,7 @@
 
 <script>
 	import {config} from "../../data.js";
-	import {req_saveCourse} from "../../api/api.js";
+	import {req_saveCourse,req_getCourse} from "../../api/api.js";
 	import E from 'wangeditor';
     export default{
 		data(){
@@ -82,9 +82,11 @@
 			},
 			handleSubmit(){
 				this.getOverview();
+				this.course.status = 0;
 				this.doPost();
 			},
 			doPost(){
+				let id = this.course.id;
 				req_saveCourse(this.course).then(response => {
 					if(response){
 						//解析接口应答的json串
@@ -97,7 +99,7 @@
 						  });
 						} else {
 						  this.$message({
-						    message: "Save Course Success!",
+						    message: id==0?"添加课程成功！":"修改课程成功！",
 						    type: 'success'
 						  });
 							this.$router.push('/CourseList');
@@ -107,6 +109,28 @@
 			}
 		},mounted(){
 			this.editor.create();
+			//编辑课程
+			if(this.$route.query.courseId){
+				this.course.id = this.$route.query.courseId;
+				let that = this;
+				req_getCourse(this.course.id).then(response => {
+					if(response){
+						//解析接口应答的json串
+						let { data, message, success } = response;
+						//应答不成功，提示错误信息
+						if (success !== 0) {
+						  this.$message({
+						    message: "获取课程失败：" + message + "！！！",
+						    type: 'error'
+						  });
+						} else {
+							that.course = data;
+							that.editor.txt.html(that.course.overview);
+						}
+					}
+				});
+			}
+			
 		}
 	}
 </script>

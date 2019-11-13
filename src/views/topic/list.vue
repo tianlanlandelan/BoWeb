@@ -1,13 +1,6 @@
 <template>
 	<div>
-		<el-row v-for="topic in list" :key = "topic.id">
-		  <el-col :span="12" >
-			<h4>{{topic.title}}</h4>
-		  </el-col>
-		  <el-col :span="12" >
-		  	<el-button @click="addExcise(topic.id)">添加练习</el-button>
-		  </el-col>
-		</el-row>
+		
 	</div>
 </template>
 
@@ -16,28 +9,15 @@
 	export default{
 		data(){
 			return{
+				courseId:0,
 				list:[]
 			}
 		},
 		methods:{
-			addExcise(topicId){
-				this.$router.push({ path: '/ExerciseEdit',query:{id:0,topicId:topicId} });
-			}
+			
 		},mounted(){
-			req_getTopicList().then(response => {
-			  console.log("Topic Saved，Response:",response);
-			  //解析接口应答的json串
-			  let { data, message, success } = response;
-			  //应答不成功，提示错误信息
-			  if (success !== 0) {
-			    this.$message({
-			      message: message,
-			      type: 'error'
-			    });
-			  } else {
-			    this.list = data;
-			  }
-			});
+			this.courseId  = this.$route.query.courseId;
+			console.log("courseId",this.courseId);
 		}
 	}
 </script>

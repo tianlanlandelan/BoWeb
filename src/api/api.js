@@ -109,6 +109,7 @@ export const req_saveTopic = (topic) => {
 
 export const req_saveCourse = (course) => { 
     return axios.post(api, {
+		id:course.id,
         title:course.title,
 		subTitle:course.subTitle,
 		img:course.img,
@@ -127,14 +128,24 @@ export const req_getCourseList = () => {
 		headers:{
 			'method':'course/getAll'
 		}
-	}).then(res => res.data); 
+	}).then(res => res.data).catch(err => err);  
+};
+export const req_getCourse = (id) => { 
+    return axios.get(form, {
+		params:{
+			id:id
+		},
+		headers:{
+			'method':'course'
+		}
+	}).then(res => res.data).catch(err => err); 
 };
 export const req_getTopicList = () => { 
     return axios.get(form, {
 		headers:{
 			'method':'topicInfo/getAll'
 		}
-	}).then(res => res.data); 
+	}).then(res => res.data).catch(err => err); 
 };
 export const req_getCurrent = (userId) => { 
     return axios.get(form, {
