@@ -106,6 +106,29 @@ export const req_saveTopic = (topic) => {
 		}
 	}).then(res => res.data); 
 };
+
+export const req_saveCourse = (course) => { 
+    return axios.post(api, {
+        title:course.title,
+		subTitle:course.subTitle,
+		img:course.img,
+		overview:course.overview,
+		price:course.price,
+		status:course.status
+    },{
+		headers:{
+			'method':'course'
+		}
+	}).then(res => res.data)
+	.catch(err => err); 
+};
+export const req_getCourseList = () => { 
+    return axios.get(form, {
+		headers:{
+			'method':'course/getAll'
+		}
+	}).then(res => res.data); 
+};
 export const req_getTopicList = () => { 
     return axios.get(form, {
 		headers:{

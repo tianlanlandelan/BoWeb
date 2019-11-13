@@ -26,12 +26,14 @@
 .margin10{margin: 10px;}/* 10px外边距 */
 .margin15{margin: 15px;}/* 15px外边距 */
 .margin20{margin: 20px;}/* 20px外边距  */
-.marginBottom20{margin-bottom: 20px;}
-.marginTop20{margin-top: 20px;}
+.margin5-0{margin: 5px 0;}
+.margin10-0{margin: 10px 0;}
+.margin0-10{margin:0 10px;}
 .padding5{padding: 5px;}/* 5px内边距 */
 .padding10{padding: 10px;}/* 10px内边距 */
 .padding15{padding: 15px;}/* 15px内边距 */
 .padding20{padding: 20px;}/* 20px内边距 */
+.padding0-5{padding:0 5px;}
 /* 鼠标指针样式 */
 .cursorPointer{cursor:pointer;}/* 变小手 */
 .width100{width:100%;}/* 宽度100% , 经常用在 img/video/div等需要控制宽度的组件上 */
@@ -40,3 +42,5 @@
 /* 遮罩层里的内容 */
 .boxCenter{position: absolute;top: 0;left: 0;width:60%;margin-left: 20%;margin-top: 10%;
 	background-color: #FFFFFF;opacity: 1;border-radius: 20px;z-index: 999;}
+	
+img{width: 100%;}

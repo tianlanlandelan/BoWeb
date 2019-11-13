@@ -35,9 +35,9 @@
 			
 			<el-col :span="18" class="BgColorCommon padding10" :style="'height:' + menu.height  + 'px;'">
 				<div class="alignCenter font20 font-bold ColorCommon">课程名：深度学习与自然语言处理</div>
-				<div class="alignCenter font18 font-bold ColorCommon marginBottom20">Topic 1:Overview of Data Mining</div>
+				<div class="alignCenter font18 font-bold ColorCommon margin10-0">Topic 1:Overview of Data Mining</div>
 				<video class="width100" src="http://localhost:8081/nginx/video/20191018120715461.mp4" controls></video>
-				<div class="marginTop20">
+				<div class="margin10-0">
 					<el-button type="primary" round>下一课</el-button>
 					<el-button type="primary" round>学过了</el-button>
 				</div>

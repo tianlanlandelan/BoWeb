@@ -1,3 +1,7 @@
+const config={
+	nginxUrl : "http://127.0.0.1:8081/nginx"
+}
+
 const user={
 	id:0,
 	type:1,
@@ -173,5 +177,5 @@ const utils = {
 	}
 }
 export {
-	user,topic,exercise,utils
+	user,topic,exercise,utils,config
 }
