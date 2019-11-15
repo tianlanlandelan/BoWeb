@@ -39,12 +39,24 @@
 					:group="{ name: 'chapter', pull: 'clone', put: false }"
 				    v-model="list"
 				    @change="draggableChange">
-							<el-row class="margin5-0"  v-for="chapter in list" :key="chapter.id">
+							<el-row class="margin5-0"  v-for="(item,i) in list" :key="item.id">
 								<el-col :span="18">
-									<span class="cursorPointer font18 ColorCommon">{{chapter.name}}</span>
+									<span class="cursorPointer font18 ColorCommon" 
+										v-if="!(chapterEditer.edit && chapterEditer.current === item.id)">
+										{{item.name}}
+									</span>
+									<el-input v-model="item.name" 
+										v-if="chapterEditer.edit && chapterEditer.current === item.id"></el-input>
 								</el-col>
 								<el-col :span="6">
-									<el-button size="mini" type="danger" icon="el-icon-delete" circle @click="handleDeleteChapter(chapter.id)"></el-button>
+									<el-button size="mini" type="primary" icon="el-icon-edit" 
+										circle v-if="!(chapterEditer.edit && chapterEditer.current === item.id)" 
+										@click="handleEditChapter(item.id)"></el-button>
+									<el-button size="mini" type="success" icon="el-icon-check" 
+										circle v-if="chapterEditer.edit && chapterEditer.current === item.id" 
+										@click="handleEditedChapter(item)"></el-button>
+									<el-button size="mini" type="danger" icon="el-icon-delete" 
+										circle @click="handleDeleteChapter(item.id)"></el-button>
 								</el-col>
 							</el-row>
 				</draggable>
@@ -58,7 +70,7 @@
 
 <script>
 	import draggable from 'vuedraggable';
-	import {req_saveChapter,req_getTopicList} from "../../api/api.js";
+	import {req_saveChapter,req_getTopicList,req_updateTopic,req_updateChapter} from "../../api/api.js";
 	export default{
 		components:{draggable},
 		data(){
@@ -71,17 +83,10 @@
 					name:"",
 					sort:0
 				},
-				list1: [
-				  { name: "Jesus", id: 1 },
-				  { name: "Paul", id: 2 },
-				  { name: "Peter", id: 3 }
-				],
-				list2: [
-				  { name: "Luc", id: 5 },
-				  { name: "Thomas", id: 6 },
-				  { name: "John", id: 7 }
-				],
-				controlOnStart: true
+				chapterEditer:{
+					edit:false,
+					current:0
+				}
 			}
 		},
 		methods:{
@@ -95,9 +100,29 @@
 			topicListChange(chapter){
 				console.log("========",chapter.id,chapter.name,"========");
 				for(var i = 0; i < chapter.list.length ; i ++){
-					console.log(i,chapter.id,chapter.list[i].id,chapter.list[i].title);
+					this.updateTopic(chapter.list[i].id,chapter.id,i);
+					console.log("id:",chapter.list[i].id ,"chapterId:",chapter.id,"sort:",i,"title:",chapter.list[i].title);
 				}
 				console.log("========END========");
+			},
+			/**
+			 * 修改课时的排序
+			 * @param {Object} id
+			 * @param {Object} chapterId
+			 * @param {Object} sort
+			 */
+			updateTopic(id,chapterId,sort){
+				req_updateTopic(id,chapterId,sort).then(response => {
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+					this.$notify.error({
+					  title:'Failed',
+					  message: message
+					});
+				  } 
+				});
 			},
 			/**
 			 * 章节顺序发生改变，修改章节顺序
@@ -105,9 +130,25 @@
 			draggableChange(){
 				for(var i = 0; i < this.list.length ; i ++){
 					console.log(this.list[i].id,this.list[i].name);
+					this.updateChapter(this.list[i].id,i,this.list[i].name);
 				}
 			},
-			
+			updateChapter(id,sort,name){
+				req_updateChapter(id,sort,name).then(response => {
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+					this.$notify.error({
+					  title:'Failed',
+					  message: message
+					});
+				  } 
+				});
+			},
+			/**
+			 * 添加章节
+			 */
 			handleAddChapter(){
 				this.chapter.courseId = this.courseId;
 				let id = this.chapter.id;
@@ -128,6 +169,19 @@
 					this.getList();
 				  }
 				});
+			},
+			/**
+			 * 开始修改章节，去掉<span>节点，替换为<input>
+			 * @param {Object} id
+			 */
+			handleEditChapter(id){
+				this.chapterEditer.edit = true;
+				this.chapterEditer.current = id;
+			},
+			handleEditedChapter(chapter){
+				this.chapterEditer.edit = false;
+				this.chapterEditer.current = 0;
+				this.updateChapter(chapter.id,chapter.sort,chapter.name);
 			},
 			handleDeleteChapter(id){
 				console.log(id);
