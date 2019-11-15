@@ -16,9 +16,6 @@ import CourseEidt from "./views/course/edit.vue"
 import CourseList from "./views/course/list.vue"
 import CourseView from "./views/course/view.vue"
 
-import ExerciseList from "./views/exercise/list.vue"
-import ExerciseEdit from "./views/exercise/edit.vue"
-
 import SroceList from "./views/admin/ScoreList.vue"
 import Settings from "./views/admin/Settings.vue"
 import UserList from "./views/admin/UserList.vue"
@@ -27,7 +24,7 @@ let routes = [
 	{
 	    path: '/Manager',
 	    component: Admin,
-	    name: '课程管理',
+	    name: '管理页面',
 	    iconCls: 'el-icon-message',//图标样式class
 	    children: [
 			{ path: '/SroceList', component: SroceList, name: '分类数据' },
@@ -41,14 +38,12 @@ let routes = [
 	{
 	    path: '/SubManager',
 	    component: Admin,
-	    name: '课程管理',
+	    name: '管理子页面',
 	    iconCls: 'el-icon-message',//图标样式class
 	    children: [
 
 	        { path: '/TopicList', component: TopicList, name: '课时列表' },
 	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课时' },
-			{ path: '/ExerciseList', component: ExerciseList, name: '练习列表' },
-			{ path: '/ExerciseEdit', component: ExerciseEdit, name: '编辑练习' },
 			{ path: '/CourseEidt', component: CourseEidt, name: '编辑课程' },
 			{ path: '/CourseView', component: CourseView, name: '课程展示' }
 	    ],

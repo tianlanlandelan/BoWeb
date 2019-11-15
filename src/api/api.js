@@ -95,10 +95,12 @@ export const req_forgetPassword = (user) => {
  */
 export const req_saveTopic = (topic) => { 
     return axios.post(api, {
+		id			:topic.id,
+		courseId	:topic.courseId,
+		chapterId	:topic.chapterId,
         sort		:topic.sort,
         title		:topic.title,
         content		:topic.content,	
-        pptUrl		:topic.pprUrl,
         videoUrl	:topic.videoUrl	
     },{
 		headers:{
@@ -123,10 +125,33 @@ export const req_saveCourse = (course) => {
 	}).then(res => res.data)
 	.catch(err => err); 
 };
+export const req_saveChapter = (chapter) => { 
+    return axios.post(api, {
+		id:chapter.id,
+        courseId:chapter.courseId,
+		name:chapter.name,
+		sort:chapter.sort
+    },{
+		headers:{
+			'method':'chapter'
+		}
+	}).then(res => res.data)
+	.catch(err => err); 
+};
 export const req_getCourseList = () => { 
     return axios.get(form, {
 		headers:{
 			'method':'course/getAll'
+		}
+	}).then(res => res.data).catch(err => err);  
+};
+export const req_getChapterList = (courseId) => { 
+    return axios.get(form, {
+		params:{
+			courseId:courseId
+		},
+		headers:{
+			'method':'chapter'
 		}
 	}).then(res => res.data).catch(err => err);  
 };
@@ -140,10 +165,13 @@ export const req_getCourse = (id) => {
 		}
 	}).then(res => res.data).catch(err => err); 
 };
-export const req_getTopicList = () => { 
+export const req_getTopicList = (courseId) => { 
     return axios.get(form, {
+		params:{
+			courseId:courseId
+		},
 		headers:{
-			'method':'topicInfo/getAll'
+			'method':'topicInfo/getList'
 		}
 	}).then(res => res.data).catch(err => err); 
 };

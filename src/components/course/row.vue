@@ -8,13 +8,13 @@
 			<el-col :span="16" class="padding0-5">
 				<div class="font20 ColorMain font-bold" >{{course.title}}</div>
 				<div class="font16 ColorCommon margin5-0">{{course.subTitle}}</div>
-				<div class="ColorInfo margin5-0">52课时 | 5649人已学 | 10评论</div>
+				<div class="ColorInfo margin5-0">{{course.topicNumber}}课时 | {{course.gotNumber}}人已学 | {{course.evaluatedNumber}}评论</div>
 				<el-rate class="margin5-0"
-				  v-model="value"
+				  v-model="course.evaluation"
 				  disabled
 				  show-score
 				  text-color="#ff9900"
-				  score-template="{value}">
+				  :score-template="course.evaluation + ''">
 				</el-rate>
 				<div>
 					<span class="ColorCommon">价格: </span>
@@ -35,8 +35,7 @@
 		},
 		data(){
 			return{
-				config:config,
-				value:3.7,
+				config:config
 				
 			}
 		},
