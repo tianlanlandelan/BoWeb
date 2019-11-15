@@ -38,31 +38,7 @@ export const req_updateUserInfo = (user) => {
 		}
 	}).then(res => res.data); 
 };
-export const req_setTimer = (userId,timer) => { 
-    return axios.put(api, {
-		userId:userId,
-		timer:timer
-    },{
-		headers:{
-			'method':'rate'
-		}
-	}).then(res => res.data); 
-};
 
-/**
- * 用户反馈
- */
-export const req_feedBack = (userId,feedback1,feedback2) => { 
-    return axios.put(api, {
-		userId:userId,
-		feedback1:feedback1,
-		feedback2:feedback2
-    },{
-		headers:{
-			'method':'rate/feedback'
-		}
-	}).then(res => res.data); 
-};
 /**
  * 登录接口
  */
@@ -109,6 +85,21 @@ export const req_saveTopic = (topic) => {
 	}).then(res => res.data); 
 };
 
+/**
+ * 修改课时顺序
+ */
+export const req_updateTopic = (id,chapterId,sort) => { 
+    return axios.put(api, {
+		id:id,
+		chapterId:chapterId,
+		sort:sort
+    },{
+		headers:{
+			'method':'topicInfo'
+		}
+	}).then(res => res.data); 
+};
+
 export const req_saveCourse = (course) => { 
     return axios.post(api, {
 		id:course.id,
@@ -137,6 +128,17 @@ export const req_saveChapter = (chapter) => {
 		}
 	}).then(res => res.data)
 	.catch(err => err); 
+};
+export const req_updateChapter = (id,sort,name) => { 
+    return axios.put(api, {
+		id:id,
+		sort:sort,
+		name:name
+    },{
+		headers:{
+			'method':'chapter'
+		}
+	}).then(res => res.data); 
 };
 export const req_getCourseList = () => { 
     return axios.get(form, {
@@ -175,26 +177,6 @@ export const req_getTopicList = (courseId) => {
 		}
 	}).then(res => res.data).catch(err => err); 
 };
-export const req_getCurrent = (userId) => { 
-    return axios.get(form, {
-		params:{
-			userId:userId
-		},
-		headers:{
-			'method':'topicInfo/getCurrent'
-		}
-	}).then(res => res.data); 
-};
-export const req_getNext = (userId) => { 
-    return axios.get(form, {
-		params:{
-			userId:userId
-		},
-		headers:{
-			'method':'topicInfo/getNext'
-		}
-	}).then(res => res.data); 
-};
 
 export const req_getTopicInfo = (id) => { 
     return axios.get(form, {
@@ -229,39 +211,7 @@ export const req_saveExercise = (exercise) => {
 		}
 	}).then(res => res.data); 
 };
-export const req_getExerciseList = () => { 
-    return axios.get(form, {
-		headers:{
-			'method':'exerciseInfo/getAll'
-		}
-	}).then(res => res.data); 
-};
-/**
- * get方法提交的参数要按照form表单的形式接收
- */
-export const req_getExerciseInfo = (id) => { 
-    return axios.get(form, {
-		params:{
-			id:id
-		},
-		headers:{
-			'method':'exerciseInfo'
-		}
-	}).then(res => res.data); 
-};
-/**
- * 获取用户主页左侧导航菜单
- */
-export const req_getMenu = (userId) => { 
-    return axios.get(form, {
-		params:{
-			userId:userId
-		},
-		headers:{
-			'method':'getMenu'
-		}
-	}).then(res => res.data); 
-};
+
 
 
 export const req_saveScore = (userId,exerciseId,score,answer) => { 
@@ -290,26 +240,6 @@ export const req_getLeaderBoard1 = (userId) => {
 	}).then(res => res.data); 
 };
 
-export const req_getLeaderBoard2 = (userId) => { 
-    return axios.get(form, {
-		params:{
-			userId:userId
-		},
-		headers:{
-			'method':'rate/getDown'
-		}
-	}).then(res => res.data); 
-};
-export const req_getLeaderBoard3 = (userId) => { 
-    return axios.get(form, {
-		params:{
-			userId:userId
-		},
-		headers:{
-			'method':'rate/getMiddle'
-		}
-	}).then(res => res.data); 
-};
 
 /**
  * 设置邀请码
