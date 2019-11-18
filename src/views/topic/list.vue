@@ -1,6 +1,10 @@
 <!-- 课时列表 -->
 <template>
 	<div class="padding10">
+		<div class="margin10-0">
+			<el-link @click="handleGoCourseList()" icon="el-icon-back">返回课程</el-link>
+		</div>
+		
 		<el-row>
 			<!-- 课时列表 -->
 			<el-col :span="12">
@@ -16,7 +20,7 @@
 						@start="start">
 								<el-row class="margin5-0"  v-for="topic in chapter.list" :key="topic.title">
 									<el-col :span="18" :offset="1">
-										<span class="cursorPointer font16 ColorCommon">{{topic.title}}</span>
+										<span class="cursorPointer font16 ColorCommon" @click="handleGoTopicInfo(topic.id)">{{topic.title}}</span>
 									</el-col>
 								</el-row>
 					</draggable>
@@ -90,6 +94,16 @@
 			}
 		},
 		methods:{
+			/**
+			 * 返回课程列表
+			 */
+			handleGoCourseList(){
+				this.$router.push("/CourseList");
+			},
+			handleGoTopicInfo(topicId){
+				console.log("handleGoTopicInfo");
+				this.$router.push({ path: '/Topic', query: { id:topicId,courseId: this.courseId }});
+			},
 			start({ originalEvent }) {
 			  this.controlOnStart = originalEvent.ctrlKey;
 			},
@@ -166,7 +180,7 @@
 						title:'Success',
 					    message: id==0?"添加成功":"修改成功"
 					  });
-					this.getList();
+					this.getTopicList();
 				  }
 				});
 			},
