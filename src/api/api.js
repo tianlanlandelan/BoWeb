@@ -106,6 +106,7 @@ export const req_saveCourse = (course) => {
         title:course.title,
 		subTitle:course.subTitle,
 		img:course.img,
+		overviewMD:course.overviewMD,
 		overview:course.overview,
 		price:course.price,
 		status:course.status

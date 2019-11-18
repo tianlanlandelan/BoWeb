@@ -19,7 +19,8 @@
 					</el-upload>
 			</el-form-item>
 			<el-form-item label="概述">
-				<div id = "editor"></div>
+				<!-- MarkDown编辑器 -->
+				<MarkDown @func="markdownChanged" :mdstr="course.overviewMD" :htmlstr="course.overview" v-if="loadMarkDown"></MarkDown>
 			</el-form-item>
 			<el-form-item label="价格">
 				<el-input v-model="course.price" placeholder="请输入价格"></el-input>
@@ -41,10 +42,12 @@
 <script>
 	import {config} from "../../data.js";
 	import {req_saveCourse,req_getCourse} from "../../api/api.js";
-	import E from 'wangeditor';
+	import MarkDown from "../../components/MarkDown.vue"
     export default{
+		components:{MarkDown},
 		data(){
 			return{
+				loadMarkDown:false,
 				config:config,
 				/**
 				 * 课程
@@ -55,10 +58,10 @@
 					subTitle:"",
 					img:"",
 					overview:"",
+					overviewMD:"",
 					price:0,
 					status:0
-				},
-				editor : new E("#editor")
+				}
 			}
 		},
 		methods:{
@@ -67,21 +70,14 @@
 					this.course.img = response.data;
 			    }
 			},
-			getOverview(){
-				if(this.editor.txt.text()){
-					this.course.overview = this.editor.txt.html();
-				}
-			},
 			/**
 			 * 保存草稿
 			 */
 			handleSave(){
-				this.getOverview();
 				this.course.status = 1;
 				this.doPost();
 			},
 			handleSubmit(){
-				this.getOverview();
 				this.course.status = 0;
 				this.doPost();
 			},
@@ -106,9 +102,17 @@
 						}
 					}
 				});
+			},
+			/**
+			 * markdown内容发生变化后的回调
+			 * @param {Object} content markdown内容
+			 * @param {Object} html HTML内容
+			 */
+			markdownChanged(content,html){
+				this.course.overviewMD = content;
+				this.course.overview = html;
 			}
 		},mounted(){
-			this.editor.create();
 			//编辑课程
 			if(this.$route.query.courseId){
 				this.course.id = this.$route.query.courseId;
@@ -125,10 +129,12 @@
 						  });
 						} else {
 							that.course = data;
-							that.editor.txt.html(that.course.overview);
+							that.loadMarkDown = true;
 						}
 					}
 				});
+			}else{
+				this.loadMarkDown = true;
 			}
 			
 		}

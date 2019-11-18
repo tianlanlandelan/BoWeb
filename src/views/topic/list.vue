@@ -8,7 +8,7 @@
 				<!-- 课时列表，可拖动排序 -->
 				<div class=" width50 font-bold font18 ColorInfo margin10-0 border-2-info">课时列表，可拖动排序</div>
 				<div v-for="chapter in list" :key="chapter.name">
-					<div class="font18 ColorMain"> {{chapter.name}}</div>
+					<div class="font18 ColorMain">{{chapter.name}}</div>
 					<draggable
 						group="chapter"
 					    v-model="chapter.list"

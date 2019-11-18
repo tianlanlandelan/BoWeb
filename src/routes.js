@@ -20,6 +20,8 @@ import SroceList from "./views/admin/ScoreList.vue"
 import Settings from "./views/admin/Settings.vue"
 import UserList from "./views/admin/UserList.vue"
 
+import markdown from "./components/MarkDown.vue"
+
 let routes = [
 	{
 	    path: '/Manager',
@@ -57,8 +59,10 @@ let routes = [
 	{	path: '/Login/1',component: Login,alias: '/'},
 	{	path: '/Login/99',component: Login,alias: '/admin'},
     { 	path: '/Register',component: Register, name: ''},
-    {	path: '/404',component: NotFound,name: ''},
+    {	path: '/markdown',component: markdown,name: 'markdown'},
+	{	path: '/404',component: NotFound,name: ''},
     {	path: '*', redirect: { path: '/404' },
+	
 	}
 ];
 
