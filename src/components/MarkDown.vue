@@ -68,6 +68,9 @@ export default {
         change(value, render){
             // render 为 markdown 解析后的结果[htmlStr]
             this.html = render;
+			/**
+			 * 在这里一定要用Base64.encodeURI()，不能用Base64.encode(),否则会出现中文乱码情况
+			 */
 			this.$emit('func',Base64.encodeURI(value),Base64.encodeURI(render));
         }
 
