@@ -1,4 +1,4 @@
-<!-- 课时 -->
+<!-- 课时详情 -->
 <template>
 	<div>
 		<el-row>
@@ -20,7 +20,8 @@
 						<div class="alignCenter font20 font-bold ColorCommon border-2-info margin10-0">深度学习与自然语言处理</div>
 						<!-- 课程目录 -->
 						<div v-if="menu.active == 0">
-							<div v-for="chapter in topicList.list" :key="chapter.name">
+							<TopicList @func="handleGetTopic" ref="topicList"></TopicList>
+							<!-- <div v-for="chapter in topicList.list" :key="chapter.name">
 								<div class="font18 ColorMain">{{chapter.name}}</div>
 									<el-row class="margin5-0"  v-for="topic in chapter.list" :key="topic.title">
 										<el-col :span="18" :offset="1">
@@ -28,7 +29,7 @@
 											 @click="handleGetTopic(topic.id)">{{topic.title}}</span>
 										</el-col>
 									</el-row>
-							</div>
+							</div> -->
 						</div>
 						<div v-if="menu.active == 1">
 							问答
@@ -58,8 +59,10 @@
 
 <script>
 	import $ from 'jquery';
-	import {req_getTopicList,req_getTopicInfo} from "../api/api.js";
+	import {req_getTopicInfo} from "../../api/api.js";
+	import TopicList from "../../components/course/TopicList.vue"
 	export default {
+		components:{TopicList},
 		data() {
 			return {
 				//课程id
@@ -79,12 +82,6 @@
 						{index:2,icon:"el-icon-document",title:"笔记"},
 						{index:3,icon:"el-icon-setting",title:"资料"}
 					]
-				},
-				//课程目录
-				topicList:{
-					//是否获取过课程目录，如果获取过就不再重新获取
-					got:false,
-					list:[]
 				},
 				//问答
 				questions:{
@@ -123,6 +120,7 @@
 				  } else {
 				    this.topicInfo = data;
 					this.topicId = this.topicInfo.id;
+					this.getTopicList();
 				  }
 				});
 			},
@@ -133,7 +131,7 @@
 			handMenuClick(index){
 				this.menu.active = index;
 				switch(index){
-					case(0):this.getTopicList();break;
+					case(0):;break;
 					case(1):this.getQuestions();break;
 					case(2):this.getNotes();break;
 					default:this.getDocuments();
@@ -144,25 +142,7 @@
 			 * 获取课程列表
 			 */
 			getTopicList(){
-				if(this.topicList.got){
-					return;
-				}
-				this.topicList.got = true;
-				console.log("do getTopicList");
-				req_getTopicList(this.courseId).then(response => {
-				  //解析接口应答的json串
-				  let { data, message, success } = response;
-				  //应答不成功，提示错误信息
-				  if (success !== 0) {
-				    this.$notify.warning({
-					  title:'warning',
-				      message: message
-				    });
-				  } else {
-				    this.topicList.list = data;
-				  }
-				});
-				
+				this.$refs.topicList.load(this.topicId,this.courseId);
 			},
 			/**
 			 * 获取问答列表
@@ -216,9 +196,10 @@
 			}
 			if(this.$route.query.courseId){
 				this.courseId  = this.$route.query.courseId;
-				this.getTopicList();
+				
 			}
 			console.log("topicId:",this.topicId,"courseId:",this.courseId);
+			this.getTopicList();
 			
 		}
 	}

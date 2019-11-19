@@ -62,9 +62,12 @@
 					price:0,
 					status:0
 				},
+				/**
+				 * 定时器，每60秒自动保存编辑中的课程简介
+				 */
 				interval : setInterval(()=>{
-					if(that.loadMarkDown && that.course.title && that.course.overviewMD){
-						that.handleSave(true);
+					if(this.loadMarkDown && this.course.title && this.course.overviewMD){
+						this.handleSave(true);
 					}
 				}, 60000)
 			}
@@ -150,6 +153,11 @@
 				this.loadMarkDown = true;
 			}
 			
+		},destroyed(){
+			/**
+			 * 在使用setInterval 时一定要注意在 destroyed 时清除定时器
+			 */
+			clearInterval(this.interval);
 		}
 	}
 </script>

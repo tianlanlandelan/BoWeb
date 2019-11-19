@@ -1,24 +1,15 @@
 <!-- 课程列表 -->
 <template>
     <div>
-		<el-row>
+		<el-row class="border-2-info marginBottom20 padding10-0">
 			<el-col>
 				<el-button type="primary" @click="handleAddCourse()">添加课程</el-button>
 			</el-col>
 		</el-row>
 		
-		<el-row v-for="course in list" :key = "course.id">
-			<el-col :span="16">
-				<!-- 课程总览 -->
-				<CourseRow :course="course"></CourseRow>
-			</el-col>
-			<el-col :span="8">
-				<!-- 课程管理 -->
-				<el-button type="primary" @click="handleEditCourse(course.id)">编辑课程</el-button>
-				<el-button type="primary" @click="handleTopicList(course.id)">管理课时</el-button>
-				<el-button type="primary">查看评价</el-button>
-			</el-col>
-		</el-row>
+		<div v-for="course in list" :key = "course.id">
+			<CourseRow :course="course"></CourseRow>
+		</div>
 		
     </div>
 </template>

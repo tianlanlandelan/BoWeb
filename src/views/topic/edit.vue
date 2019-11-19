@@ -3,7 +3,7 @@
 	<div>
 		<el-form label-position="left" label-width="80px" >   
 		<!-- 选择章节 -->
-			<el-form-item label="选择章节">
+			<el-form-item label="章节">
 				<el-select
 					v-model="topic.chapterId"
 					filterable
@@ -106,6 +106,13 @@
 			 * 保存课时
 			 */
 			submit(){
+				if(this.topic.chapterId == ''){
+					this.$notify.error({
+						title:"Failed",
+						message: "请选择章节"
+					});
+					return;
+				}
 				this.topic.courseId = this.courseId;
 				if(this.editor.txt.text() && this.type === '1'){
 					this.topic.content = this.editor.txt.html();

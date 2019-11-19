@@ -29,11 +29,14 @@
 .margin5-0{margin: 5px 0;}
 .margin10-0{margin: 10px 0;}
 .margin0-10{margin:0 10px;}
+.marginTop20{margin-top: 20px;}
+.marginBottom20{margin-bottom: 20px;}
 .padding5{padding: 5px;}/* 5px内边距 */
 .padding10{padding: 10px;}/* 10px内边距 */
 .padding15{padding: 15px;}/* 15px内边距 */
 .padding20{padding: 20px;}/* 20px内边距 */
 .padding0-5{padding:0 5px;}
+.padding10-0{padding: 10px 0;}
 /* 鼠标指针样式 */
 .cursorPointer{cursor:pointer;}/* 变小手 */
 .width100{width:100%;}/* 宽度100% , 经常用在 img/video/div等需要控制宽度的组件上 */
