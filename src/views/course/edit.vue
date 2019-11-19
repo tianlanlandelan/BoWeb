@@ -61,7 +61,12 @@
 					overviewMD:"",
 					price:0,
 					status:0
-				}
+				},
+				interval : setInterval(()=>{
+					if(that.loadMarkDown && that.course.title && that.course.overviewMD){
+						that.handleSave(true);
+					}
+				}, 60000)
 			}
 		},
 		methods:{
@@ -73,15 +78,15 @@
 			/**
 			 * 保存草稿
 			 */
-			handleSave(){
+			handleSave(auto){
 				this.course.status = 1;
-				this.doPost();
+				this.doPost(auto);
 			},
 			handleSubmit(){
 				this.course.status = 0;
 				this.doPost();
 			},
-			doPost(){
+			doPost(auto){
 				let id = this.course.id;
 				req_saveCourse(this.course).then(response => {
 					if(response){
@@ -94,11 +99,19 @@
 						    type: 'error'
 						  });
 						} else {
-						  this.$message({
-						    message: id==0?"添加课程成功！":"修改课程成功！",
-						    type: 'success'
-						  });
-							this.$router.push('/CourseList');
+						  if(auto){
+							  this.$message({
+							    message: "已自动保存为草稿",
+							    type: 'success'
+							  }); 
+						  }else{
+							 this.$message({
+							   message: id==0?"添加课程成功！":"修改课程成功！",
+							   type: 'success'
+							 }); 
+							 clearInterval(this.interval);
+							 this.$router.push('/CourseList');
+						  }
 						}
 					}
 				});
@@ -113,10 +126,10 @@
 				this.course.overview = html;
 			}
 		},mounted(){
+			let that = this;
 			//编辑课程
 			if(this.$route.query.courseId){
 				this.course.id = this.$route.query.courseId;
-				let that = this;
 				req_getCourse(this.course.id).then(response => {
 					if(response){
 						//解析接口应答的json串
