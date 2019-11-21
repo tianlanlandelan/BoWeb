@@ -5,7 +5,7 @@
 			<div class="font18 ColorMain">{{chapter.name}}</div>
 				<el-row class="margin5-0"  v-for="topic in chapter.list" :key="topic.title">
 					<el-col :span="18" :offset="1">
-						<span  :class="topicId == topic.id ? 'font16 ColorPrimary font-bold':'cursorPointer font16 ColorCommon'"
+						<span  :class="topicId == topic.id ? ' ColorPrimary font-bold':'cursorPointer  ColorCommon'"
 						 @click="handleTopicClick(topic.id)">{{topic.title}}</span>
 					</el-col>
 				</el-row>

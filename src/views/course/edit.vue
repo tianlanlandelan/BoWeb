@@ -20,7 +20,7 @@
 			</el-form-item>
 			<el-form-item label="概述">
 				<!-- MarkDown编辑器 -->
-				<MarkDown @func="markdownChanged" :mdstr="course.overviewMD" :htmlstr="course.overview" v-if="loadMarkDown"></MarkDown>
+				<MarkDown @func="markdownChanged" :mdstr="course.overviewMD" :htmlstr="course.overview" ref="markdown"></MarkDown>
 			</el-form-item>
 			<el-form-item label="价格">
 				<el-input v-model="course.price" placeholder="请输入价格"></el-input>
@@ -65,11 +65,7 @@
 				/**
 				 * 定时器，每60秒自动保存编辑中的课程简介
 				 */
-				interval : setInterval(()=>{
-					if(this.loadMarkDown && this.course.title && this.course.overviewMD){
-						this.handleSave(true);
-					}
-				}, 60000)
+				interval : ''
 			}
 		},
 		methods:{
@@ -127,6 +123,16 @@
 			markdownChanged(content,html){
 				this.course.overviewMD = content;
 				this.course.overview = html;
+	
+				if(this.interval == ''){
+					console.log("开启计时器");
+					//开启计时器，每60秒自动保存课程内容
+					this.interval = setInterval(()=>{
+						if(this.course.title && this.course.overviewMD){
+							this.handleSave(true);
+						}
+					}, 60000)
+				}
 			}
 		},mounted(){
 			let that = this;
@@ -145,18 +151,18 @@
 						  });
 						} else {
 							that.course = data;
-							that.loadMarkDown = true;
+							//将课程内容回显在 MarkDown 编辑器中
+							this.$refs.markdown.load(this.course.overviewMD,this.course.overview);
 						}
 					}
 				});
-			}else{
-				this.loadMarkDown = true;
 			}
 			
 		},destroyed(){
 			/**
 			 * 在使用setInterval 时一定要注意在 destroyed 时清除定时器
 			 */
+			console.log("销毁计时器");
 			clearInterval(this.interval);
 		}
 	}

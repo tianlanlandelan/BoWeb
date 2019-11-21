@@ -1,3 +1,5 @@
+body{font-size:16px;}
+
 /* 字体大小 */
 .font24{font-size:24px;}/*  */
 .font22{font-size:22px;}/*  */
@@ -14,7 +16,7 @@
 /* 字体样式 */
 .font-bold{font-weight:bold;}/* 加粗  */
 .font-underline{text-decoration: underline;}/* 加下划线 */
-.BgColorCommon{background-color: #e5e5e5;}
+.BgColorCommon{background-color: #f9f9f9}
 /* 布局方式 */
 .verticalRl{writing-mode:vertical-lr;}/* 文字垂直排列，多行文字从右向左排列 */
 .verticalLr{writing-mode:vertical-lr;}/* 文字垂直排列，多行文字从左向右排列 */
@@ -39,6 +41,7 @@
 .padding10-0{padding: 10px 0;}
 /* 鼠标指针样式 */
 .cursorPointer{cursor:pointer;}/* 变小手 */
+.width80{width:80%;}
 .width100{width:100%;}/* 宽度100% , 经常用在 img/video/div等需要控制宽度的组件上 */
 .width50{width:50%;}
 /* 遮罩层 */

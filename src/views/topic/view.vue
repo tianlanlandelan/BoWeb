@@ -11,7 +11,7 @@
 								<div  class="padding10 cursorPointer  "
 								:class="{'left-menu-active':menu.active == item.index}"  >
 									<i class="font24" :class="item.icon"></i>
-									<div class="font16">{{item.title}}</div>
+									<div>{{item.title}}</div>
 								</div>
 							</div>
 						</div>
@@ -21,15 +21,6 @@
 						<!-- 课程目录 -->
 						<div v-if="menu.active == 0">
 							<TopicList @func="handleGetTopic" ref="topicList"></TopicList>
-							<!-- <div v-for="chapter in topicList.list" :key="chapter.name">
-								<div class="font18 ColorMain">{{chapter.name}}</div>
-									<el-row class="margin5-0"  v-for="topic in chapter.list" :key="topic.title">
-										<el-col :span="18" :offset="1">
-											<span  :class="topicId == topic.id ? 'font16 ColorPrimary font-bold':'cursorPointer font16 ColorCommon'"
-											 @click="handleGetTopic(topic.id)">{{topic.title}}</span>
-										</el-col>
-									</el-row>
-							</div> -->
 						</div>
 						<div v-if="menu.active == 1">
 							问答
@@ -43,10 +34,11 @@
 					</el-col>
 				</el-row>
 			</el-col>
-			
-			<el-col :span="18" class="BgColorCommon padding10" :style="'height:' + menu.height  + 'px;'">
+			<!-- 右侧内容 -->
+			<el-col :span="18" class="BgColorCommon padding10">
 				<div class="alignCenter font18 font-bold ColorCommon margin10-0">{{topicInfo.title}}</div>
 				<video class="width100" :src="topicInfo.videoUrl" controls v-if="topicInfo.videoUrl"></video>
+				<div class="ColorMain" v-html="topicInfo.content" v-else></div>
 				<div class="margin10-0">
 					<el-button type="primary" round>下一课</el-button>
 					<el-button type="primary" round>学过了</el-button>
@@ -60,7 +52,8 @@
 <script>
 	import $ from 'jquery';
 	import {req_getTopicInfo} from "../../api/api.js";
-	import TopicList from "../../components/course/TopicList.vue"
+	import TopicList from "../../components/course/TopicList.vue";
+	var Base64 = require('js-base64').Base64;
 	export default {
 		components:{TopicList},
 		data() {
@@ -120,6 +113,7 @@
 				  } else {
 				    this.topicInfo = data;
 					this.topicId = this.topicInfo.id;
+					this.topicInfo.content = Base64.decode(data.content);
 					this.getTopicList();
 				  }
 				});

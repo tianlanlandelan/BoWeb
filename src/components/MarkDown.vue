@@ -12,8 +12,8 @@
 </template>
 <script>
 
-import { mavonEditor } from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
+import { mavonEditor } from 'mavon-editor';
+import 'mavon-editor/dist/css/index.css';
 import axios from 'axios';
 import {config} from "../data.js";
 var Base64 = require('js-base64').Base64;
@@ -21,11 +21,11 @@ var Base64 = require('js-base64').Base64;
 export default {
 	props:{
 			mdstr:'',
-			htmlstr:'',
+			htmlstr:''
 		},
     // 注册
     components: {
-        mavonEditor,
+        mavonEditor
     },
     data() {
         return {
@@ -72,13 +72,19 @@ export default {
 			 * 在这里一定要用Base64.encodeURI()，不能用Base64.encode(),否则会出现中文乱码情况
 			 */
 			this.$emit('func',Base64.encodeURI(value),Base64.encodeURI(render));
-        }
-
+        },
+		load(content,html){
+			this.content = Base64.decode(content);
+			this.html = Base64.decode(html);
+		}
     },
     mounted() {
-		let that = this;
-		this.content = Base64.decode(that.mdstr);
-		this.html = Base64.decode(that.htmlstr);
+		if(this.content ){
+			this.content = Base64.decode(that.mdstr);
+		}
+		if(this.html){
+			this.html = Base64.decode(that.htmlstr);
+		}
     }
 }
 </script>

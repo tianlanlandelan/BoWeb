@@ -19,8 +19,14 @@
 					    @change="topicListChange(chapter)"
 						@start="start">
 								<el-row class="margin5-0"  v-for="topic in chapter.list" :key="topic.title">
-									<el-col :span="18" :offset="1">
+									<el-col :span="16" :offset="1">
 										<span class="cursorPointer font16 ColorCommon" @click="handleGoTopicInfo(topic.id)">{{topic.title}}</span>
+									</el-col>
+									<el-col :span="4">
+										<el-button size="mini" type="primary" icon="el-icon-edit" 
+											circle @click="handleEditTopic(topic.id)"></el-button>
+										<el-button size="mini" type="danger" icon="el-icon-delete" 
+											circle @click="handleDeleteTopic(topic.id)"></el-button>
 									</el-col>
 								</el-row>
 					</draggable>
@@ -43,24 +49,38 @@
 					:group="{ name: 'chapter', pull: 'clone', put: false }"
 				    v-model="list"
 				    @change="draggableChange">
-							<el-row class="margin5-0"  v-for="(item,i) in list" :key="item.id">
+							<el-row class="margin5-0"  v-for="item in list" :key="item.id">
 								<el-col :span="18">
+									<el-input class="width80" v-model="item.name" 
+										v-if="chapterEditer.editing && chapterEditer.current === item.id"></el-input>
 									<span class="cursorPointer font18 ColorCommon" 
-										v-if="!(chapterEditer.edit && chapterEditer.current === item.id)">
+										v-else>
 										{{item.name}}
 									</span>
-									<el-input v-model="item.name" 
-										v-if="chapterEditer.edit && chapterEditer.current === item.id"></el-input>
+									
 								</el-col>
 								<el-col :span="6">
-									<el-button size="mini" type="primary" icon="el-icon-edit" 
-										circle v-if="!(chapterEditer.edit && chapterEditer.current === item.id)" 
-										@click="handleEditChapter(item.id)"></el-button>
 									<el-button size="mini" type="success" icon="el-icon-check" 
-										circle v-if="chapterEditer.edit && chapterEditer.current === item.id" 
+										circle v-if="chapterEditer.editing && chapterEditer.current === item.id"
 										@click="handleEditedChapter(item)"></el-button>
-									<el-button size="mini" type="danger" icon="el-icon-delete" 
-										circle @click="handleDeleteChapter(item.id)"></el-button>
+									<el-button size="mini" type="primary" icon="el-icon-edit" 
+										circle v-else
+										@click="handleEditChapter(item.id)"></el-button>
+										
+										<!-- item.v_delete 为虚拟字段，仅在页面用来控制 el-popover 组件的显示 -->
+										<el-popover
+										  placement="top"
+										  width="160" v-model="item.v_delete">
+										  <p>确定删除该章节吗？请确保该章节下没有课时</p>
+										  <div style="text-align: right; margin: 0">
+											<el-button size="mini" type="text" @click="item.v_delete = false">取消</el-button>
+											<el-button type="danger" size="mini" @click="item.v_delete = false;handleDeleteChapter(item.id)">删除</el-button>
+										  </div>
+										  <el-button slot="reference" size="mini" type="danger" icon="el-icon-delete" 
+										  	circle ref="b"></el-button>
+										 
+										</el-popover>
+									
 								</el-col>
 							</el-row>
 				</draggable>
@@ -74,7 +94,7 @@
 
 <script>
 	import draggable from 'vuedraggable';
-	import {req_saveChapter,req_getTopicList,req_updateTopic,req_updateChapter} from "../../api/api.js";
+	import {req_saveChapter,req_getTopicList,req_updateTopic,req_updateChapter,req_deleteChapter} from "../../api/api.js";
 	export default{
 		components:{draggable},
 		data(){
@@ -88,7 +108,11 @@
 					sort:0
 				},
 				chapterEditer:{
-					edit:false,
+					//编辑状态
+					editing:false,
+					//删除状态
+					deleting:false,
+					//当前操作的章节
 					current:0
 				}
 			}
@@ -103,6 +127,15 @@
 			handleGoTopicInfo(topicId){
 				console.log("handleGoTopicInfo");
 				this.$router.push({ path: '/Topic', query: { id:topicId,courseId: this.courseId }});
+			},
+			handleAddTopic(){
+				this.$router.push({ path: '/TopicEdit', query: { courseId: this.courseId }});
+			},
+			handleEditTopic(topicId){
+				this.$router.push({ path: '/TopicEdit', query: { courseId: this.courseId ,id:topicId}});
+			},
+			handleDeleteTopic(topicId){
+				console.log("handleDeleteTopic",topicId);
 			},
 			start({ originalEvent }) {
 			  this.controlOnStart = originalEvent.ctrlKey;
@@ -189,16 +222,29 @@
 			 * @param {Object} id
 			 */
 			handleEditChapter(id){
-				this.chapterEditer.edit = true;
+				this.chapterEditer.editing = true;
 				this.chapterEditer.current = id;
 			},
 			handleEditedChapter(chapter){
-				this.chapterEditer.edit = false;
+				this.chapterEditer.editing = false;
 				this.chapterEditer.current = 0;
 				this.updateChapter(chapter.id,chapter.sort,chapter.name);
 			},
 			handleDeleteChapter(id){
 				console.log(id);
+				req_deleteChapter(id).then(response => {
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+				    this.$notify.error({
+					  title:'warning',
+				      message: message
+				    });
+				  } else {
+				    this.getTopicList();
+				  }
+				});
 			},
 			getTopicList(){
 				req_getTopicList(this.courseId).then(response => {
@@ -214,10 +260,8 @@
 				    this.list = data;
 				  }
 				});
-			},
-			handleAddTopic(){
-				this.$router.push({ path: '/TopicEdit', query: { courseId: this.courseId }});
 			}
+			
 		},mounted(){
 			this.courseId  = this.$route.query.courseId;
 			console.log("courseId",this.courseId);

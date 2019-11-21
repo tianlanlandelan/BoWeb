@@ -75,6 +75,7 @@ export const req_saveTopic = (topic) => {
 		chapterId	:topic.chapterId,
         sort		:topic.sort,
         title		:topic.title,
+		contentMD	:topic.contentMD,	
         content		:topic.content,	
         videoUrl	:topic.videoUrl	
     },{
@@ -156,6 +157,16 @@ export const req_getChapterList = (courseId) => {
 			'method':'chapter'
 		}
 	}).then(res => res.data).catch(err => err);  
+};
+export const req_deleteChapter = (id) => { 
+    return axios.delete(form, {
+		params:{
+			id:id
+		},
+		headers:{
+			'method':'chapter'
+		}
+	}).then(res => res.data).catch(err => err); 
 };
 export const req_getCourse = (id) => { 
     return axios.get(form, {
