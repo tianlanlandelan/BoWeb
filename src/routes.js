@@ -62,11 +62,9 @@ let routes = [
 	       { 	path: '/Exercise', component: Exercise, name: 'Exercise' }
 	    ]
 	},
-    {	path: '/Login/:type',component: Login,name: ''},
 	{ 	path: '/Password',component: Password},
-	{	path: '/Login/1',component: Login,alias: '/'},
-	{	path: '/Login/99',component: Login,alias: '/admin'},
-    { 	path: '/Register',component: Register, name: ''},
+	{	path: '/login',component: Login,name:"login"},
+    { 	path: '/Register',component: Register, name: 'Register'},
     {	path: '/markdown',component: markdown,name: 'markdown'},
 	{	path: '/404',component: NotFound,name: ''},
     {	path: '*', redirect: { path: '/404' },

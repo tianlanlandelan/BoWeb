@@ -17,7 +17,7 @@
 						</div>
 					</el-col>
 					<el-col :span="20" class="padding10">
-						<div class="alignCenter font20 font-bold ColorCommon border-2-info margin10-0">深度学习与自然语言处理</div>
+						<div class="alignCenter font20 font-bold ColorCommon border-2-info margin10-0">{{courseTitle}}</div>
 						<!-- 课程目录 -->
 						<div v-if="menu.active == 0">
 							<TopicList @func="handleGetTopic" ref="topicList"></TopicList>
@@ -60,6 +60,7 @@
 			return {
 				//课程id
 				courseId:0,
+				courseTitle:'',
 				topicId:0,
 				topicInfo:{},
 				//菜单
@@ -188,11 +189,9 @@
 				this.topicId  = this.$route.query.id;
 				this.getTopicInfo(this.topicId);
 			}
-			if(this.$route.query.courseId){
-				this.courseId  = this.$route.query.courseId;
-				
-			}
-			console.log("topicId:",this.topicId,"courseId:",this.courseId);
+			this.courseId  = this.$route.query.courseId;
+			this.courseTitle = this.$route.query.courseTitle;
+			
 			this.getTopicList();
 			
 		}

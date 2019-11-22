@@ -14,7 +14,6 @@ export const req_register = (user) => {
     return axios.post(api, {
 		type:user.type,
         email:user.email,
-		sid:user.sid,
         password:user.password,
 		code:user.code
     },{
@@ -29,8 +28,7 @@ export const req_register = (user) => {
 export const req_updateUserInfo = (user) => { 
     return axios.put(api, {
 		id:user.id,
-		firstName:user.firstName,
-		lastName:user.lastName,
+		nickName:user.nickName,
 		avatarId:user.avatarId
     },{
 		headers:{
@@ -100,6 +98,16 @@ export const req_updateTopic = (id,chapterId,sort) => {
 	}).then(res => res.data).catch(err => err); 
 };
 
+export const req_deleteTopic = (id) => { 
+    return axios.delete(form, {
+		params:{
+			id:id
+		},
+		headers:{
+			'method':'topicInfo'
+		}
+	}).then(res => res.data).catch(err => err); 
+};
 export const req_saveCourse = (course) => { 
     return axios.post(api, {
 		id:course.id,

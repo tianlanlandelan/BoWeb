@@ -84,7 +84,7 @@
       },
       showRegister(){
         console.log('showRegister');
-        this.$router.push({path:'/Register',query:{type:this.user.type}});
+        this.$router.push('/Register');
       },
 	  showPassword(){
 	    console.log('showPassword');
@@ -93,6 +93,18 @@
     },mounted(){
 		//每次访问登录页面，先清空session
 		sessionStorage.removeItem('user');
+		sessionStorage.removeItem('type');
+		sessionStorage.removeItem('path');
+		
+		let type = this.$route.params.type;
+		let path = this.$route.path;
+		console.log("router",path);
+		if(path == "/admin"){
+			this.admin = true;
+		}
+		this.user.type = type;
+		sessionStorage.setItem('type', type);
+		sessionStorage.setItem('path',this.$route.path);
 	}
   }
 

@@ -1,6 +1,7 @@
 <!-- 课时列表 -->
 <template>
 	<div class="padding10">
+		<div class="alignCenter font18">{{courseTitle}}</div>
 		<div class="margin10-0">
 			<el-link @click="handleGoCourseList()" icon="el-icon-back">返回课程</el-link>
 		</div>
@@ -25,8 +26,18 @@
 									<el-col :span="4">
 										<el-button size="mini" type="primary" icon="el-icon-edit" 
 											circle @click="handleEditTopic(topic.id)"></el-button>
-										<el-button size="mini" type="danger" icon="el-icon-delete" 
-											circle @click="handleDeleteTopic(topic.id)"></el-button>
+										<!-- topic.v_delete 为虚拟字段，仅在页面用来控制 el-popover 组件的显示 -->
+										<el-popover
+										  placement="top"
+										  width="160" v-model="topic.v_delete">
+										  <p>确定删除该课时吗？此操作不可恢复</p>
+										  <div style="text-align: right; margin: 0">
+											<el-button size="mini" type="text" @click="topic.v_delete = false">取消</el-button>
+											<el-button type="danger" size="mini" @click="topic.v_delete = false;handleDeleteTopic(topic.id)">删除</el-button>
+										  </div>
+										  <el-button slot="reference" size="mini" type="danger" icon="el-icon-delete" 
+										  	circle ref="b"></el-button>
+										</el-popover>
 									</el-col>
 								</el-row>
 					</draggable>
@@ -78,7 +89,6 @@
 										  </div>
 										  <el-button slot="reference" size="mini" type="danger" icon="el-icon-delete" 
 										  	circle ref="b"></el-button>
-										 
 										</el-popover>
 									
 								</el-col>
@@ -94,12 +104,13 @@
 
 <script>
 	import draggable from 'vuedraggable';
-	import {req_saveChapter,req_getTopicList,req_updateTopic,req_updateChapter,req_deleteChapter} from "../../api/api.js";
+	import {req_saveChapter,req_getTopicList,req_updateTopic,req_updateChapter,req_deleteChapter,req_deleteTopic} from "../../api/api.js";
 	export default{
 		components:{draggable},
 		data(){
 			return{
 				courseId:0,
+				courseTitle:'',
 				list:[],
 				chapter:{
 					id:0,
@@ -126,7 +137,7 @@
 			},
 			handleGoTopicInfo(topicId){
 				console.log("handleGoTopicInfo");
-				this.$router.push({ path: '/Topic', query: { id:topicId,courseId: this.courseId }});
+				this.$router.push({ path: '/Topic', query: { id:topicId,courseId: this.courseId,courseTitle:this.courseTitle}});
 			},
 			handleAddTopic(){
 				this.$router.push({ path: '/TopicEdit', query: { courseId: this.courseId }});
@@ -136,6 +147,23 @@
 			},
 			handleDeleteTopic(topicId){
 				console.log("handleDeleteTopic",topicId);
+				req_deleteTopic(topicId).then(response => {
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+					this.$notify.error({
+					  title:'Failed',
+					  message: message
+					});
+				  }else{
+					  this.$notify.success({
+					    title:'Success',
+					    message: "课时已删除"
+					  });
+					  this.getTopicList();
+				  } 
+				});
 			},
 			start({ originalEvent }) {
 			  this.controlOnStart = originalEvent.ctrlKey;
@@ -242,6 +270,10 @@
 				      message: message
 				    });
 				  } else {
+					  this.$notify.success({
+					    title:'Success',
+					    message: "章节已删除"
+					  });
 				    this.getTopicList();
 				  }
 				});
@@ -264,7 +296,7 @@
 			
 		},mounted(){
 			this.courseId  = this.$route.query.courseId;
-			console.log("courseId",this.courseId);
+			this.courseTitle = this.$route.query.courseTitle;
 			this.getTopicList();
 			
 			/**

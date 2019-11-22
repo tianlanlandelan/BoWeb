@@ -27,7 +27,7 @@
 					&nbsp;&nbsp;
 					<el-link class="font16" icon="el-icon-view" @click="handleViewCourse(course.id)">预览</el-link>
 					&nbsp;&nbsp;
-					<el-link class="font16" icon="el-icon-notebook-2" @click="handleTopicList(course.id)">课时</el-link>
+					<el-link class="font16" icon="el-icon-notebook-2" @click="handleTopicList(course.id,course.title)">课时</el-link>
 					&nbsp;&nbsp;
 					<el-link class="font16" icon="el-icon-star-off">评价</el-link>
 					&nbsp;&nbsp;
@@ -59,8 +59,8 @@
 			handleEditCourse(courseId){
 				this.$router.push({ path: '/CourseEidt', query: { courseId: courseId }});
 			},
-			handleTopicList(courseId){
-				this.$router.push({ path: '/TopicList', query: { courseId: courseId }});
+			handleTopicList(courseId,courseTitle){
+				this.$router.push({ path: '/TopicList', query: { courseId: courseId,courseTitle:courseTitle }});
 			}
 		},mounted(){
 			

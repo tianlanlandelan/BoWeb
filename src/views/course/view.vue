@@ -1,14 +1,15 @@
 
 <template>
     <div class="courseView">
+		<!-- 课程展示 -->
         <CourseRow :course="course"></CourseRow>
 		<div>
 			<el-tabs v-model="activeName" @tab-click="handleClick">
+				<!-- 课程介绍 -->
 				<el-tab-pane label="概览" name="1">
-					<div v-html="course.overview">
-						
-					</div>
+					<div v-html="course.overview"></div>
 				</el-tab-pane>
+				<!-- 课程目录 -->
 				<el-tab-pane label="目录" name="2">
 					<TopicList @func="handleGoTopicInfo" ref="topicList"></TopicList>
 				</el-tab-pane>
@@ -50,7 +51,7 @@
 		},
 		methods:{
 			handleGoTopicInfo(topicId){
-				this.$router.push({ path: '/Topic', query: { id:topicId,courseId: this.course.id }});
+				this.$router.push({ path: '/Topic', query: { id:topicId,courseId: this.course.id ,courseTitle:this.course.title}});
 			},
 			handleClick(tab, event) {
 				this.$notify.info({
