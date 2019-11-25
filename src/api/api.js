@@ -11,7 +11,7 @@ let base = 'base';
  * 注册
  */
 export const req_register = (user) => { 
-    return axios.post(api, {
+    return axios.post(base, {
 		type:user.type,
         email:user.email,
         password:user.password,
@@ -22,6 +22,30 @@ export const req_register = (user) => {
 		}
 	}).then(res => res.data).catch(err => err); 
 };
+export const req_getCode = (type,email) => { 
+    return axios.get(base + '/getCode', {
+		params:{
+			type:type,
+			email:email
+		}
+	}).then(res => res.data).catch(err => err);  
+};
+/**
+ * 登录接口
+ */
+export const req_logon = (user) => { 
+    return axios.post(base, {
+        type:user.type,
+        name:user.email,
+		password:user.password
+    },{
+		headers:{
+			'method':'login'
+		}
+	}).then(res => res.data).catch(err => err); 
+};
+
+
 /**
  * 修改个人信息
  */
@@ -37,32 +61,8 @@ export const req_updateUserInfo = (user) => {
 	}).then(res => res.data).catch(err => err); 
 };
 
-/**
- * 登录接口
- */
-export const req_logon = (user) => { 
-    return axios.post(api, {
-        type:user.type,
-        name:user.email,
-		password:user.password
-    },{
-		headers:{
-			'method':'login'
-		}
-	}).then(res => res.data).catch(err => err); 
-};
 
-// TODO
-export const req_forgetPassword = (user) => { 
-    return axios.post(api, {
-        type:user.type,
-        name:user.email
-    },{
-		headers:{
-			'method':'forgetPassword'
-		}
-	}).then(res => res.data).catch(err => err); 
-};
+
 /**
  * 添加课程
  */

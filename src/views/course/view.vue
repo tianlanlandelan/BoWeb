@@ -88,7 +88,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.courseView{
 		margin: 0 20%;
 	}

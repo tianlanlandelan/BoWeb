@@ -38,6 +38,7 @@
 			<el-col :span="18" class="BgColorCommon padding10">
 				<div class="alignCenter font18 font-bold ColorCommon margin10-0">{{topicInfo.title}}</div>
 				<video class="width100" :src="topicInfo.videoUrl" controls v-if="topicInfo.videoUrl"></video>
+				<!-- 文章展示 -->
 				<div class="ColorMain" v-html="topicInfo.content" v-else></div>
 				<div class="margin10-0">
 					<el-button type="primary" round>下一课</el-button>

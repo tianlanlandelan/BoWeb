@@ -32,6 +32,11 @@ module.exports = {
         changeOrigin: true,
         secure:false 
       },
+	  '/base': {
+	  	target: 'http://127.0.0.1:8080',
+	    changeOrigin: true,
+	    secure:false 
+	  },
 	  '/form': {
 	  	target: 'http://127.0.0.1:8080',
 	    changeOrigin: true,

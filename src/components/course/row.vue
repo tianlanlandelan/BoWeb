@@ -68,7 +68,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.row{
 		height: 220px;
 	}

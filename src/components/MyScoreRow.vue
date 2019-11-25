@@ -46,7 +46,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.me-bg{
 		margin:5px 10px;
 		background-color: #EBEEF5;

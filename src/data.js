@@ -1,7 +1,12 @@
 
 
 const config={
-	nginxUrl : "http://127.0.0.1:8081/nginx"
+	nginxUrl : "http://127.0.0.1:8081/nginx",
+	type:{
+		register:0,
+		login:1,
+		resetPassword:2
+	}
 }
 
 const user={
@@ -18,7 +23,7 @@ const user={
 	passChecked:true,
 	codeChecked:true,
 	//没有输入用户名时，提交按钮是禁用状态
-	nameChecked:false,
+	nameChecked:true,
 	checkEmail(){
 		if(this.email == ""){
 		   this.emailChecked = false;
