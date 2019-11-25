@@ -2,23 +2,26 @@ import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import NotFound from './views/404.vue'
 
-import Topic from "./views/Topic.vue"
 import Exercise from "./views/ExerciseInfo.vue"
 
 import Main from './views/Main.vue'
 import Password from "./views/Password.vue"
 
 import Admin from "./views/Admin.vue"
+import Home from "./views/Home.vue"
 import TopicList from "./views/topic/list.vue"
 import TopicEdit from "./views/topic/edit.vue"
+import Topic from "./views/topic/view.vue"
 
 import CourseEidt from "./views/course/edit.vue"
 import CourseList from "./views/course/list.vue"
-import CourseView from "./views/course/view.vue"
+import Course from "./views/course/view.vue"
 
 import SroceList from "./views/admin/ScoreList.vue"
 import Settings from "./views/admin/Settings.vue"
 import UserList from "./views/admin/UserList.vue"
+
+import markdown from "./components/MarkDown.vue"
 
 let routes = [
 	{
@@ -44,21 +47,28 @@ let routes = [
 
 	        { path: '/TopicList', component: TopicList, name: '课时列表' },
 	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课时' },
-			{ path: '/CourseEidt', component: CourseEidt, name: '编辑课程' },
-			{ path: '/CourseView', component: CourseView, name: '课程展示' }
+			{ path: '/CourseEidt', component: CourseEidt, name: '编辑课程' }
 	    ],
 		//是否显示在Admin页面的左侧菜单列表中
 		show:false
 	},
-	{ 	path: '/Topic', component: Topic, name: 'Topic' },
-	{ 	path: '/Exercise', component: Exercise, name: 'Exercise' },
-    {	path: '/Login/:type',component: Login,name: ''},
+	{
+	    path: '/Home',
+	    component: Home,
+	    name: '用户主页面',
+	    children: [
+	       { 	path: '/Topic', component: Topic, name: 'Topic' },
+	       { 	path: '/Course', component: Course, name: 'Course' },
+	       { 	path: '/Exercise', component: Exercise, name: 'Exercise' }
+	    ]
+	},
 	{ 	path: '/Password',component: Password},
-	{	path: '/Login/1',component: Login,alias: '/'},
-	{	path: '/Login/99',component: Login,alias: '/admin'},
-    { 	path: '/Register',component: Register, name: ''},
-    {	path: '/404',component: NotFound,name: ''},
+	{	path: '/login',component: Login,name:"login"},
+    { 	path: '/Register',component: Register, name: 'Register'},
+    {	path: '/markdown',component: markdown,name: 'markdown'},
+	{	path: '/404',component: NotFound,name: ''},
     {	path: '*', redirect: { path: '/404' },
+	
 	}
 ];
 

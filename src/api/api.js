@@ -11,39 +11,30 @@ let base = 'base';
  * 注册
  */
 export const req_register = (user) => { 
-    return axios.post(api, {
+    return axios.post(base, {
 		type:user.type,
         email:user.email,
-		sid:user.sid,
         password:user.password,
 		code:user.code
     },{
 		headers:{
 			'method':'register'
 		}
-	}).then(res => res.data); 
+	}).then(res => res.data).catch(err => err); 
 };
-/**
- * 修改个人信息
- */
-export const req_updateUserInfo = (user) => { 
-    return axios.put(api, {
-		id:user.id,
-		firstName:user.firstName,
-		lastName:user.lastName,
-		avatarId:user.avatarId
-    },{
-		headers:{
-			'method':'userInfo'
+export const req_getCode = (type,email) => { 
+    return axios.get(base + '/getCode', {
+		params:{
+			type:type,
+			email:email
 		}
-	}).then(res => res.data); 
+	}).then(res => res.data).catch(err => err);  
 };
-
 /**
  * 登录接口
  */
 export const req_logon = (user) => { 
-    return axios.post(api, {
+    return axios.post(base, {
         type:user.type,
         name:user.email,
 		password:user.password
@@ -51,21 +42,27 @@ export const req_logon = (user) => {
 		headers:{
 			'method':'login'
 		}
-	}).then(res => res.data)
-	.catch(err =>{console.log("loginError",err)}); 
+	}).then(res => res.data).catch(err => err); 
 };
 
-// TODO
-export const req_forgetPassword = (user) => { 
-    return axios.post(api, {
-        type:user.type,
-        name:user.email
+
+/**
+ * 修改个人信息
+ */
+export const req_updateUserInfo = (user) => { 
+    return axios.put(api, {
+		id:user.id,
+		nickName:user.nickName,
+		avatarId:user.avatarId
     },{
 		headers:{
-			'method':'forgetPassword'
+			'method':'userInfo'
 		}
-	}).then(res => res.data); 
+	}).then(res => res.data).catch(err => err); 
 };
+
+
+
 /**
  * 添加课程
  */
@@ -76,13 +73,14 @@ export const req_saveTopic = (topic) => {
 		chapterId	:topic.chapterId,
         sort		:topic.sort,
         title		:topic.title,
+		contentMD	:topic.contentMD,	
         content		:topic.content,	
         videoUrl	:topic.videoUrl	
     },{
 		headers:{
 			'method':'topicInfo'
 		}
-	}).then(res => res.data); 
+	}).then(res => res.data).catch(err => err); 
 };
 
 /**
@@ -97,15 +95,26 @@ export const req_updateTopic = (id,chapterId,sort) => {
 		headers:{
 			'method':'topicInfo'
 		}
-	}).then(res => res.data); 
+	}).then(res => res.data).catch(err => err); 
 };
 
+export const req_deleteTopic = (id) => { 
+    return axios.delete(form, {
+		params:{
+			id:id
+		},
+		headers:{
+			'method':'topicInfo'
+		}
+	}).then(res => res.data).catch(err => err); 
+};
 export const req_saveCourse = (course) => { 
     return axios.post(api, {
 		id:course.id,
         title:course.title,
 		subTitle:course.subTitle,
 		img:course.img,
+		overviewMD:course.overviewMD,
 		overview:course.overview,
 		price:course.price,
 		status:course.status
@@ -138,7 +147,7 @@ export const req_updateChapter = (id,sort,name) => {
 		headers:{
 			'method':'chapter'
 		}
-	}).then(res => res.data); 
+	}).then(res => res.data).catch(err => err); 
 };
 export const req_getCourseList = () => { 
     return axios.get(form, {
@@ -156,6 +165,16 @@ export const req_getChapterList = (courseId) => {
 			'method':'chapter'
 		}
 	}).then(res => res.data).catch(err => err);  
+};
+export const req_deleteChapter = (id) => { 
+    return axios.delete(form, {
+		params:{
+			id:id
+		},
+		headers:{
+			'method':'chapter'
+		}
+	}).then(res => res.data).catch(err => err); 
 };
 export const req_getCourse = (id) => { 
     return axios.get(form, {
@@ -186,7 +205,7 @@ export const req_getTopicInfo = (id) => {
 		headers:{
 			'method':'topicInfo'
 		}
-	}).then(res => res.data); 
+	}).then(res => res.data).catch(err => err); 
 };
 
 /**
@@ -209,150 +228,5 @@ export const req_saveExercise = (exercise) => {
 		headers:{
 			'method':'exerciseInfo'
 		}
-	}).then(res => res.data); 
-};
-
-
-
-export const req_saveScore = (userId,exerciseId,score,answer) => { 
-    return axios.post(api, {
-        userId:userId,
-		exerciseId:exerciseId,
-		score:score,
-		answer:answer
-    },{
-		headers:{
-			'method':'rate'
-		}
-	}).then(res => res.data); 
-};
-/**
- * 获取排行榜
- */
-export const req_getLeaderBoard1 = (userId) => { 
-    return axios.get(form, {
-		params:{
-			userId:userId
-		},
-		headers:{
-			'method':'rate/getUp'
-		}
-	}).then(res => res.data); 
-};
-
-
-/**
- * 设置邀请码
- */
-export const req_admin_setInviteCode = (value) => { 
-    return axios.put(api, {
-		value:value
-    },{
-		headers:{
-			'method':'admin/setInviteCode'
-		}
-	}).then(res => res.data); 
-};
-/**
- * 获取邀请码
- */
-export const req_admin_getInviteCode = () => { 
-    return axios.get(form, {
-		params:{
-			
-		},
-		headers:{
-			'method':'admin/getInviteCode'
-		}
-	}).then(res => res.data); 
-};
-
-/**
- * 获取忘记密码的用户
- */
-export const req_admin_getFotPasswordUser = () => { 
-    return axios.get(form, {
-		params:{
-			
-		},
-		headers:{
-			'method':'admin/getFotPasswordUser'
-		}
-	}).then(res => res.data); 
-};
-/**
- * 重置用户密码
- */
-export const req_admin_resetPassword = (userId,password) => { 
-    return axios.put(api, {
-		userId:userId,
-		password:password
-    },{
-		headers:{
-			'method':'admin/resetPassword'
-		}
-	}).then(res => res.data); 
-};
-/**
- * 获取用户总数
- */
-export const req_admin_getUserCount = () => { 
-    return axios.get(form, {
-		params:{
-			
-		},
-		headers:{
-			'method':'admin/getUserCount'
-		}
-	}).then(res => res.data); 
-};
-
-/**
- * 按照类型获取用户学习记录详情
- */
-export const req_admin_getInfoByType = (type) => { 
-    return axios.get(form, {
-		params:{
-			type:type
-		},
-		headers:{
-			'method':'admin/getInfoByType'
-		}
-	}).then(res => res.data); 
-};
-export const req_admin_getByEmail = (email) => { 
-    return axios.get(form, {
-		params:{
-			email:email
-		},
-		headers:{
-			'method':'admin/getByEmail'
-		}
-	}).then(res => res.data); 
-};
-
-
-export const req_admin_getLeaderBoardTop20 = () => { 
-    return axios.get(form, {
-		params:{
-			
-		},
-		headers:{
-			'method':'admin/getLeaderBoardTop20'
-		}
-	}).then(res => res.data); 
-};
-
-/**
- * 删除用户，并关联删除该用户的所有记录
- */
-export const req_admin_deleteUser = (userId) => { 
-    return axios.delete(form, {
-	params:{
-		userId:userId
-	},
-		headers:{
-			'method':'admin/deleteUser'
-		}
-	}).then(res => res.data); 
+	}).then(res => res.data).catch(err => err); 
 };

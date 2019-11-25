@@ -41,7 +41,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.popover-row{
 		padding:5px 20px;
 		height: 40px;

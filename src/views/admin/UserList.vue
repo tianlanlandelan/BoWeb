@@ -77,7 +77,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.mytitle{
 		font-size: 16px;
 		background-color: #dbdfe6;

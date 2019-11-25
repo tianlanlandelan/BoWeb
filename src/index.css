@@ -1,3 +1,5 @@
+body{font-size:16px;}
+
 /* 字体大小 */
 .font24{font-size:24px;}/*  */
 .font22{font-size:22px;}/*  */
@@ -14,7 +16,7 @@
 /* 字体样式 */
 .font-bold{font-weight:bold;}/* 加粗  */
 .font-underline{text-decoration: underline;}/* 加下划线 */
-.BgColorCommon{background-color: #e5e5e5;}
+.BgColorCommon{background-color: #f9f9f9}
 /* 布局方式 */
 .verticalRl{writing-mode:vertical-lr;}/* 文字垂直排列，多行文字从右向左排列 */
 .verticalLr{writing-mode:vertical-lr;}/* 文字垂直排列，多行文字从左向右排列 */
@@ -29,13 +31,17 @@
 .margin5-0{margin: 5px 0;}
 .margin10-0{margin: 10px 0;}
 .margin0-10{margin:0 10px;}
+.marginTop20{margin-top: 20px;}
+.marginBottom20{margin-bottom: 20px;}
 .padding5{padding: 5px;}/* 5px内边距 */
 .padding10{padding: 10px;}/* 10px内边距 */
 .padding15{padding: 15px;}/* 15px内边距 */
 .padding20{padding: 20px;}/* 20px内边距 */
 .padding0-5{padding:0 5px;}
+.padding10-0{padding: 10px 0;}
 /* 鼠标指针样式 */
 .cursorPointer{cursor:pointer;}/* 变小手 */
+.width80{width:80%;}
 .width100{width:100%;}/* 宽度100% , 经常用在 img/video/div等需要控制宽度的组件上 */
 .width50{width:50%;}
 /* 遮罩层 */
@@ -43,8 +49,6 @@
 /* 遮罩层里的内容 */
 .boxCenter{position: absolute;top: 0;left: 0;width:60%;margin-left: 20%;margin-top: 10%;
 	background-color: #FFFFFF;opacity: 1;border-radius: 20px;z-index: 999;}
-	
-img{width: 100%;}
 
 .border-2-info{
 	border-bottom: 2px solid #909399;

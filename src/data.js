@@ -1,16 +1,21 @@
+
+
 const config={
-	nginxUrl : "http://127.0.0.1:8081/nginx"
+	nginxUrl : "http://127.0.0.1:8081/nginx",
+	type:{
+		register:0,
+		login:1,
+		resetPassword:2
+	}
 }
 
 const user={
 	id:0,
 	type:1,
-	sid: '',
 	email: '',
 	password: '',
 	code:'',
-	firstName:'',
-	lastName:'',
+	nickName:'',
 	avatarId:0,
 	//初始化时赋值为true，此时用户尚未输入内容，不提示错误
 	sidChecked:true,
@@ -18,15 +23,7 @@ const user={
 	passChecked:true,
 	codeChecked:true,
 	//没有输入用户名时，提交按钮是禁用状态
-	nameChecked:false,
-	checkSid(){
-	   if(this.sid == "" || !this.sid.startsWith("u")){
-	   		this.sidChecked = false;
-	   }else{
-	   		this.sidChecked = true;
-	   }
-	   return this.sidChecked;
-	},
+	nameChecked:true,
 	checkEmail(){
 		if(this.email == ""){
 		   this.emailChecked = false;
@@ -52,7 +49,7 @@ const user={
 		return this.codeChecked;
 	},
 	checkUserName(){
-		if(this.firstName == "" || this.lastName == ""){
+		if(this.nickName == ""){
 			this.nameChecked = false;		   
 		}else{
 			this.nameChecked = true;

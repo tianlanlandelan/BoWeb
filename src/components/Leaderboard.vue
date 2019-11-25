@@ -112,7 +112,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.bg{
 		background: #000000;
 		padding: 20px;

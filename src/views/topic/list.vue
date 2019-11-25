@@ -1,6 +1,11 @@
 <!-- 课时列表 -->
 <template>
 	<div class="padding10">
+		<div class="alignCenter font18">{{courseTitle}}</div>
+		<div class="margin10-0">
+			<el-link @click="handleGoCourseList()" icon="el-icon-back">返回课程</el-link>
+		</div>
+		
 		<el-row>
 			<!-- 课时列表 -->
 			<el-col :span="12">
@@ -8,15 +13,31 @@
 				<!-- 课时列表，可拖动排序 -->
 				<div class=" width50 font-bold font18 ColorInfo margin10-0 border-2-info">课时列表，可拖动排序</div>
 				<div v-for="chapter in list" :key="chapter.name">
-					<div class="font18 ColorMain"> {{chapter.name}}</div>
+					<div class="font18 ColorMain">{{chapter.name}}</div>
 					<draggable
 						group="chapter"
 					    v-model="chapter.list"
 					    @change="topicListChange(chapter)"
 						@start="start">
 								<el-row class="margin5-0"  v-for="topic in chapter.list" :key="topic.title">
-									<el-col :span="18" :offset="1">
-										<span class="cursorPointer font16 ColorCommon">{{topic.title}}</span>
+									<el-col :span="16" :offset="1">
+										<span class="cursorPointer font16 ColorCommon" @click="handleGoTopicInfo(topic.id)">{{topic.title}}</span>
+									</el-col>
+									<el-col :span="4">
+										<el-button size="mini" type="primary" icon="el-icon-edit" 
+											circle @click="handleEditTopic(topic.id)"></el-button>
+										<!-- topic.v_delete 为虚拟字段，仅在页面用来控制 el-popover 组件的显示 -->
+										<el-popover
+										  placement="top"
+										  width="160" v-model="topic.v_delete">
+										  <p>确定删除该课时吗？此操作不可恢复</p>
+										  <div style="text-align: right; margin: 0">
+											<el-button size="mini" type="text" @click="topic.v_delete = false">取消</el-button>
+											<el-button type="danger" size="mini" @click="topic.v_delete = false;handleDeleteTopic(topic.id)">删除</el-button>
+										  </div>
+										  <el-button slot="reference" size="mini" type="danger" icon="el-icon-delete" 
+										  	circle ref="b"></el-button>
+										</el-popover>
 									</el-col>
 								</el-row>
 					</draggable>
@@ -39,24 +60,37 @@
 					:group="{ name: 'chapter', pull: 'clone', put: false }"
 				    v-model="list"
 				    @change="draggableChange">
-							<el-row class="margin5-0"  v-for="(item,i) in list" :key="item.id">
+							<el-row class="margin5-0"  v-for="item in list" :key="item.id">
 								<el-col :span="18">
+									<el-input class="width80" v-model="item.name" 
+										v-if="chapterEditer.editing && chapterEditer.current === item.id"></el-input>
 									<span class="cursorPointer font18 ColorCommon" 
-										v-if="!(chapterEditer.edit && chapterEditer.current === item.id)">
+										v-else>
 										{{item.name}}
 									</span>
-									<el-input v-model="item.name" 
-										v-if="chapterEditer.edit && chapterEditer.current === item.id"></el-input>
+									
 								</el-col>
 								<el-col :span="6">
-									<el-button size="mini" type="primary" icon="el-icon-edit" 
-										circle v-if="!(chapterEditer.edit && chapterEditer.current === item.id)" 
-										@click="handleEditChapter(item.id)"></el-button>
 									<el-button size="mini" type="success" icon="el-icon-check" 
-										circle v-if="chapterEditer.edit && chapterEditer.current === item.id" 
+										circle v-if="chapterEditer.editing && chapterEditer.current === item.id"
 										@click="handleEditedChapter(item)"></el-button>
-									<el-button size="mini" type="danger" icon="el-icon-delete" 
-										circle @click="handleDeleteChapter(item.id)"></el-button>
+									<el-button size="mini" type="primary" icon="el-icon-edit" 
+										circle v-else
+										@click="handleEditChapter(item.id)"></el-button>
+										
+										<!-- item.v_delete 为虚拟字段，仅在页面用来控制 el-popover 组件的显示 -->
+										<el-popover
+										  placement="top"
+										  width="160" v-model="item.v_delete">
+										  <p>确定删除该章节吗？请确保该章节下没有课时</p>
+										  <div style="text-align: right; margin: 0">
+											<el-button size="mini" type="text" @click="item.v_delete = false">取消</el-button>
+											<el-button type="danger" size="mini" @click="item.v_delete = false;handleDeleteChapter(item.id)">删除</el-button>
+										  </div>
+										  <el-button slot="reference" size="mini" type="danger" icon="el-icon-delete" 
+										  	circle ref="b"></el-button>
+										</el-popover>
+									
 								</el-col>
 							</el-row>
 				</draggable>
@@ -70,12 +104,13 @@
 
 <script>
 	import draggable from 'vuedraggable';
-	import {req_saveChapter,req_getTopicList,req_updateTopic,req_updateChapter} from "../../api/api.js";
+	import {req_saveChapter,req_getTopicList,req_updateTopic,req_updateChapter,req_deleteChapter,req_deleteTopic} from "../../api/api.js";
 	export default{
 		components:{draggable},
 		data(){
 			return{
 				courseId:0,
+				courseTitle:'',
 				list:[],
 				chapter:{
 					id:0,
@@ -84,12 +119,52 @@
 					sort:0
 				},
 				chapterEditer:{
-					edit:false,
+					//编辑状态
+					editing:false,
+					//删除状态
+					deleting:false,
+					//当前操作的章节
 					current:0
 				}
 			}
 		},
 		methods:{
+			/**
+			 * 返回课程列表
+			 */
+			handleGoCourseList(){
+				this.$router.push("/CourseList");
+			},
+			handleGoTopicInfo(topicId){
+				console.log("handleGoTopicInfo");
+				this.$router.push({ path: '/Topic', query: { id:topicId,courseId: this.courseId,courseTitle:this.courseTitle}});
+			},
+			handleAddTopic(){
+				this.$router.push({ path: '/TopicEdit', query: { courseId: this.courseId }});
+			},
+			handleEditTopic(topicId){
+				this.$router.push({ path: '/TopicEdit', query: { courseId: this.courseId ,id:topicId}});
+			},
+			handleDeleteTopic(topicId){
+				console.log("handleDeleteTopic",topicId);
+				req_deleteTopic(topicId).then(response => {
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+					this.$notify.error({
+					  title:'Failed',
+					  message: message
+					});
+				  }else{
+					  this.$notify.success({
+					    title:'Success',
+					    message: "课时已删除"
+					  });
+					  this.getTopicList();
+				  } 
+				});
+			},
 			start({ originalEvent }) {
 			  this.controlOnStart = originalEvent.ctrlKey;
 			},
@@ -166,7 +241,7 @@
 						title:'Success',
 					    message: id==0?"添加成功":"修改成功"
 					  });
-					this.getList();
+					this.getTopicList();
 				  }
 				});
 			},
@@ -175,16 +250,33 @@
 			 * @param {Object} id
 			 */
 			handleEditChapter(id){
-				this.chapterEditer.edit = true;
+				this.chapterEditer.editing = true;
 				this.chapterEditer.current = id;
 			},
 			handleEditedChapter(chapter){
-				this.chapterEditer.edit = false;
+				this.chapterEditer.editing = false;
 				this.chapterEditer.current = 0;
 				this.updateChapter(chapter.id,chapter.sort,chapter.name);
 			},
 			handleDeleteChapter(id){
 				console.log(id);
+				req_deleteChapter(id).then(response => {
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+				    this.$notify.error({
+					  title:'warning',
+				      message: message
+				    });
+				  } else {
+					  this.$notify.success({
+					    title:'Success',
+					    message: "章节已删除"
+					  });
+				    this.getTopicList();
+				  }
+				});
 			},
 			getTopicList(){
 				req_getTopicList(this.courseId).then(response => {
@@ -200,13 +292,11 @@
 				    this.list = data;
 				  }
 				});
-			},
-			handleAddTopic(){
-				this.$router.push({ path: '/TopicEdit', query: { courseId: this.courseId }});
 			}
+			
 		},mounted(){
 			this.courseId  = this.$route.query.courseId;
-			console.log("courseId",this.courseId);
+			this.courseTitle = this.$route.query.courseTitle;
 			this.getTopicList();
 			
 			/**
@@ -221,5 +311,5 @@
 	}
 </script>
 
-<style>
+<style scoped>
 </style>

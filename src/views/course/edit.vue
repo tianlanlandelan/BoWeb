@@ -19,7 +19,8 @@
 					</el-upload>
 			</el-form-item>
 			<el-form-item label="概述">
-				<div id = "editor"></div>
+				<!-- MarkDown编辑器 -->
+				<MarkDown @func="markdownChanged" :mdstr="course.overviewMD" :htmlstr="course.overview" ref="markdown"></MarkDown>
 			</el-form-item>
 			<el-form-item label="价格">
 				<el-input v-model="course.price" placeholder="请输入价格"></el-input>
@@ -41,10 +42,12 @@
 <script>
 	import {config} from "../../data.js";
 	import {req_saveCourse,req_getCourse} from "../../api/api.js";
-	import E from 'wangeditor';
+	import MarkDown from "../../components/MarkDown.vue"
     export default{
+		components:{MarkDown},
 		data(){
 			return{
+				loadMarkDown:false,
 				config:config,
 				/**
 				 * 课程
@@ -55,10 +58,14 @@
 					subTitle:"",
 					img:"",
 					overview:"",
+					overviewMD:"",
 					price:0,
 					status:0
 				},
-				editor : new E("#editor")
+				/**
+				 * 定时器，每60秒自动保存编辑中的课程简介
+				 */
+				interval : ''
 			}
 		},
 		methods:{
@@ -67,25 +74,18 @@
 					this.course.img = response.data;
 			    }
 			},
-			getOverview(){
-				if(this.editor.txt.text()){
-					this.course.overview = this.editor.txt.html();
-				}
-			},
 			/**
 			 * 保存草稿
 			 */
-			handleSave(){
-				this.getOverview();
+			handleSave(auto){
 				this.course.status = 1;
-				this.doPost();
+				this.doPost(auto);
 			},
 			handleSubmit(){
-				this.getOverview();
 				this.course.status = 0;
 				this.doPost();
 			},
-			doPost(){
+			doPost(auto){
 				let id = this.course.id;
 				req_saveCourse(this.course).then(response => {
 					if(response){
@@ -98,21 +98,47 @@
 						    type: 'error'
 						  });
 						} else {
-						  this.$message({
-						    message: id==0?"添加课程成功！":"修改课程成功！",
-						    type: 'success'
-						  });
-							this.$router.push('/CourseList');
+						  if(auto){
+							  this.$message({
+							    message: "已自动保存为草稿",
+							    type: 'success'
+							  }); 
+						  }else{
+							 this.$message({
+							   message: id==0?"添加课程成功！":"修改课程成功！",
+							   type: 'success'
+							 }); 
+							 clearInterval(this.interval);
+							 this.$router.push('/CourseList');
+						  }
 						}
 					}
 				});
+			},
+			/**
+			 * markdown内容发生变化后的回调
+			 * @param {Object} content markdown内容
+			 * @param {Object} html HTML内容
+			 */
+			markdownChanged(content,html){
+				this.course.overviewMD = content;
+				this.course.overview = html;
+	
+				if(this.interval == ''){
+					console.log("开启计时器");
+					//开启计时器，每60秒自动保存课程内容
+					this.interval = setInterval(()=>{
+						if(this.course.title && this.course.overviewMD){
+							this.handleSave(true);
+						}
+					}, 60000)
+				}
 			}
 		},mounted(){
-			this.editor.create();
+			let that = this;
 			//编辑课程
 			if(this.$route.query.courseId){
 				this.course.id = this.$route.query.courseId;
-				let that = this;
 				req_getCourse(this.course.id).then(response => {
 					if(response){
 						//解析接口应答的json串
@@ -125,17 +151,24 @@
 						  });
 						} else {
 							that.course = data;
-							that.editor.txt.html(that.course.overview);
+							//将课程内容回显在 MarkDown 编辑器中
+							this.$refs.markdown.load(this.course.overviewMD,this.course.overview);
 						}
 					}
 				});
 			}
 			
+		},destroyed(){
+			/**
+			 * 在使用setInterval 时一定要注意在 destroyed 时清除定时器
+			 */
+			console.log("销毁计时器");
+			clearInterval(this.interval);
 		}
 	}
 </script>
 
-<style>
+<style scoped>
 	
 	.avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;

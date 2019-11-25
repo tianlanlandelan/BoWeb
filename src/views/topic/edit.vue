@@ -3,7 +3,7 @@
 	<div>
 		<el-form label-position="left" label-width="80px" >   
 		<!-- 选择章节 -->
-			<el-form-item label="选择章节">
+			<el-form-item label="章节">
 				<el-select
 					v-model="topic.chapterId"
 					filterable
@@ -25,9 +25,6 @@
 				<el-radio v-model="type" label="0">视频</el-radio>
 				<el-radio v-model="type" label="1">文章</el-radio>
 			</el-form-item>
-			<el-form-item label="内容" v-show="type === '1'">
-				<div id = "editor"></div>
-			</el-form-item>
 			<el-form-item label="视频" v-show="type === '0'">
 				<el-upload
 				    action="/upload/video"
@@ -38,6 +35,10 @@
 				    <el-button size="small" type="primary">点击上传</el-button>
 				    </el-upload>
 			</el-form-item>
+			<el-form-item label="内容" v-show="type === '1'">
+				<!-- MarkDown编辑器 -->
+				<MarkDown @func="markdownChanged" :mdstr="topic.contentMD" :htmlstr="topic.content" ref="markdown"></MarkDown>
+			</el-form-item>
 			<el-form-item>
 				<el-button type="primary" @click = "submit()">添加课时</el-button>
 			</el-form-item>
@@ -46,10 +47,10 @@
 </template>
 
 <script>
-	import {req_saveTopic,req_getChapterList} from "../../api/api.js";
-	import E from 'wangeditor';
-	
+	import {req_saveTopic,req_getTopicInfo,req_getChapterList} from "../../api/api.js";
+	import MarkDown from "../../components/MarkDown.vue";
 	export default{
+		components:{MarkDown},
 		data(){
 			return{
 				type:'0',
@@ -66,11 +67,14 @@
 					title		:"",
 					content		:"",
 					videoUrl	:""
-				},
-				editor : new E("#editor")
+				}
 			}
 		},
 		methods:{
+			/**
+			 * 上传视频前，校验视频格式和大小
+			 * @param {Object} file
+			 */
 			beforeAvatarUpload(file) {
 				console.log("file.type",file.type);
 				const isJPG = file.type === 'video/mp4';
@@ -106,11 +110,14 @@
 			 * 保存课时
 			 */
 			submit(){
-				this.topic.courseId = this.courseId;
-				if(this.editor.txt.text() && this.type === '1'){
-					this.topic.content = this.editor.txt.html();
-					console.log("html",this.editor.txt.html());	
+				if(this.topic.chapterId == ''){
+					this.$notify.error({
+						title:"Failed",
+						message: "请选择章节"
+					});
+					return;
 				}
+				this.topic.courseId = this.courseId;
 				let id = this.topic.id;
 				let courseId = this.courseId;
 				req_saveTopic(this.topic).then(response => {
@@ -132,6 +139,32 @@
 				  }
 				});
 			},
+			/**
+			 * 获取课时详情
+			 */
+			getTopicInfo(){
+				req_getTopicInfo(this.topic.id).then(response => {
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+				    this.$notify.error({
+						title:"Failed",
+						message: message
+				    });
+				  } else {
+				    this.topic = data;
+					if(this.topic.contentMD){
+						this.type = "1";
+						//将课程内容回显在 MarkDown 编辑器中
+						this.$refs.markdown.load(this.topic.contentMD,this.topic.content);
+					}
+				  }
+				});
+			},
+			/**
+			 * 获取章节列表
+			 */
 			getChapterList(){
 				req_getChapterList(this.courseId).then(response => {
 				  //解析接口应答的json串
@@ -147,21 +180,18 @@
 				  }
 				});
 			},
-		},mounted(){
-			// this.editor.customConfig.uploadImgServer = '/upload/img';
-			// 将图片大小限制为 3M
-			// this.editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024
-			// 限制一次最多上传 5 张图片
-			// this.editor.customConfig.uploadImgMaxLength = 5
-			// this.editor.customConfig.uploadImgShowBase64 = true ;
-			this.editor.create();
-			
+			markdownChanged(content,html){
+				this.topic.contentMD = content;
+				this.topic.content = html;
+			}
+		},mounted(){	
 			if(this.$route.query.courseId){
 				this.courseId  = this.$route.query.courseId;
 				console.log("topicEdit",this.courseId);
 			}
-			if(this.$route.query.chapterId){
-				this.topic.chapterId  = this.$route.query.chapterId;
+			if(this.$route.query.id){
+				this.topic.id  = this.$route.query.id;
+				this.getTopicInfo();
 			}
 			this.getChapterList();
     
@@ -170,5 +200,5 @@
 	
 </script>
 
-<style>
+<style scoped>
 </style>
