@@ -11,15 +11,10 @@ let base = 'base';
  * 注册
  */
 export const req_register = (user) => { 
-    return axios.post(base, {
-		type:user.type,
-        email:user.email,
-        password:user.password,
+    return axios.post(base + '/register', {
+		email:user.email,
+		password:user.password,
 		code:user.code
-    },{
-		headers:{
-			'method':'register'
-		}
 	}).then(res => res.data).catch(err => err); 
 };
 export const req_getCode = (type,email) => { 
@@ -34,15 +29,11 @@ export const req_getCode = (type,email) => {
  * 登录接口
  */
 export const req_logon = (user) => { 
-    return axios.post(base, {
+    return axios.post(base + '/login', {
         type:user.type,
         name:user.email,
 		password:user.password
-    },{
-		headers:{
-			'method':'login'
-		}
-	}).then(res => res.data).catch(err => err); 
+    }).then(res => res.data).catch(err => err); 
 };
 
 
@@ -86,14 +77,14 @@ export const req_saveTopic = (topic) => {
 /**
  * 修改课时顺序
  */
-export const req_updateTopic = (id,chapterId,sort) => { 
+export const req_updateNote = (id,chapterId,sort) => { 
     return axios.put(api, {
 		id:id,
 		chapterId:chapterId,
 		sort:sort
     },{
 		headers:{
-			'method':'topicInfo'
+			'method':'note'
 		}
 	}).then(res => res.data).catch(err => err); 
 };
@@ -108,19 +99,15 @@ export const req_deleteTopic = (id) => {
 		}
 	}).then(res => res.data).catch(err => err); 
 };
-export const req_saveCourse = (course) => { 
+export const req_saveNotes = (notes) => { 
     return axios.post(api, {
-		id:course.id,
-        title:course.title,
-		subTitle:course.subTitle,
-		img:course.img,
-		overviewMD:course.overviewMD,
-		overview:course.overview,
-		price:course.price,
-		status:course.status
+		id:notes.id,
+		userId:notes.userId,
+        title:notes.title,
+		subTitle:notes.subTitle
     },{
 		headers:{
-			'method':'course'
+			'method':'notes'
 		}
 	}).then(res => res.data)
 	.catch(err => err); 
@@ -149,10 +136,13 @@ export const req_updateChapter = (id,sort,name) => {
 		}
 	}).then(res => res.data).catch(err => err); 
 };
-export const req_getCourseList = () => { 
+export const req_getNotesList = (userId) => { 
     return axios.get(form, {
+		params:{
+			userId:userId
+		},
 		headers:{
-			'method':'course/getAll'
+			'method':'notes/getList'
 		}
 	}).then(res => res.data).catch(err => err);  
 };
@@ -186,24 +176,24 @@ export const req_getCourse = (id) => {
 		}
 	}).then(res => res.data).catch(err => err); 
 };
-export const req_getTopicList = (courseId) => { 
+export const req_getNoteList = (notesId) => { 
     return axios.get(form, {
 		params:{
-			courseId:courseId
+			notesId:notesId
 		},
 		headers:{
-			'method':'topicInfo/getList'
+			'method':'note/getList'
 		}
 	}).then(res => res.data).catch(err => err); 
 };
 
-export const req_getTopicInfo = (id) => { 
+export const req_getNote = (id) => { 
     return axios.get(form, {
 		params:{
 			id:id
 		},
 		headers:{
-			'method':'topicInfo'
+			'method':'note'
 		}
 	}).then(res => res.data).catch(err => err); 
 };

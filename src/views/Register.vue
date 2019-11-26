@@ -23,7 +23,7 @@
 		</el-form-item>
       </el-form-item>
       <el-form-item style="width:100%;">
-        <el-button type="primary"  style="width:100%;" @click="handleGetCode">获取验证码</el-button>
+        <el-button type="primary"  style="width:100%;" :disabled="getCodeButtonDisabled" @click="handleGetCode">获取验证码</el-button>
       </el-form-item>
     </el-row>
 	
@@ -91,6 +91,7 @@
   export default {
     data() {
       return {
+		  getCodeButtonDisabled:false,
 		  showIcon:false,
 		  showSelected:false,
         //注册用户数据
@@ -109,56 +110,54 @@
        * 发送验证码
        */
       handleGetCode(){
-		  this.step ++;
-		  // let email = this.user.email;
-		  // req_getCode(config.type.register,email).then(response => {
-		  //   //解析接口应答的json串
-		  //   let { data, message, success } = response;
-		  //   //应答不成功，提示错误信息
-		  //   if (success !== 0) {
-		  //     this.$message({
-		  //       message: message,
-		  //       type: 'error'
-		  //     });
-		  //   } else{
-				// this.$notify.success({
-				//   title:email,
-				//   message: "验证码已发送到您的邮箱，请及时查收"
-				// });
-		 	//    this.step ++;
-		  //   }
-		  // });
+		  this.getCodeButtonDisabled = true;
+		  let email = this.user.email;
+		  req_getCode(config.type.register,email).then(response => {
+		    //解析接口应答的json串
+		    let { data, message, success } = response;
+		    //应答不成功，提示错误信息
+		    if (success !== 0) {
+		      this.$message({
+		        message: message,
+		        type: 'error'
+		      });
+		    } else{
+				this.$notify.success({
+				  title:email,
+				  message: "验证码已发送到您的邮箱，请及时查收"
+				});
+		 	   this.step ++;
+		    }
+		  });
 		
       },
       //校验验证码
       handleRegister(){
-		  this.step ++;
-		// if(this.user.checkEmail() && this.user.checkPassword() && this.user.checkCode()){
-		// 	//调用注册接口
-		// 	req_register(this.user).then(response => {
-		// 	  //解析接口应答的json串
-		// 	  let { data, message, success } = response;
-		// 	  //应答不成功，提示错误信息
-		// 	  if (success !== 0) {
-		// 	    this.$message({
-		// 	      message: message,
-		// 	      type: 'error'
-		// 	    });
-		// 		// this.$router.push({ path: this.path});
-		// 	  } else{
-		// 			this.user.id = data;
-		// 			this.handleStep(2);
-		// 	  }
-		// 	}).catch(response=>{
-		// 		let { data, message, success } = response;
-		// 		this.$message({
-		// 		  message: message,
-		// 		  type: 'error'
-		// 		});
-		// 	});
-		// }else{
-		// 	console.log("信息不全");
-		// }
+		if(this.user.checkEmail() && this.user.checkPassword() && this.user.checkCode()){
+			//调用注册接口
+			req_register(this.user).then(response => {
+			  //解析接口应答的json串
+			  let { data, message, success } = response;
+			  //应答不成功，提示错误信息
+			  if (success !== 0) {
+			    this.$message({
+			      message: message,
+			      type: 'error'
+			    });
+			  } else{
+					this.user.id = data;
+					this.step ++;
+			  }
+			}).catch(response=>{
+				let { data, message, success } = response;
+				this.$message({
+				  message: message,
+				  type: 'error'
+				});
+			});
+		}else{
+			console.log("信息不全");
+		}
       },
 	   handleSelect(){
 		   this.showIcon = true;

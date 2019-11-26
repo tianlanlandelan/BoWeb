@@ -3,33 +3,33 @@
     <el-form label-position="left" 
 		label-width="0px" class="demo-ruleForm login-container"
 		>
-		  <h3 class="title">Log in</h3>
+		  <h3 class="title">kyleNotes 登录</h3>
 		    
 		    <el-form-item>
 				<!-- 用户名输入框 -->
-				<span class="tip">Umail </span>
-				<span class="Danger" v-show="!user.emailChecked"> ( please enter your umail )</span>
+				<span class="tip">邮箱 </span>
+				<span class="ColorDanger" v-show="!user.emailChecked"> ( 请输入正确的邮箱地址 )</span>
 				<el-input type="text" v-model="user.email" auto-complete="off" 
-					placeholder="u1145615@YourUniversity.edu" @blur="user.checkEmail()"></el-input>
+					placeholder="kyleNotes@foxmail.com" @blur="user.checkEmail()"></el-input>
 		    
 				<!-- 密码输入框 -->
-				<span class="tip">Password </span>
-				<span class="Danger" v-show="!user.passChecked"> ( please enter your password )</span>
+				<span class="tip">密码 </span>
+				<span class="ColorDanger" v-show="!user.passChecked"> ( 请输入密码 )</span>
 				<el-input type="password" v-model="user.password" auto-complete="off" 
-					placeholder="password" @blur="user.checkPassword()"></el-input>
+					placeholder="6到12位,英文字符和数字的组合" @blur="user.checkPassword()"></el-input>
 		    </el-form-item>
 		    <!-- 忘记密码和新用户注册按钮 Admin登录页面不显示-->
 		    <el-form-item v-if="!admin">
 		      <el-col :span="12">
-		        <el-button type="text" @click="showPassword">Forgot password?</el-button>
+		        <el-button type="text" @click="showPassword">忘记密码 ？</el-button>
 		      </el-col>
 		      <el-col :span="12">
-		        <el-button type="text" @click="showRegister">New user signup</el-button>
+		        <el-button type="text" @click="showRegister">注册账号</el-button>
 		      </el-col>
 		    </el-form-item>
 		    <!-- 登录按钮 -->
 		    <el-form-item style="width:100%;">
-		      <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogon" :loading="logining">LOG IN</el-button>
+		      <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogon" :loading="logining">登录</el-button>
 		    </el-form-item>
 		  </el-form> 
   </el-row>
@@ -75,7 +75,7 @@
 					this.$router.push({ path: '/SroceList' });
 				}else{
 					sessionStorage.setItem('user', JSON.stringify(this.user));
-					this.$router.push({ path: '/Topic' });
+					this.$router.push({ path: '/Home' });
 				}
               
               }

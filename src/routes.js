@@ -9,9 +9,9 @@ import Password from "./views/Password.vue"
 
 import Admin from "./views/Admin.vue"
 import Home from "./views/Home.vue"
-import TopicList from "./views/topic/list.vue"
-import TopicEdit from "./views/topic/edit.vue"
-import Topic from "./views/topic/view.vue"
+import NoteList from "./views/note/list.vue"
+import NoteEdit from "./views/note/edit.vue"
+import Note from "./views/note/view.vue"
 
 import CourseEidt from "./views/course/edit.vue"
 import CourseList from "./views/course/list.vue"
@@ -24,16 +24,27 @@ import UserList from "./views/admin/UserList.vue"
 import markdown from "./components/MarkDown.vue"
 
 let routes = [
+	{	path: '/',component: Login,name:"login"},
 	{
-	    path: '/Manager',
+	    path: '/SystemAdmin',
 	    component: Admin,
-	    name: '管理页面',
+	    name: '系统设置',
 	    iconCls: 'el-icon-message',//图标样式class
 	    children: [
 			{ path: '/SroceList', component: SroceList, name: '分类数据' },
 			{ path: '/Settings', component: Settings, name: '设置' },
-			{ path: '/UserList', component: UserList, name: '概览' },
-			{ path: '/CourseList', component: CourseList, name: '课程列表' }
+			{ path: '/UserList', component: UserList, name: '概览' }
+	    ],
+		//是否显示在Admin页面的左侧菜单列表中
+		show:true
+	},
+	{
+	    path: '/ContentAdmin',
+	    component: Admin,
+	    name: '内容管理',
+	    iconCls: 'el-icon-message',//图标样式class
+	    children: [
+			{ path: '/CourseList', component: CourseList, name: '笔记本' }
 	    ],
 		//是否显示在Admin页面的左侧菜单列表中
 		show:true
@@ -45,27 +56,16 @@ let routes = [
 	    iconCls: 'el-icon-message',//图标样式class
 	    children: [
 
-	        { path: '/TopicList', component: TopicList, name: '课时列表' },
-	        { path: '/TopicEdit', component: TopicEdit, name: '编辑课时' },
-			{ path: '/CourseEidt', component: CourseEidt, name: '编辑课程' }
+	        { path: '/NoteList', component: NoteList, name: '笔记' },
+	        { path: '/NoteEdit', component: NoteEdit, name: '编辑笔记' },
+			{ path: '/CourseEidt', component: CourseEidt, name: '编辑笔记本' }
 	    ],
 		//是否显示在Admin页面的左侧菜单列表中
 		show:false
 	},
-	{
-	    path: '/Home',
-	    component: Home,
-	    name: '用户主页面',
-	    children: [
-	       { 	path: '/Topic', component: Topic, name: 'Topic' },
-	       { 	path: '/Course', component: Course, name: 'Course' },
-	       { 	path: '/Exercise', component: Exercise, name: 'Exercise' }
-	    ]
-	},
 	{ 	path: '/Password',component: Password},
-	{	path: '/login',component: Login,name:"login"},
     { 	path: '/Register',component: Register, name: 'Register'},
-    {	path: '/markdown',component: markdown,name: 'markdown'},
+    {	path: '/Home',component: Home,name: 'Home'},
 	{	path: '/404',component: NotFound,name: ''},
     {	path: '*', redirect: { path: '/404' },
 	

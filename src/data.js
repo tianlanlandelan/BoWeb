@@ -9,9 +9,34 @@ const config={
 	}
 }
 
+const format ={
+	pattern :"yyyy-MM-dd",
+	SIGN_REGEXP : /([yMdhsm])(\1*)/g,
+	padding(s, len) {
+	    var len = len - (s + '').length;
+	    for (var i = 0; i < len; i++) { s = '0' + s; }
+	    return s;
+	},
+	formatDate (date) {
+		 date = new Date(date);
+		 let that = this;
+	     return this.pattern.replace(this.SIGN_REGEXP, function ($0) {
+	         switch ($0.charAt(0)) {
+	             case 'y': return that.padding(date.getFullYear(), $0.length);
+	             case 'M': return that.padding(date.getMonth() + 1, $0.length);
+	             case 'd': return that.padding(date.getDate(), $0.length);
+	             case 'w': return date.getDay() + 1;
+	             case 'h': return that.padding(date.getHours(), $0.length);
+	             case 'm': return that.padding(date.getMinutes(), $0.length);
+	             case 's': return that.padding(date.getSeconds(), $0.length);
+	         }
+	      });
+	   }
+} 
+
 const user={
 	id:0,
-	type:1,
+	type:0,
 	email: '',
 	password: '',
 	code:'',
@@ -174,5 +199,5 @@ const utils = {
 	}
 }
 export {
-	user,topic,exercise,utils,config
+	user,topic,exercise,utils,config,format
 }
