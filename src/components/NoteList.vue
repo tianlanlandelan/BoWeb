@@ -1,12 +1,25 @@
 <!-- 笔记列表 -->
 <template>
     <div>
+		<div class="border-2-info font18 ColorCommon marginBottom10">{{notes.title}}</div>
 		<draggable
         		group="chapter"
         	    v-model="list"
         	    @change="chapterListChange()">
         				<div v-for="chapter in list" :key="chapter.name">
-        					<div class="font18 ColorMain cursorPointer">{{chapter.name}}</div>
+        					<div class="font18 ColorCommon cursorPointer">
+								{{chapter.name}} 
+								<el-dropdown>
+								  <span class="el-dropdown-link">
+									<i class="el-icon-edit"></i>
+								  </span>
+								  <el-dropdown-menu slot="dropdown">
+									<el-dropdown-item icon="el-icon-plus">添加</el-dropdown-item>
+									<el-dropdown-item icon="el-icon-edit">修改</el-dropdown-item>
+									<el-dropdown-item icon="el-icon-delete">删除</el-dropdown-item>
+								  </el-dropdown-menu>
+								</el-dropdown>
+							</div>
         					<draggable
         						group="note"
         					    v-model="chapter.list"
@@ -26,16 +39,32 @@
 
 <script>
 	import draggable from 'vuedraggable';
-	import {req_getNote,req_updateNote,req_updateChapter,req_deleteChapter,req_deleteTopic} from "../api/api.js";
+	import {req_getNoteList,req_getNote,req_updateNote,req_updateChapter,req_deleteChapter,req_deleteTopic} from "../api/api.js";
     export default{
 		components:{draggable},
 		data(){
 			return{
+				notes:{},
 				list:[],
 				noteId:0
 			}
 		},
 		methods:{
+			getNoteList(){
+				req_getNoteList(this.notes.id).then(response => {
+				  //解析接口应答的json串
+				  let { data, message, success } = response;
+				  //应答不成功，提示错误信息
+				  if (success !== 0) {
+				    this.$message({
+				      message: message,
+				      type: 'error'
+				    });
+				  } else {
+				    this.list = data;
+				  }
+				});
+			},
 			/**
 			 * 目录发生改变时，修改目录
 			 */
@@ -110,8 +139,9 @@
 				});
 				
 			},
-			load(list){
-				this.list = list;
+			load(notes){
+				this.notes = notes;
+				this.getNoteList();
 			}
 		},mounted(){
 			/**

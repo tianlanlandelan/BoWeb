@@ -57,19 +57,18 @@ export const req_updateUserInfo = (user) => {
 /**
  * 添加课程
  */
-export const req_saveTopic = (topic) => { 
+export const req_saveNote = (note) => { 
     return axios.post(api, {
-		id			:topic.id,
-		courseId	:topic.courseId,
-		chapterId	:topic.chapterId,
-        sort		:topic.sort,
-        title		:topic.title,
-		contentMD	:topic.contentMD,	
-        content		:topic.content,	
-        videoUrl	:topic.videoUrl	
+		id			:note.id,
+		userId		:note.userId,
+		notesId		:note.notesId,
+		chapterId	:note.chapterId,
+        title		:note.title,
+		contentMD	:note.contentMD,	
+        content		:note.content
     },{
 		headers:{
-			'method':'topicInfo'
+			'method':'note'
 		}
 	}).then(res => res.data).catch(err => err); 
 };

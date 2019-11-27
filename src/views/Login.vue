@@ -9,7 +9,7 @@
 				<!-- 用户名输入框 -->
 				<span class="tip">邮箱 </span>
 				<span class="ColorDanger" v-show="!user.emailChecked"> ( 请输入正确的邮箱地址 )</span>
-				<el-input type="text" v-model="user.email" auto-complete="off" 
+				<el-input type="text"  autofocus="autofocus" v-model="user.email" auto-complete="off" 
 					placeholder="kyleNotes@foxmail.com" @blur="user.checkEmail()"></el-input>
 		    
 				<!-- 密码输入框 -->

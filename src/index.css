@@ -1,4 +1,5 @@
 body{font-size:16px;}
+img{max-width: 1000px;}
 
 /* 字体大小 */
 .font24{font-size:24px;}/*  */
@@ -34,6 +35,7 @@ body{font-size:16px;}
 .margin10-0{margin: 10px 0;}
 .margin0-10{margin:0 10px;}
 .marginTop20{margin-top: 20px;}
+.marginBottom10{margin-bottom: 10px;}
 .marginBottom20{margin-bottom: 20px;}
 .padding5{padding: 5px;}/* 5px内边距 */
 .padding10{padding: 10px;}/* 10px内边距 */
